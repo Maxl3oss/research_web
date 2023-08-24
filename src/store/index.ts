@@ -1,17 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit'
-import countSlice from './counter.store/count.slice'
-import authSlice from './auth.store/auth.slice';
-import ThemeSlice from './theme.store/theme.slice';
-import SearchSlice from './search.store/search.slice';
+import countSlice from '@store/counter.store/count.slice'
+import authSlice from '@store/auth.store/auth.slice';
+import ThemeSlice from '@store/theme.store/theme.slice';
+import SearchSlice from '@store/search.store/search.slice';
+import NavSlice from '@store/nav.store/nav.slice';
 
 export const store = configureStore({
   reducer: {
-    counter: countSlice,
-    auth: authSlice,
-    theme: ThemeSlice,
-    search: SearchSlice,
+    RDcounter: countSlice,
+    RDauth: authSlice,
+    RDtheme: ThemeSlice,
+    RDsearch: SearchSlice,
+    RDnav: NavSlice,
   },
 })
 
-export type RootState = ReturnType<typeof store.getState>
+export type IRootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch

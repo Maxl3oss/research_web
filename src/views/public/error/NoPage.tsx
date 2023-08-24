@@ -1,4 +1,4 @@
-import noPageImage from "../../assets/images/NoPage2.gif";
+import noPageImage from "@assets/images/NoPage2.gif";
 
 export default function NoPage() {
   return (

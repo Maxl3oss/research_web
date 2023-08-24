@@ -1,22 +1,21 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import ScrollToTop from './components/scrollToTop'
-import routes from './routes';
-import ThemeProvider from './store/theme.store/theme.provider';
+import { BrowserRouter } from 'react-router-dom'
+import ScrollToTop from '@components/scrollToTop'
+import ThemeProvider from '@store/theme.store/theme.provider';
+import RoutesControl from '@routes/routesControl';
 
 function App() {
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <ThemeProvider>
-        <Routes>
-          {routes.map((item: any, key: any) => {
-            return (
-              <Route path={item.path} element={item.element} key={key} />
-            );
-          })}
-        </Routes>
-      </ThemeProvider>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <RoutesControl />
+        {/* <Routes>
+          {routes.map((item: IRoute, key: number) => (
+            <Route path={item.path} element={item.element} key={key} />
+          ))}
+        </Routes> */}
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

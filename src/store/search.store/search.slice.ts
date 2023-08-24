@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface CounterState {
   search: string;
+  tagsList: string[];
 }
 
 const initialState: CounterState = {
   search: "",
+  tagsList: [],
 };
 
 export const SearchSlice = createSlice({
@@ -15,9 +17,12 @@ export const SearchSlice = createSlice({
     setSearch: (state, action: PayloadAction<string>) => {
       state.search = action.payload;
     },
+    setTagsList: (state, action: PayloadAction<string[]>) => {
+      state.tagsList = action.payload;
+    },
   },
 });
 
-export const { setSearch } = SearchSlice.actions;
+export const { setSearch, setTagsList } = SearchSlice.actions;
 
 export default SearchSlice.reducer;

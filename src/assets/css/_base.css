@@ -1,0 +1,25 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap");
+
+* {
+  font-family: "Noto Sans Thai", sans-serif;
+  font-size: calc(14px + 0.125vw);
+}
+
+.bg-theme {
+  @apply bg-white dark:bg-zinc-800 text-gray-800 dark:text-gray-300 !important;
+}
+.bg-btn-theme {
+  @apply bg-indigo-600 hover:bg-indigo-800 dark:bg-zinc-700 dark:hover:bg-zinc-600 !important;
+}
+.bg-loading {
+  @apply animate-pulse bg-zinc-300 dark:bg-zinc-800 rounded-md;
+}
+.text-loading {
+  @apply animate-pulse text-zinc-400/60 dark:text-zinc-500/60;
+}
+.alert {
+  @apply font-medium text-xs text-red-700;
+}
+.tags-theme {
+  @apply flex items-center whitespace-nowrap gap-1 text-xs rounded-md w-fit h-fit px-1 bg-indigo-600 text-white dark:bg-zinc-900 dark:text-gray-300;
+}

@@ -1,12 +1,12 @@
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { RootState, store } from '../../store';
-import { changeIncrementAmount, decrement, increment } from '../../store/counter.store/count.slice';
-import { Button } from '../../components/base';
+import { IRootState, store } from '../../store';
+import { changeIncrementAmount, decrement, increment } from '@store/counter.store/count.slice';
+import { Button } from '@components/base';
 import { useState } from 'react';
-import { setError, setLoading, setUser } from '../../store/auth.store/auth.slice';
-import axiosService from '../../services/Axios.service';
-import { signInUser } from '../../store/auth.store/auth.actions';
+import { setError, setLoading, setUser } from '@store/auth.store/auth.slice';
+import axiosService from '@services/Axios.service';
+import { signInUser } from '@store/auth.store/auth.actions';
 
 interface SignInUserArgs {
   email: string;
@@ -14,11 +14,11 @@ interface SignInUserArgs {
 }
 
 export default function PlayRedux() {
-  const count = useSelector((state: RootState) => state.counter.value);
+  const count = useSelector((state: RootState) => state.RDcounter.value);
   const dispatch = useDispatch();
   const [email, setEmail] = useState("maxl3oss10@gmail.com");
   const [password, setPassword] = useState("asdf");
-  const { isLoading, error, user } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error, user } = useSelector((state: IRootState) => state.RDauth);
 
   function handleChange(incrementAmountValue: string) {
     dispatch(changeIncrementAmount(Number(incrementAmountValue)));

@@ -1,22 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-type Theme = 'light' | 'dark';
+export type ITheme = 'light' | 'dark';
 
-export const getInitialTheme = (): Theme => {
+export const getInitialTheme = (): ITheme => {
   if (typeof window !== 'undefined' && window.localStorage) {
-    const storedPrefs = window.localStorage.getItem('current-theme');
-    if (typeof storedPrefs === 'string') {
-      return storedPrefs as Theme;
+    const storedPreFs = window.localStorage.getItem('current-theme');
+    if (typeof storedPreFs === 'string') {
+      return storedPreFs as ITheme;
     }
     if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
     }
   }
-  return 'light';
+  return 'dark';
 };
 
 export interface ThemeState {
-  theme: Theme;
+  theme: ITheme;
 }
 
 const themeSlice = createSlice({

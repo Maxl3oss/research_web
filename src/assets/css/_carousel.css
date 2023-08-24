@@ -1,0 +1,52 @@
+.carousel {
+  width: 100%;
+  position: relative;
+}
+
+.carousel__slides {
+  display: flex;
+  overflow-x: hidden;
+}
+
+.carousel__slide {
+  flex: 0 0 100%;
+  width: 100%;
+}
+
+.carousel__slide.active {
+  transition: moveRight 0.3s ease-in-out;
+}
+
+@keyframes moveRight {
+  100% {
+    transform: translateX(-1080px);
+  }
+}
+
+.carousel__controls {
+  margin-top: 10px;
+}
+
+.carousel__prev,
+.carousel__next {
+  padding: 5px 10px;
+}
+
+.carousel__indicators {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.carousel__indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: gray;
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+.carousel__indicator.active {
+  background-color: black;
+}

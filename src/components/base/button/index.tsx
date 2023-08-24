@@ -1,7 +1,7 @@
-import { Fragment } from 'react'
+import { ButtonHTMLAttributes, FC, Fragment } from 'react'
 import { twMerge } from 'tailwind-merge';
 
-const Button = ((props: any) => {
+const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
     return (
         <Fragment>
             <button
@@ -16,6 +16,6 @@ const Button = ((props: any) => {
             />
         </Fragment>
     );
-});
+};
 
 export default Button;

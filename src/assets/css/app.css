@@ -1,2 +1,6 @@
 @import "./_tailwind.css";
-@import "./_bass.css";
+@import "./_base.css";
+@import "./_layout.css";
+@import "./_home.css";
+@import "./_carousel.css";
+@import "./_signIn.css";
