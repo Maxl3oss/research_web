@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from 'react';
-import { GetResearch } from '@services/research.service';
+import { GetResearch } from '@services/Research.service';
 import { useNavigate } from 'react-router-dom';
 import { IResearch } from '@interfaces/research.interface';
 import { IPagin } from '@interfaces/pagin.interface';
