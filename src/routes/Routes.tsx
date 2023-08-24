@@ -7,6 +7,14 @@ import DetailResearch from '@views/public/research/DetailResearch';
 import MainDashBoard from "@views/private/dashboard/MainDashBoard";
 import { BackendLayout, FrontendLayout } from "@components/layouts";
 
+const RoutesAuth = {
+  role: ['auth'],
+  path: "/",
+  children: [
+    { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+  ],
+}
+
 const RoutesPublic = {
   role: ['public'],
   path: "/",
@@ -15,7 +23,6 @@ const RoutesPublic = {
     { path: "/", name: "", element: <Navigate to={"research"} /> },
     { path: "/research", name: "/รายการวิจัย", element: <MainResearch /> },
     { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
-    { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "*", name: "", element: <NoPage /> },
   ],
 }
@@ -30,4 +37,4 @@ const RoutesPrivate = {
   ],
 }
 
-export { RoutesPublic, RoutesPrivate };
+export { RoutesPublic, RoutesPrivate, RoutesAuth };
