@@ -24,7 +24,7 @@ interface Props {
   returnResearch: (item: IResearch) => void;
 }
 
-function CardMostViewed({ raw, loading, returnResearch }: Props) {
+function CardMostViewed({ raw, loading }: Props) {
 
   return (
     <Fragment>

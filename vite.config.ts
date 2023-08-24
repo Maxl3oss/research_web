@@ -16,12 +16,3 @@ export default defineConfig({
     },
   },
 })
-
-// "paths": {
-//   "@assets/*": ["src/assets/*"],
-//   "@components/*": ["src/components/*"],
-//   "@routes/*": ["src/routes/*"],
-//   "@services/*": ["src/services/*"],
-//   "@store/*": ["src/store/*"],
-//   "@views/*": ["src/views/*"],
-// },

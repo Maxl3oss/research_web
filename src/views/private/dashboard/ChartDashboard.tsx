@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js';
 import { Doughnut, Pie } from 'react-chartjs-2';
 

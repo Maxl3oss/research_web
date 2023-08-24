@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import SignIn from "@views/public/home/SignIn";
 import NoPage from "@views/public/error/NoPage";
-import PlayRedux from "@views/public/PlayRedux";
+// import PlayRedux from "@views/public/PlayRedux";
 import MainResearch from "@views/public/research/MainResearch";
 import DetailResearch from '@views/public/research/DetailResearch';
 import MainDashBoard from "@views/private/dashboard/MainDashBoard";
@@ -16,7 +16,6 @@ const RoutesPublic = {
     { path: "/research", name: "/รายการวิจัย", element: <MainResearch /> },
     { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
     { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
-    { path: "/test", name: "/test", element: <PlayRedux /> },
     { path: "*", name: "", element: <NoPage /> },
   ],
 }

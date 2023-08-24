@@ -1,7 +1,6 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import * as icons from 'lucide-react';
-
-type IconProps = {
+interface IconProps {
   name: keyof typeof icons;
   color?: string;
   className?: string;
@@ -9,10 +8,9 @@ type IconProps = {
 };
 
 const Lucide: FC<IconProps> = ({ name, className, color, size }) => {
-  const LucideIcon = icons[name];
+  const LucideIcon = icons[name] as icons.LucideIcon
 
   if (!LucideIcon) {
-    console.warn(`Lucide icon "${name}" does not exist.`);
     return null;
   }
 
