@@ -1,7 +1,7 @@
 import { useEffect, useState, Fragment } from 'react';
-import { GetResearch } from '@services/Research.service';
+import { GetResearch } from '@services/research.service';
 import { useNavigate } from 'react-router-dom';
-import { IResearch } from '@interfaces/research.interface';
+import { IResearch, IResponse } from '@interfaces/research.interface';
 import { IPagin } from '@interfaces/pagin.interface';
 import { useDispatch } from 'react-redux';
 import { setNavLoading } from '@store/nav.store/nav.slice';
@@ -38,9 +38,9 @@ export default function MainResearch() {
       popular: isLoading,
       lasts: isLoading,
     });
-    const res = await GetResearch(page, pageSize);
-    if (res) {
-      setRaw(res.data);
+    const response: IResponse<IResearch[]> = await GetResearch(page, pageSize);
+    if (response?.taskStatus && response?.statusCode === 200) {
+      setRaw(response.data);
     }
     setLoading(prev => ({ ...prev, popular: false }));
     setTimeout(() => {
@@ -53,6 +53,7 @@ export default function MainResearch() {
       data: raw
     }
     navigate("/research/detail-research", { state });
+    // navigate("/research/create", { state });
   }
 
   useEffect(() => {
@@ -62,7 +63,7 @@ export default function MainResearch() {
   useEffect(() => {
     dispatch(setNavLoading((loading.lasts && loading.popular)))
   }, [loading]);
-  
+
   return (
     <Fragment>
       <div className="cards">
@@ -80,7 +81,7 @@ export default function MainResearch() {
         </div>
         <label className="flex items-center gap-2 font-semibold text-xl sm:text-2xl">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" />
           </svg>
           ล่าสุด
         </label>

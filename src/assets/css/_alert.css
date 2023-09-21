@@ -1,0 +1,12 @@
+#countdown-bar {
+  animation: countdown 5s linear;
+}
+
+@keyframes countdown {
+  0% {
+    width: 100%;
+  }
+  100% {
+    width: 0%;
+  }
+}

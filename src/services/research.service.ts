@@ -1,4 +1,4 @@
-import axiosService from "./Axios.service";
+import axiosService from "./axios.service";
 
 export async function GetResearch(page: number, pageSize: number) {
     try {

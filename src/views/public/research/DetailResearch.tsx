@@ -19,23 +19,64 @@ export default function DetailResearch() {
   return (
     <Fragment>
       {data ? (
-        <div className="p-5 flex flex-grow flex-wrap w-full bg-slate-200 dark:bg-zinc-800 rounded-xl">
-          <div className="flex justify-center w-full md:w-1/2 border p-[1px] max-w-[2480px] max-h-[3508px]">
+        <div className="p-5 flex flex-grow flex-wrap w-full bg-white shadow-md dark:bg-zinc-800 rounded-xl">
+          <div className="flex justify-center w-full lg:w-6/12 border p-[1px] lg:h-[842px] lg:min-w-[595px]">
             <img src={data?.image_url} alt="" />
           </div>
-          <div className="p-5 grid place-content-start gap-2 w-full md:w-1/2">
-            <span className="">ชื่อเรื่อง : {data?.title}</span>
-            <span className="">ชื่อเรื่อง(ทางเลือก) : {data?.title_alternative}</span>
-            <span className="">ชื่อผู้สร้าง : {`${data?.user_info.prefix}${data?.user_info.first_name} ${data?.user_info.last_name}`}</span>
-            <span className="">รายวิชา : {data?.subject}</span>
-            <span className="">คำอธิบาย : {data?.description}</span>
-            <span className="">สำนักพิมพ์ : {data?.publisher}</span>
-            <span className="">ผู้ให้ข้อมูล : {data?.contributor}</span>
-            <span className="">วันที่ : {data?.created_date}</span>
-            <span className="">แหล่งที่มา : {data?.source}</span>
-            <span className="">สิทธิ : {data?.rights}</span>
-            <span className="">แนบไฟล์ : {data?.file_url.split("/").slice(-1)[0]}</span>
-          </div>
+          <fieldset className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">
+            <div className="w-full flex flex-col border-b border-zinc-700 p-5">
+              <h2 className="text-2xl font-semibold">{data?.title}</h2>
+              <span>{data?.title_alternative}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">ชื่อผู้สร้าง</p>
+              <span className="detail-text">{`${data?.user_info.prefix}${data?.user_info.first_name} ${data?.user_info.last_name}`}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">รายวิชา</p>
+              <span className="detail-text">{data?.subject}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">คำอธิบาย</p>
+              <span className="detail-text">{data?.description}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">สำนักพิมพ์</p>
+              <span className="detail-text">{data?.publisher}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">ผู้ให้ข้อมูล</p>
+              <span className="detail-text">{data?.contributor}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">วันที่</p>
+              <span className="detail-text">{data?.created_date}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">แหล่งที่มา</p>
+              <span className="detail-text">{data?.source}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">สิทธิ์</p>
+              <span className="detail-text">{data?.rights}</span>
+            </div>
+
+            <div className="detail-text-container">
+              <p className="w-3/12">แนบไฟล์</p>
+              <span className="w-full flex items-center justify-between lg:w-8/12 text-sm border-gray-300 dark:border-zinc-600 border rounded-lg p-2">
+                {data?.file_url.split("/").slice(-1)[0]}
+                <a className="text-xs text-indigo-600" href="http://">Download</a>
+              </span>
+            </div>
+          </fieldset>
         </div>
       ) : null}
     </Fragment>

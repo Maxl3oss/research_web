@@ -47,11 +47,6 @@ export function PieChart({ className }: IPieChart) {
       },
     }
   }
-  // position: "right",
-  // labels: {
-  //   usePointStyle: true,
-  //   pointStyle: "circle",
-  // },
   return <Pie className={className + " max-h-full max-w-full"} options={optionPie} data={dataPie} />;
 }
 

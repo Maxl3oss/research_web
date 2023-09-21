@@ -30,7 +30,7 @@ const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple }) => 
   const handleSearchTagsClick = (str: string) => {
     setSearchTerm("");
     const words = str;
-    
+
     const isValue = tagsList.includes(words);
     if (!isMultiple) {
       // remove item in option on tagsList 
@@ -64,30 +64,34 @@ const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple }) => 
   }, [searchTerm])
 
   return (
-    <div className="px-2" ref={ref}>
-      <div className="flex items-center border dark:border-zinc-600 rounded-lg">
+    <div className="relative" ref={ref}>
+      <div className="flex w-full items-center border dark:border-zinc-600 rounded-lg">
         <Input
           value={searchTerm}
           onChange={handleSearchChange}
           onClick={() => setIsOpen(prev => !prev)}
           placeholder={placeholder ?? "--- เลือก / ค้นหา ---"}
-          className="focus:ring-0 min-w-fit"
+          className="focus:ring-0 w-full"
         />
       </div>
       {isOpen ? (
         <ul
           className={twMerge([
-            "fixed max-w-[calc(576px_-_40px)] w-[calc(100%_-_4rem)] sm:w-11/12 md:w-[60%] lg:w-full max-h-[180px] text-sm z-50 overflow-auto",
-            "bg-theme rounded-lg border dark:border-zinc-600"
+            "absolute w-full mt-12 z-50 max-h-[180px] text-sm overflow-auto",
+            "bg-theme rounded-lg border dark:border-zinc-600",
+            isOpen ? "top-0" : "hidden", 
           ])}
         >
-          {filteredOptions.length > 0 ? filteredOptions.map((option, index) => (
+          {filteredOptions?.length > 0 ? filteredOptions?.map((option, index) => (
             <li
               className={twMerge([
                 "p-2 hover:bg-gray-100 dark:hover:bg-zinc-600 cursor-pointer",
-                `${tagsList.includes(option) ? "dark:bg-zinc-900 bg-gray-200" : ""}`,
+                `${tagsList?.some(it => it === option) ? "dark:bg-zinc-900 bg-gray-200" : ""}`,
               ])}
-              onClick={() => handleSearchTagsClick(option)}
+              onClick={() => {
+                handleSearchTagsClick(option);
+                if (filteredOptions?.length !== options?.length) setFilteredOptions(options);
+              }}
               key={index}
             >
               {option}

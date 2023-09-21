@@ -1,10 +1,8 @@
 @import "./_base.css";
 
-.bg-back-theme {
-  @apply bg-white dark:bg-zinc-950/20 text-gray-800 dark:text-gray-300;
-}
+
 th, td {
-  @apply border border-zinc-800 rounded-lg p-3 max-h-fit text-left
+  @apply border dark:border-zinc-800 rounded-lg p-3 max-h-fit text-left
 }
 tr {
   @apply  flex flex-col flex-nowrap md:table-row rounded-l-lg md:rounded-none mb-2 md:mb-0;

@@ -1,5 +1,5 @@
-import { forwardRef, InputHTMLAttributes, Fragment } from 'react';
-import { FieldError, UseFormRegister } from 'react-hook-form';
+import { InputHTMLAttributes, Fragment, forwardRef } from 'react';
+import { UseFormRegister, FieldError } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,12 +8,13 @@ interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement | null, CustomInputProps>(
-  ({ register, error, ...rest }, ref) => (
+  ({ register, error, name, ...rest }, ref) => (
     <Fragment>
       <input
-        {...rest}
-        {...register?.(rest.name ?? "")}
         ref={ref}
+        name={name}
+        {...register?.(name ?? "")}
+        {...rest}
         className={twMerge([
           "bg-gray-50 border border-gray-300 text-zinc-900 sm:text-sm text-base rounded-lg",
           "focus:border-blue-500 focus:ring-blue-400 focus:outline-none focus:ring focus:ring-opacity-40 block w-full p-2.5",

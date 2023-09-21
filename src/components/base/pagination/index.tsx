@@ -38,19 +38,25 @@ function Pagination({ pagin, onPageChange }: Props) {
   return (
     <Fragment>
       <div className="w-fit flex gap-2">
-        <button className="w-fit p-2 bg-theme rounded-lg shadow-sm font-bold" onClick={handlePreviousPage} disabled={pagin.page === 1}>
+        <button
+          className="!w-16 px-2 rounded-lg shadow-sm text-sm btn-primary disabled:text-gray-400 disabled:cursor-not-allowed dark:disabled:bg-zinc-900 disabled:bg-zinc-100"
+          onClick={handlePreviousPage} disabled={pagin.page === 1}
+        >
           ก่อนหน้า
         </button>
         {getPageNumbers().map((pageNum) => (
           <span
             key={pageNum}
             onClick={() => onPageChange(pageNum)}
-            className={`${pagin.page === pageNum ? "text-indigo-600 bg-white dark:bg-zinc-800 shadow-sm font-bold" : ""} p-2 px-3 rounded-md cursor-pointer`}
+            className={`${pagin.page === pageNum ? "text-indigo-600 bg-indigo-600/20 dark:bg-zinc-800 shadow-sm font-bold px-3" : ""} p-2 rounded-md cursor-pointer`}
           >
             {pageNum}
           </span>
         ))}
-        <button className="w-fit p-2 bg-theme rounded-lg shadow-sm font-bold" onClick={handleNextPage} disabled={pagin.page === pagin.totalPage}>
+        <button
+          className="!w-16 p-2 rounded-lg shadow-sm text-sm btn-primary disabled:text-gray-400 disabled:cursor-not-allowed dark:disabled:bg-zinc-900 disabled:bg-zinc-100"
+          onClick={handleNextPage} disabled={pagin.page === pagin.totalPage}
+        >
           ถัดไป
         </button>
       </div>

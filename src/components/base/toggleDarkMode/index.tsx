@@ -13,7 +13,7 @@ const ToggleDarkMode: React.FC = () => {
   };
 
   return (
-    <button className="p-2 rounded-full hover:bg-slate-100 hover:dark:bg-zinc-800" onClick={handleToggle}>
+    <button className="p-2 rounded-full hover:bg-slate-100 hover:dark:bg-zinc-800 dark:bg-zinc-800" onClick={handleToggle}>
 
       {theme === 'light' ?
         <>

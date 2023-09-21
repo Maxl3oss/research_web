@@ -3,18 +3,18 @@
 }
 
 .menu-side-active {
-  @apply flex items-center justify-center gap-1 py-3 w-full rounded-md text-indigo-600 bg-indigo-200/20 dark:bg-zinc-800 dark:border-zinc-800 !important;
+  @apply flex items-center justify-center gap-1 py-3 w-full rounded-md text-indigo-600 bg-indigo-200/20 dark:bg-zinc-800 dark:border-zinc-800
 }
 
 .menu-side {
-  @apply flex items-center justify-center gap-1 py-3 w-full rounded-md text-zinc-600 !important;
+  @apply flex items-center justify-center gap-1 py-3 w-full rounded-md text-zinc-600 !important
 }
 
 /* icon sidebar  */
 .menu-icon {
   @apply flex items-center justify-between w-full gap-2 px-3
 }
-.menu-icon .icon {
+.icon {
   @apply flex items-center mx-auto xl:mx-0 gap-3
 }
 .menu-icon .icon > p {

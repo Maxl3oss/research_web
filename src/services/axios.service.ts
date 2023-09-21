@@ -6,10 +6,8 @@ const axiosService = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
   headers: {
-    // "Content-type": "application/json",
-    // Accept: "application/json",
+    // "Content-Type": ["application/json;multipart/form-data;"],
     "Access-Control-Allow-Origin": "*",
-    "Content-Type": ["application/json;multipart/form-data;"],
   },
 });
 
