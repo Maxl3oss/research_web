@@ -15,7 +15,9 @@ const RoutesAuth = {
   role: ['none-auth'],
   path: "/",
   children: [
+    { path: "*", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+    { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
   ],
 }
 
