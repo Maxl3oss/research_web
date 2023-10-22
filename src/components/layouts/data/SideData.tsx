@@ -1,12 +1,14 @@
-import { SVG_Dashboard, SVG_Home } from "./DataSVG";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse, faChartPie, faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
 
 const SideData = {
   "admin": [
-    { "id": 1, "link": "/research/", "name": "Home", "icon": SVG_Home, },
-    { "id": 2, "link": "/back/dashboard", "name": "Dashboard", "icon": SVG_Dashboard }
+    { "id": 1, "link": "/research/", "name": "Home", "icon": <FontAwesomeIcon icon={faHouse} /> },
+    { "id": 2, "link": "/research/create", "name": "Add", "icon": <FontAwesomeIcon icon={faFileCirclePlus} /> },
+    { "id": 3, "link": "/back/dashboard", "name": "Dashboard", "icon": <FontAwesomeIcon icon={faChartPie} /> }
   ],
   "user": [
-    { "id": 1, "link": "/research/", "name": "Home", "icon": SVG_Home }
+    { "id": 1, "link": "/research/", "name": "Home", "icon": <FontAwesomeIcon icon={faHouse} /> }
   ]
 }
 

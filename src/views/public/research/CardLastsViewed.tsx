@@ -1,13 +1,14 @@
-import { Lucide } from '@components/base';
 import { IResearch } from '@interfaces/research.interface';
 import StarRating from '@components/base/starRating';
 import NotFound from '@components/base/notFound';
 import { Fragment } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from "@fortawesome/free-regular-svg-icons";
 
 interface Props {
   loading: boolean;
   raw: IResearch[];
-  returnChangePage: (raw: IResearch) => void;
+  returnChangePage: (id: number) => void;
 }
 function CardLastsViewed({ loading, raw, returnChangePage }: Props) {
   return (
@@ -20,7 +21,7 @@ function CardLastsViewed({ loading, raw, returnChangePage }: Props) {
                 <div className="h-full w-36 rounded-lg"></div>
               </div>
               <div className="absolute text-loading flex flex-row justify-center items-center gap-2 top-2 right-4 text-sm">
-                <Lucide name="Eye" size='14' />
+                <FontAwesomeIcon className="text-sm" icon={faEye} />
                 {key}
               </div>
               <div className="p-2 md:ml-40 min-h-[200px]">
@@ -35,26 +36,27 @@ function CardLastsViewed({ loading, raw, returnChangePage }: Props) {
           raw?.length > 0
             ? raw.map((item: IResearch, key: number) => (
               <div key={key} onClick={() => {
-                returnChangePage(item);
+                returnChangePage(item.id);
               }}
-                className="relative bg-theme card-hv card-pp gap-3 flex flex-col p-2 rounded-lg border shadow-lg cursor-pointer dark:border-zinc-800 hover:ring-zinc-200 hover:dark:ring-zinc-800 hover:ring"
+                className="relative bg-theme card-hv card-pp gap-2 flex p-2 rounded-lg border shadow-lg cursor-pointer dark:border-zinc-800 hover:ring-zinc-200 hover:dark:ring-zinc-800 hover:ring"
               >
-                <div className="flex mt-1 sm:mt-5 md:mt-0 md:absolute bottom-5 top-0">
-                  <img className="h-full md:mt-0 md:h-52 rounded-lg" src={item.image_url} alt="" />
+                <div className="flex h-full mt-1 sm:mt-5 md:mt-0 md:absolute bottom-5 top-0">
+                  <img className="h-full w-36 rounded-lg object-cover" src={item?.image_url as string} alt="" />
                 </div>
-                <div className="absolute flex flex-row justify-center items-center gap-2 top-2 right-4 text-sm">
-                  <Lucide name="Eye" size='14' />
-                  9
-                </div>
-                <div className="p-2 md:ml-40 h-fit md:min-h-[200px]">
+                <div className="md:ml-40 h-fit md:min-h-[200px]">
                   <div className="font-bold text-base mb-2 mt-3 line-clamp-1">
-                    {item.title}
+                    {item?.title}
                   </div>
-                  <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-1">by {item.user_info.first_name + " " + item.user_info.last_name}</p>
-                  <StarRating rating={4} />
+                  <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-1">จัดทำโดย {item?.user_info?.first_name + " " + item?.user_info?.last_name}</p>
+                  <StarRating rating={item?.average_rating} />
                   <p className="text-gray-700 dark:text-zinc-400 text-sm line-clamp-3 mr-2">
-                    {item.description}
+                    {item?.description}
                   </p>
+                </div>
+                {/* views */}
+                <div className="absolute flex flex-row justify-center items-center gap-2 top-2 right-4 text-sm">
+                  <FontAwesomeIcon className="text-sm" icon={faEye} />
+                  {item?.views}
                 </div>
               </div>
             )) : (

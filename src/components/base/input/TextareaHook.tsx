@@ -1,11 +1,11 @@
 import { ErrorMessage } from '@hookform/error-message';
-import { FC, Fragment, InputHTMLAttributes } from 'react';
+import { FC, Fragment, TextareaHTMLAttributes } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { twMerge } from 'tailwind-merge';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement>;
+type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
 
-const InputHook: FC<InputProps> = (props) => {
+const TextareaHook: FC<TextareaProps> = (props) => {
   const { register, formState: { errors, touchedFields } } = useFormContext(); // Retrieve all hook methods
   const name = props.name ?? "";
   // console.log(name, (errors[name] ? "1" : (touchedFields[name] ? "3" : "2")));
@@ -14,7 +14,7 @@ const InputHook: FC<InputProps> = (props) => {
 
   return (
     <Fragment>
-      <input
+      <textarea
         {...register(name)}
         {...props}
         className={twMerge([
@@ -36,4 +36,4 @@ const InputHook: FC<InputProps> = (props) => {
   );
 };
 
-export default InputHook;
+export default TextareaHook;

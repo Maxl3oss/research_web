@@ -1,27 +1,83 @@
-import { Button, InputHook, InputHookUploadImage } from "@components/base";
+import { Button, InputHook, InputHookUploadImage, TextareaHook } from "@components/base";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { IResearch } from "@interfaces/research.interface";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
-import { Link } from "react-router-dom";
-import * as yup from 'yup';
-
-const validationSchema = yup.object<IResearch>({
-  title: yup.string().required("ชื่อรายงาน"),
-  title_alternative: yup.string().required("ชื่อรายงานทางเลือก"),
-  // created_by: yup.string().required("ชื่อรายงานทางเลือก"),
-});
+import { Link, useLocation } from "react-router-dom";
+import validationSchema from "./ValidationResearch";
+import { CreateResearch, GetResearchDetailByUserId, UpdateResearch } from "@services/research.service";
+import { useSelector } from "react-redux";
+import { IRootState } from "@store/index";
+import { Entries, IReqResearch } from "@interfaces/global.interface";
+import { IResearch, IResponse } from "@interfaces/research.interface";
+import { FetchTagsDDL } from "@services/tags.service";
+import SelectSearchHook from "@components/base/input/SelectSearchHook";
 
 export function FormResearch() {
-  const methods = useForm<IResearch>({
-    resolver: yupResolver(validationSchema), defaultValues: {
-      image_url: "https://animelib.me/uploads/anime/22179/cover/de498577-f91f-4fc5-8487-0d94efa92c6f.jpg",
+  const userInfo = useSelector((state: IRootState) => state.RDauth.user);
+  const [raw, setRaw] = useState<IResearch | null>(null);
+  const [tagsDDL, setTagsDDL] = useState<{ id: number, name: string }[]>([]);
+  const { id } = useLocation().state || "";
+  const methods = useForm<IReqResearch>({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      image: "",
     }
   });
 
-  async function onSubmit(data: IResearch) {
-      console.log(data);
+  async function fetchTagsDDL() {
+    const res = await FetchTagsDDL();
+    if (res && (res.statusCode === 200 && res.taskStatus)) {
+      setTagsDDL(res.data);
+    }
   }
+
+  async function fetchData(userId: string, id: number) {
+    const res: Omit<IResponse<IResearch>, 'pagin'> = await GetResearchDetailByUserId(userId, id);
+    if (res && (res.statusCode === 200 && res.taskStatus)) {
+      setRaw(res.data);
+    }
+  }
+
+  // async function onChangeFileUpload(e: ChangeEvent<HTMLInputElement>) {
+  //   const target = e.target as HTMLInputElement;
+  //   const file: FileList = (target.files as FileList);
+  // }
+
+  async function onSubmit(values: IReqResearch) {
+    values.user_id = userInfo?.id || "";
+    values.pdf = (methods.getValues("pdf") as FileList)[0];
+    values.image = methods.getValues("image");
+
+    console.log(values)
+    const res = id ? await UpdateResearch(id, values) : await CreateResearch(values);
+    if (res) {
+      console.log(res);
+    }
+  }
+
+  useEffect(() => {
+    if (id && userInfo) {
+      Promise.all([fetchData(userInfo.id, id)])
+    }
+    fetchTagsDDL();
+  }, [id, userInfo])
+
+  useEffect(() => {
+    if (raw) {
+      for (const [key, value] of Object.entries(raw) as Entries<IReqResearch>) {
+        methods.setValue(key, value);
+      }
+      methods.setValue('image', raw.image_url ?? "", { shouldValidate: true });
+      methods.setValue('pdf', raw.file_url ?? "", { shouldValidate: true });
+    }
+  }, [raw]);
+
+  useEffect(() => {
+    const { unsubscribe } = methods.watch((value) => {
+      console.log(value);
+    });
+    return () => unsubscribe();
+  }, [methods.watch])
 
   return (
     <Fragment>
@@ -29,41 +85,78 @@ export function FormResearch() {
         <h3 className="font-semibold text-xl sm:text-2xl mb-5">เพิ่มข้อมูลงานวิจัย</h3>
         <div className="bg-back-theme p-5 rounded-2xl">
           <form autoComplete="off" onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-wrap gap-3">
-            <div className="flex justify-center w-full md:w-1/2 border p-[1px] max-w-[2480px] max-h-[3508px]">
+            <div className="w-full lg:w-1/3 max-w-[2480px] max-h-[3508px]">
               <InputHookUploadImage
-                defaultValue={methods.getValues("image_url") ?? ""}
-                accept="profile"
-                name="profile"
-                className="max-w-[2480px] max-h-[3508px] h-full w-full"
+                defaultValue={methods.getValues("image") || ""}
+                accept="image/*"
+                name="image"
+                className=" max-w-[2480px] min-h-[300px] max-h-[300px] md:max-h-[3508px] object-contain md:object-cover"
                 onChange={(e) => {
-                  methods.setValue("image_url", e, { shouldValidate: true });
+                  console.log(e)
+                  methods.setValue('image', e, { shouldValidate: true });
                 }}
               />
-              {/* <img src={"https://animelib.me/uploads/anime/22179/cover/de498577-f91f-4fc5-8487-0d94efa92c6f.jpg"} alt="" /> */}
             </div>
-            <div className="flex-1 grid gap-2 content-start mb-5">
-              <div className="w-full">
-                <label>ค้นหา</label>
+            <div className="grow grid grid-cols-2 gap-2 content-start py-5 pl-5">
+              <div className="col-span-2 md:col-span-1">
+                <label>ชื่อเรื่อง</label>
                 <InputHook name="title" />
               </div>
-              <div className="w-full">
-                <label>ค้นหา</label>
+              <div className="col-span-2 md:col-span-1">
+                <label>ชื่อทางเลือก (EN)</label>
                 <InputHook name="title_alternative" />
               </div>
-              <div className="w-full">
-                <label>ค้นหา</label>
-                <InputHook name="created_by" />
+              <div className="col-span-2 md:col-span-1">
+                <label>จัดทำโดย</label>
+                <InputHook name="creator" />
               </div>
-              <div className="w-full">
-                <label>ค้นหา</label>
-                <InputHook name="name4" />
+              <div className="col-span-2 md:col-span-1">
+                <label>รายวิชา</label>
+                <InputHook name="subject" />
               </div>
-              <div className="w-full">
-                <label>ค้นหา</label>
-                <InputHook name="name5" />
+              <div className="col-span-full">
+                <label>รายละเอียด</label>
+                <TextareaHook rows={8} name="description" />
               </div>
-
-              <div className="w-full sm:w-fit flex items-end justify-end sm:justify-start gap-3">
+              <div className="col-span-2 md:col-span-1">
+                <label>ผู้จัดพิมพ์</label>
+                <InputHook name="publisher" />
+              </div>
+              <div className="col-span-2 md:col-span-1">
+                <label>ผู้ร่วมให้ข้อมูล</label>
+                <InputHook name="contributor" />
+              </div>
+              <div className="col-span-2 md:col-span-1">
+                <label>ปีที่จัดทำ</label>
+                <InputHook type="date" name="year_creation" />
+              </div>
+              <div className="col-span-2 md:col-span-1">
+                <label>แหล่งที่มา</label>
+                <InputHook name="source" />
+              </div>
+              <div className="col-span-2 md:col-span-1">
+                <label>สิทธิ</label>
+                <InputHook name="rights" />
+              </div>
+              <div className="">
+                <label>ประเภท</label>
+                <SelectSearchHook
+                  name="tags_name"
+                  options={tagsDDL}
+                  optionId="id"
+                  optionLabel="name"
+                  value={methods.getValues("tags_id")}
+                  optionOnClick={(val: { id: string, name: string }) => {
+                    methods.setValue("tags_id", Number(val.id), { shouldValidate: true });
+                    methods.setValue("tags_name", val?.name, { shouldValidate: true });
+                  }}
+                />
+              </div>
+              <div className="col-span-2">
+                <label>เอกสาร</label>
+                <InputHook type="file" multiple={false} accept=".pdf" name="pdf" />
+              </div>
+              <div className="mt-5 col-span-2 flex items-end justify-center gap-3">
                 <Button type="submit" className="btn-primary">บันทึก</Button>
                 <Link to="/research" className="btn-link">ย้อนกลับ</Link>
               </div>

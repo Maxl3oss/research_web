@@ -3,12 +3,13 @@ import { CustomAlert, Input } from "@components/base";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { FetchLogin } from "@services/auth.service";
 import { Fragment, useState } from "react";
 import Logo2 from "../../../assets/images/logo2.svg"
-import { IResponse } from "@interfaces/research.interface";
-import { ILogin } from "@interfaces/global.interface";
 import { AlertType } from "@components/base/alert/CustomAlert";
+import { useDispatch } from "react-redux";
+import { Login } from "@store/auth.store/auth.actions";
+import { SignInUserArgs } from "@store/auth.store/auth.interface";
+import { AppDispatch } from "@store/index";
 
 const validationSchema = yup.object({
   email: yup.string().email("กรุณาตรวจสอบอีเมล").required("กรุณากรอกอีเมล"),
@@ -16,6 +17,7 @@ const validationSchema = yup.object({
 });
 
 export default function SignIn() {
+  const dispatch = useDispatch<AppDispatch>();
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(validationSchema) });
   const [rsAlert, setRsAlert] = useState<AlertType>({
     isShow: false,
@@ -25,19 +27,18 @@ export default function SignIn() {
   });
   const navigate = useNavigate();
 
-  async function onSubmit(data: ILogin) {
-    const response: IResponse = await FetchLogin(data);
-    if (response?.taskStatus && response?.statusCode === 200) {
-      navigate("/");
-    } else {
-      setRsAlert({ isShow: true, icon: "error", title: "ไม่สำเร็จ", text: response?.message });
-    }
+  async function onSubmit(data: SignInUserArgs) {
+    dispatch(Login(data)).unwrap()
+      .catch((err) => {
+        console.log(err)
+      })
+      .then((res) => { if (res) navigate("/") });
   }
 
   return (
     <Fragment>
       <CustomAlert onChange={(is) => setRsAlert((prev) => ({ ...prev, isShow: is }))} alert={rsAlert} />
-      <section className="flex justify-center items-center h-screen w-screen layout-theme">
+      <section className="flex justify-center items-center h-screen w-full layout-theme px-5">
         <div className="md:w-6/12 lg:w-4/12 gap-3 hidden md:flex items-center justify-center">
           <img className="w-16 h-16" src={Logo2} alt="logo" />
           <h1 className="text-4xl font-bold text-slate-800 dark:text-white">Research</h1>
@@ -50,14 +51,14 @@ export default function SignIn() {
             <label htmlFor="email" className="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-300">
               อีเมล
             </label>
-            <Input value={"maxl3oss10@gmail.com"} register={register} error={errors.email} name="email" placeholder="example@mail.com" />
+            <Input defaultValue={"narongrid.dev@gmail.com"} register={register} error={errors.email} name="email" placeholder="example@mail.com" />
           </div>
           <div>
             <label htmlFor="password" className="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-300">
               รหัสผ่าน
             </label>
             <Input
-              defaultValue={"Maxl3oss10"}
+              defaultValue={"asdf"}
               onClick={() => null}
               register={register}
               error={errors.password}

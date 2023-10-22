@@ -1,20 +1,35 @@
+import { IPagin } from "./pagin.interface";
+
 export interface IResearch {
-  id?: number;
-  contributor?: string;
-  creator?: string;
-  date?: string;
-  description?: string;
-  file_url?: number;
-  image_url?: string | File;
-  isVerified?: number;
-  publisher?: string;
-  rights?: string;
-  source?: string;
-  subject?: string;
-  title?: string;
-  title_alternative?: string;
-  user_name?: string
-  user_info?: IUserInfo
+  id: number;
+  contributor: string;
+  creator: string;
+  date: string;
+  description: string;
+  file_url: string | File;
+  image_url: string | File;
+  isVerified: number;
+  publisher: string;
+  rights: string;
+  source: string;
+  subject: string;
+  title: string;
+  created_date: string;
+  title_alternative: string;
+  year_creation: string;
+  user_name: string;
+  views: number;
+  average_rating: number;
+  user_info: IUserInfo;
+  tags_info: ITagsInfo;
+  tags_id: number;
+  rating_id: number;
+	likes: number;
+}
+
+export interface ITagsInfo {
+	id: number;
+	name: string;
 }
 
 export interface IResponse<T = []> {
@@ -22,6 +37,7 @@ export interface IResponse<T = []> {
   taskStatus: boolean;
   message: string;
   data: T;
+  pagin: IPagin;
 }
 
 export interface IUserInfo {

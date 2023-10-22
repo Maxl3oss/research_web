@@ -16,6 +16,7 @@ const RoutesAuth = {
   path: "/",
   children: [
     { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+    { path: "*", name: "/เข้าสู่ระบบ", element: <SignIn /> },
   ],
 }
 
@@ -28,6 +29,7 @@ const RoutesPublic = {
     { path: "/research/", name: "/รายการวิจัย", element: <MainResearch /> },
     { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
     { path: "/research/create", name: "/รายการวิจัย/เพิ่มข้อมูลวิจัย", element: <FormResearch /> },
+    { path: "/research/update", name: "/รายการวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/result", name: "/รายการวิจัย/แสดงรายการ", element: <MainResultSearch /> },
     { path: "/user/profile", name: "/ผู้ใช้/ข้อมูลผู้ใช้", element: <MainProfile /> },
     { path: "*", name: "", element: <NoPage /> },

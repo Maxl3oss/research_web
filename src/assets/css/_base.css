@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Thai&display=swap");
+@import url(@fortawesome/fontawesome-svg-core/styles.css);
 
 * {
   font-family: "Noto Sans Thai", sans-serif;
@@ -49,7 +50,7 @@ header.layout-theme {
   @apply w-24 flex items-center justify-center h-10 px-4 rounded-md min-w-fit bg-theme hover:bg-zinc-700 no-underline;
 }
 .detail-text-container {
-  @apply w-full flex items-center flex-wrap border-b border-gray-300 dark:border-zinc-700 p-3 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-md;
+  @apply w-full flex items-start flex-wrap border-b border-gray-300 dark:border-zinc-700 p-3 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-md;
 } 
 .detail-text {
   @apply w-full lg:w-9/12 text-sm break-all

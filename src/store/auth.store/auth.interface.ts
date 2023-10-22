@@ -1,10 +1,12 @@
 export interface UserInfo {
-  user_id: number;
-  user_fname: string;
-  user_lname: string;
-  user_email: string;
-  role_id: number;
-  isVerified: number;
+	id: string;
+	email: string;
+	profile?: string | null;
+	first_name: string;
+	last_name: string;
+	status: number;
+	role_id: number;
+	prefix: string;
 }
 
 export interface SignInUserArgs {
@@ -16,6 +18,5 @@ export interface AuthState {
   token: string | null;
   user: UserInfo | null;
   isLoading: boolean;
-  error: string | null;
+	role: number | null;
 }
-

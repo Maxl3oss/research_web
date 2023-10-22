@@ -4,9 +4,7 @@ const BASE_URL = "https://research-server-7gdnvtnmf-maxl3oss.vercel.app/api/";
 
 const axiosService = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
   headers: {
-    // "Content-Type": ["application/json;multipart/form-data;"],
     "Access-Control-Allow-Origin": "*",
   },
 });

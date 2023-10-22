@@ -4,10 +4,13 @@ import ToggleDarkMode from '@components/base/toggleDarkMode/index';
 import { useSelector } from 'react-redux';
 import { setSearch } from '@components/../store/search.store/search.slice';
 import Button from '@components/base/button/index';
-import Lucide from '@components/base/lucide/index';
 import React, { useState } from 'react';
-import { IRootState } from '@store/index';
+import { AppDispatch, IRootState } from '@store/index';
 import { Link } from 'react-router-dom';
+import { Logout } from '@store/auth.store/auth.actions';
+import NoProfile from '../../../assets/images/NoProfile.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 interface Props {
   isOpenSearch: boolean;
@@ -18,8 +21,11 @@ interface Props {
 
 export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSliceSide }: Props) {
   const search = useSelector((state: IRootState) => state.RDsearch.search) as string;
+  const userInfo = useSelector((state: IRootState) => state.RDauth.user);
   const [isOpen, setIsOpen] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleLogout = () => dispatch(Logout());
 
   return (
     <header className="sticky top-0 w-full shadow-sm z-20 flex layout-theme">
@@ -46,7 +52,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
           <div className="relative hidden md:flex justify-center items-center w-full">
             <div onClick={() => returnIsOpen(!isOpenSearch)} className="max-w-[625px] flex w-8/12">
               <div className={`${isOpenSearch ? "flex" : "invisible"} w-12 -mr-4 h-10 items-center justify-center bg-slate-200 dark:bg-zinc-700 rounded-l-full`}>
-                <Lucide name="Search" size='18' />
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
               </div>
               <div onClick={() => returnIsOpen(true)} className="nav-search w-full max-w-[625px] dark:bg-zinc-700 rounded-l-full rounded-r-full">
                 <Input
@@ -57,7 +63,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
                   value={search}
                 />
                 <Button className="w-fit px-3 pr-4 rounded-r-full bg-gray-200 hover:bg-gray-300 dark:bg-zinc-700 dark:hover:bg-zinc-800 focus:ring-0">
-                  <Lucide name="Search" size='18' />
+                  <FontAwesomeIcon icon={faMagnifyingGlass} />
                 </Button>
               </div>
             </div>
@@ -65,7 +71,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
           {/* search mobile input */}
           <div className="flex md:hidden justify-end items-center w-full mr-2">
             <Button onClick={() => returnIsOpen(true)} className="h-10 w-10 p-2 rounded-full bg-btn-theme focus:ring-0">
-              <Lucide name="Search" size='18' />
+              <FontAwesomeIcon icon={faMagnifyingGlass} />
             </Button>
           </div>
           {/* profile */}
@@ -75,8 +81,9 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
             <img
               onClick={() => setIsOpen(prev => !prev)}
               className="w-10 h-10 rounded-full border dark:border-gray-700 cursor-pointer"
-              src="https://i.pinimg.com/736x/80/17/86/80178693d1d0c7e0ec688707b02ecc0b.jpg"
-              alt=""
+              src={userInfo?.profile || ''}
+              alt="profile"
+              onError={({ currentTarget }) => currentTarget.src = NoProfile}
             />
             <ToggleDarkMode />
 
@@ -88,8 +95,13 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
               <ul className="bg-theme">
                 <li className="font-medium">
                   <div className="flex gap-3 items-center transform transition-colors duration-200 p-2">
-                    <img className="w-8 h-8 rounded-full" src="https://i.pinimg.com/736x/80/17/86/80178693d1d0c7e0ec688707b02ecc0b.jpg" alt="" />
-                    <span className="font-bold">Maxl3oss</span>
+                    <img
+                      className="w-8 h-8 rounded-full"
+                      src={userInfo?.profile ?? ""}
+                      alt="profile"
+                      onError={({ currentTarget }) => currentTarget.src = NoProfile}
+                    />
+                    <span className="font-bold">{`${userInfo?.first_name || ''} ${userInfo?.last_name || ''}`}</span>
                   </div>
                 </li>
                 <hr className="dark:border-gray-700" />
@@ -112,7 +124,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
                 </li>
                 <hr className="dark:border-gray-700" />
                 <li className="font-medium">
-                  <Link to="/signIn" className="flex gap-3 items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-red-700 m-2">
+                  <Link onClick={handleLogout} to="/signIn" className="flex gap-3 items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-red-700 m-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                     </svg>

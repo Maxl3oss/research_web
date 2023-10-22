@@ -1,27 +1,14 @@
-import { Lucide } from '@components/base';
 import StarRating from '@components/base/starRating';
 import { IResearch } from '@interfaces/research.interface';
 import { nanoid } from '@reduxjs/toolkit';
 import { Fragment } from 'react';
-
-type Tags = {
-  tag_id: number;
-  tag_name: string;
-}
-
-interface rawData {
-  image: string;
-  viewed: number;
-  title: string;
-  description: string;
-  star_rating: number;
-  tags: Tags[];
-}
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from "@fortawesome/free-regular-svg-icons";
 
 interface Props {
-  raw: rawData[];
+  raw: IResearch[];
   loading: boolean;
-  returnResearch: (item: IResearch) => void;
+  returnResearch: (id: number) => void;
 }
 
 function CardMostViewed({ raw, loading }: Props) {
@@ -50,7 +37,7 @@ function CardMostViewed({ raw, loading }: Props) {
               </div>
             </div>
             <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
-              <Lucide name="Eye" size='14' />
+              <FontAwesomeIcon className="text-sm" icon={faEye} />
               {key}
             </div>
           </div>
@@ -60,34 +47,32 @@ function CardMostViewed({ raw, loading }: Props) {
           <div key={nanoid(5)} className="md:p-2 relative w-full h-[450px] sm:h-80 snap-start rounded-xl shadow-md m-2 bg-theme">
             <div className="aspect-[0.75/1] sm:aspect-video flex flex-col p-3 sm:p-0 h-full sm:flex-row gap-3 rounded-lg z-0">
               <div className="flex flex-none w-full justify-center sm:w-52 object-cover">
-                <img className="h-52 sm:h-full rounded-md" src={item.image} alt="" />
+                <img className="h-52 sm:h-full rounded-md object-cover" src={item.image_url as string} alt="" />
               </div>
               <div className="flex flex-col gap-2 pt-0 sm:py-6 h-full">
                 <div className="grid gap-1">
-                  <div className="font-bold text-base mb-2 line-clamp-1">{item.title}</div>
-                  <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-1">by Narongrid Naorkham</p>
-                  <StarRating rating={item.star_rating} />
+                  <div className="font-bold text-base mb-2 line-clamp-1">{item?.title}</div>
+                  <p className="text-gray-700 dark:text-gray-400 text-sm line-clamp-1">จัดทำโดย {item?.user_info?.first_name + " " + item?.user_info?.last_name}</p>
+                  <StarRating rating={item?.average_rating} />
                   <p className="text-gray-700 dark:text-zinc-400 text-sm line-clamp-5 mr-2">
-                    {item.description}
+                    {item?.description}
                   </p>
                 </div>
-                <div className="flex grow flex-col mt-auto justify-end gap-2 text-xs font-semibold">
-                  <div className="flex">
-                    {item.tags.map((item) => (
-                      <div key={nanoid(5)}>
-                        <span
-                          className="inline-block dark:bg-zinc-900 bg-gray-300 rounded-full px-3 py-1 dark:text-zinc-400 text-zinc-800 mr-2 mb-2"
-                        >{item.tag_name}
-                        </span>
-                      </div>
-                    ))}
+                <div className="flex grow flex-col mt-auto justify-end gap-2">
+                  {/* {item?.tags_info?.map((_) => ( */}
+                  <div>
+                    <span
+                      className="text-sm font-medium inline-block dark:bg-zinc-900 bg-gray-300 rounded-full px-3 py-1 dark:text-zinc-400 text-zinc-800 mr-2 mb-2"
+                    >{item?.tags_info?.name}
+                    </span>
                   </div>
+                  {/* ))} */}
                 </div>
               </div>
             </div>
             <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
-              <Lucide name="Eye" size='14' />
-              {item.viewed}
+              <FontAwesomeIcon className="text-sm" icon={faEye} />
+              {item?.views}
             </div>
           </div>
         ))

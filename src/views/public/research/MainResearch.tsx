@@ -48,9 +48,9 @@ export default function MainResearch() {
     }, 500)
   }, 500);
 
-  const handleChangePage = async (raw: IResearch | undefined) => {
+  const handleChangePage = async (id: number) => {
     const state = {
-      data: raw
+      id: id
     }
     navigate("/research/detail-research", { state });
     // navigate("/research/create", { state });
@@ -76,7 +76,7 @@ export default function MainResearch() {
             ยอดฮิต
           </label>
           <Carousel className="p-2rounded-md">
-            <CardMostViewed loading={loading.popular} raw={most_viewed} returnResearch={handleChangePage} />
+            <CardMostViewed raw={raw} loading={loading.popular} returnResearch={handleChangePage} />
           </Carousel>
         </div>
         <label className="flex items-center gap-2 font-semibold text-xl sm:text-2xl">
