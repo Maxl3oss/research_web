@@ -5,7 +5,6 @@ import { IResearch, IResponse } from '@interfaces/research.interface';
 import { IPagin } from '@interfaces/pagin.interface';
 import { useDispatch } from 'react-redux';
 import { setNavLoading } from '@store/nav.store/nav.slice';
-import most_viewed from './FakerData.json';
 import CardMostViewed from './CardMostViewed';
 import Carousel from '@components/base/carousel';
 import { debounce } from "lodash"

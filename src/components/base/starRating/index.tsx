@@ -1,4 +1,3 @@
-import { nanoid } from "@reduxjs/toolkit"
 import { useState } from "react";
 
 interface Props {

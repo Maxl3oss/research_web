@@ -1,5 +1,5 @@
 import { InputHook } from '@components/base';
-import React, { useState, useEffect, useRef, TextareaHTMLAttributes, ChangeEventHandler } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface Props {
@@ -15,7 +15,7 @@ interface Props {
 
 const SelectSearchHook: React.FC<Props> = ({ options, optionOnClick, optionLabel, optionId, placeholder, value, name }) => {
   const ref = useRef<HTMLInputElement>(null);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  // const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -43,11 +43,11 @@ const SelectSearchHook: React.FC<Props> = ({ options, optionOnClick, optionLabel
     }
   }, [value])
 
-  useEffect(() => {
-    if (searchTerm) {
-      setIsOpen(true);
-    }
-  }, [searchTerm])
+  // useEffect(() => {
+  //   if (searchTerm) {
+  //     setIsOpen(true);
+  //   }
+  // }, [searchTerm])
 
   return (
     <div className="relative" ref={ref}>

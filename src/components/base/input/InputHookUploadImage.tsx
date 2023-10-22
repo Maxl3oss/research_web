@@ -17,9 +17,9 @@ const InputHookUploadImage = ({ accept = ".png", defaultValue = "", name = "", o
           alt=""
           className={`object-cover border-0 h-full w-full ${className}`}
           src={(typeof defaultValue === "string") ? defaultValue : URL.createObjectURL(defaultValue)}
-          onError={({ currentTarget }) => {
-            // currentTarget.src = Profile;
-          }}
+        // onError={({ currentTarget }) => {
+        // currentTarget.src = Profile;
+        // }}
         />
         <div
           onClick={() => document.getElementById(name)?.click()}

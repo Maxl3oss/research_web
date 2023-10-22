@@ -1,7 +1,8 @@
-import { IReqResearch } from '@interfaces/global.interface';
+// import { IReqResearch } from '@interfaces/global.interface';
 import * as yup from 'yup';
 
-const validationSchema: yup.ObjectSchema<IReqResearch> = yup.object({
+// const validationSchema: yup.ObjectSchema<IReqResearch> = yup.object({
+const validationSchema = yup.object({
   // title: yup.string().required("กรุณากรอกชื่อรายงาน"),
   // title_alternative: yup.string().required("กรุณากรอกชื่อรายงานทางเลือก"),
   // creator: yup.string().required("กรุณากรอกชื่อรายงาน"),

@@ -1,9 +1,9 @@
 import { Button, InputHook, InputHookUploadImage, TextareaHook } from "@components/base";
-import { yupResolver } from "@hookform/resolvers/yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
 import { Fragment, useEffect, useState } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
 import { Link, useLocation } from "react-router-dom";
-import validationSchema from "./ValidationResearch";
+// import validationSchema from "./ValidationResearch";
 import { CreateResearch, GetResearchDetailByUserId, UpdateResearch } from "@services/research.service";
 import { useSelector } from "react-redux";
 import { IRootState } from "@store/index";
@@ -18,7 +18,7 @@ export function FormResearch() {
   const [tagsDDL, setTagsDDL] = useState<{ id: number, name: string }[]>([]);
   const { id } = useLocation().state || "";
   const methods = useForm<IReqResearch>({
-    resolver: yupResolver(validationSchema),
+    // resolver: yupResolver(validationSchema),
     defaultValues: {
       image: "",
     }
