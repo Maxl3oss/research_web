@@ -12,11 +12,10 @@ import MainResultSearch from "@views/public/result-search/MainResultSearch";
 import MainProfile from "@views/public/profile/MainProfile";
 
 const RoutesAuth = {
-  role: ['auth'],
+  role: ['none-auth'],
   path: "/",
   children: [
-    { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
-    { path: "*", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+    { path: "/", name: "/เข้าสู่ระบบ", element: <SignIn /> },
   ],
 }
 
