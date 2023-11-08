@@ -24,12 +24,13 @@ export interface IResearch {
   tags_info: ITagsInfo;
   tags_id: number;
   rating_id: number;
-	likes: number;
+  like: boolean;
+  likes_count: number;
 }
 
 export interface ITagsInfo {
-	id: number;
-	name: string;
+  id: number;
+  name: string;
 }
 
 export interface IResponse<T = []> {

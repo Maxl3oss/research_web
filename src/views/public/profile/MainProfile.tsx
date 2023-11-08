@@ -9,6 +9,8 @@ import ShowDataProfile from './ShowDataProfile';
 import Pagination from '@components/base/pagination';
 import { CustomAlert } from '@components/base';
 import { AlertType } from '@components/base/alert/CustomAlert';
+import NoProfile from '../../../assets/images/NoProfile.png';
+import { FindPrefix, FormatterNumber } from '@components/helper/FunctionHelper';
 
 export interface IResearchByUserList {
   id: number;
@@ -16,12 +18,15 @@ export interface IResearchByUserList {
   image_url: string;
   description: string;
 }
-
+interface IRawData {
+  countResearch: number;
+  dataResearch: IResearchByUserList[];
+}
 
 function MainProfile() {
   const [activeTabs, setActiveTabs] = useState<1 | 2 | 3>(3);
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
-  const [raw, setRaw] = useState<IResearchByUserList[]>([]);
+  const [raw, setRaw] = useState<IRawData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const [pagin, setPagin] = useState<IPagin>({
@@ -39,7 +44,7 @@ function MainProfile() {
 
   async function FetchData(userId = "", status = 3, page = 1, pageSize = 10) {
     setIsLoading(true);
-    const res: IResponse = await GetResearchByUserId(userId, page, pageSize, status);
+    const res: IResponse<IRawData> = await GetResearchByUserId(userId, page, pageSize, status);
     setIsLoading(false);
     if (res) {
       setRaw(res.data);
@@ -91,15 +96,16 @@ function MainProfile() {
           <div className="inline-block">
             <img
               className="rounded-full h-32 w-32"
-              src="https://i.pinimg.com/736x/80/17/86/80178693d1d0c7e0ec688707b02ecc0b.jpg"
+              src={userInfo?.profile || ""}
+              onError={({ currentTarget }) => currentTarget.src = NoProfile}
               alt=""
             />
           </div>
           <div className="pl-10 flex flex-1 text-start">
             <fieldset className="grid space-y-1 place-self-center">
-              <h3 className="text-xl font-medium">นายณรงค์ฤทธิ์ หน่อคำ</h3>
-              <span className="text-sm text-zinc-400">narongrid.dev@gmail.com</span>
-              <span className="text-sm text-zinc-400">วิจัย/รายงาน 2 รายการ</span>
+              <h3 className="text-xl font-medium">{FindPrefix(userInfo?.prefix) + userInfo?.first_name + " " + userInfo?.last_name}</h3>
+              <span className="text-sm text-zinc-400">{userInfo?.email}</span>
+              <span className="text-sm text-zinc-400">วิจัย/รายงาน {FormatterNumber(raw?.countResearch)} รายการ</span>
             </fieldset>
           </div>
         </section>
@@ -123,7 +129,7 @@ function MainProfile() {
           <div className="flex w-full md:w-10/12">
             {/* <TabResult /> */}
             <ShowDataProfile
-              raw={raw}
+              raw={raw?.dataResearch || []}
               isLoading={isLoading}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
@@ -131,7 +137,7 @@ function MainProfile() {
           </div>
         </section>
 
-        <div className="flex w-full justify-end pt-5">
+        <div className="flex w-full md:w-10/12 justify-end pt-5">
           <Pagination
             pagin={pagin}
             onPageChange={(curr) => {

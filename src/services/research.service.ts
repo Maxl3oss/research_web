@@ -73,3 +73,12 @@ export async function RatingStarsResearch(researchId: number, data: unknown) {
     console.error("Errors : ", err);
   }
 }
+
+export async function LikeResearch(researchId: number, userId: string) {
+  try {
+    const res = await axiosService.post(`likes/like-research/${userId}?researchId=${researchId}`);
+    return res.data
+  } catch (err) {
+    console.error("Errors : ", err);
+  }
+}

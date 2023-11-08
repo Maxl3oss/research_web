@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { IResearchByUserList } from './MainProfile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPenToSquare, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 
 interface IProps {
   isLoading: boolean;
@@ -37,7 +37,15 @@ function ShowDataProfile({ isLoading, raw, onUpdate, onDelete }: IProps) {
             </div>
           ))}
         </div>
-      ) : null}
+      )
+        :
+        <div className="grow bg-theme rounded-xl p-3" >
+          <div className="h-52 flex flex-col gap-2 items-center justify-center text-red-400">
+            <FontAwesomeIcon icon={faFileCircleXmark} className="text-4xl" />
+            <p className="text-xl">ไม่พบข้อมูล</p>
+          </div>
+        </div>
+      }
     </Fragment>
   )
 }

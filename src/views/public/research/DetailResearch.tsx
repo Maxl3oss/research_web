@@ -1,7 +1,8 @@
 import StarRating from '@components/base/starRating';
+import { FormatterNumber } from '@components/helper/FunctionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IResearch, IResponse } from '@interfaces/research.interface';
-import { GetResearchDetailByUserId, RatingStarsResearch } from '@services/research.service';
+import { GetResearchDetailByUserId, LikeResearch, RatingStarsResearch } from '@services/research.service';
 import { IRootState } from '@store/index';
 import { setNavLoading } from '@store/nav.store/nav.slice';
 import { Fragment, useEffect, useState } from 'react';
@@ -36,6 +37,16 @@ export default function DetailResearch() {
     }
   }
 
+  async function handleLike(researchId: number) {
+    if (userInfo) {
+      const res = await LikeResearch(researchId, userInfo.id);
+      // alert
+      if (res && (res.statusCode === 200 && res.taskStatus)) {
+        fetchData(userInfo.id, id);
+      }
+    }
+  }
+
   useEffect(() => {
     dispatch(setNavLoading(false));
   }, [dispatch]);
@@ -58,8 +69,15 @@ export default function DetailResearch() {
               <span>{raw?.title_alternative}</span>
               <StarRating isChange onClickStar={handleOnClickRating} rating={raw?.average_rating} />
               {/* like */}
-              <div className="absolute top-0 right-0 cursor-pointer p-2 w-10 h-10 hover:bg-zinc-700 rounded-full">
-                <FontAwesomeIcon className="text-2xl" icon={["far", "heart"]} />
+              <div onClick={() => handleLike(raw.id)} className="absolute top-0 right-0 text-center">
+                <div className="cursor-pointer p-2 w-10 h-10 hover:bg-zinc-700 rounded-full">
+                  {raw.like ?
+                    <FontAwesomeIcon className="text-2xl" icon={["fas", "heart"]} />
+                    :
+                    <FontAwesomeIcon className="text-2xl" icon={["far", "heart"]} />
+                  }
+                </div>
+                {FormatterNumber(raw.likes_count)}
               </div>
             </div>
 

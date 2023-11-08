@@ -1,9 +1,9 @@
 import { Button, InputHook, InputHookUploadImage, TextareaHook } from "@components/base";
-// import { yupResolver } from "@hookform/resolvers/yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Fragment, useEffect, useState } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
 import { Link, useLocation } from "react-router-dom";
-// import validationSchema from "./ValidationResearch";
+import validationSchema from "./ValidationResearch";
 import { CreateResearch, GetResearchDetailByUserId, UpdateResearch } from "@services/research.service";
 import { useSelector } from "react-redux";
 import { IRootState } from "@store/index";
@@ -18,7 +18,7 @@ export function FormResearch() {
   const [tagsDDL, setTagsDDL] = useState<{ id: number, name: string }[]>([]);
   const { id } = useLocation().state || "";
   const methods = useForm<IReqResearch>({
-    // resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema),
     defaultValues: {
       image: "",
     }
@@ -38,17 +38,12 @@ export function FormResearch() {
     }
   }
 
-  // async function onChangeFileUpload(e: ChangeEvent<HTMLInputElement>) {
-  //   const target = e.target as HTMLInputElement;
-  //   const file: FileList = (target.files as FileList);
-  // }
-
   async function onSubmit(values: IReqResearch) {
     values.user_id = userInfo?.id || "";
     values.pdf = (methods.getValues("pdf") as FileList)[0];
     values.image = methods.getValues("image");
 
-    console.log(values)
+    console.log(values);
     const res = id ? await UpdateResearch(id, values) : await CreateResearch(values);
     if (res) {
       console.log(res);
@@ -57,13 +52,14 @@ export function FormResearch() {
 
   useEffect(() => {
     if (id && userInfo) {
-      Promise.all([fetchData(userInfo.id, id)])
+      Promise.all([fetchData(userInfo.id, id)]);
     }
     fetchTagsDDL();
+    if (userInfo) methods.setValue('user_id', userInfo.id, { shouldValidate: true });
   }, [id, userInfo])
 
   useEffect(() => {
-    if (raw) {
+    if (raw && userInfo) {
       for (const [key, value] of Object.entries(raw) as Entries<IReqResearch>) {
         methods.setValue(key, value);
       }
@@ -90,14 +86,13 @@ export function FormResearch() {
                 defaultValue={methods.getValues("image") || ""}
                 accept="image/*"
                 name="image"
-                className=" max-w-[2480px] min-h-[300px] max-h-[300px] md:max-h-[3508px] object-contain md:object-cover"
+                className="max-w-[2480px] min-h-[300px] max-h-[300px] md:max-h-[3508px] object-contain md:object-cover"
                 onChange={(e) => {
-                  console.log(e)
                   methods.setValue('image', e, { shouldValidate: true });
                 }}
               />
             </div>
-            <div className="grow grid grid-cols-2 gap-2 content-start py-5 pl-5">
+            <div className="grow grid grid-cols-2 gap-2 content-start py-5 lg:pl-5">
               <div className="col-span-2 md:col-span-1">
                 <label>ชื่อเรื่อง</label>
                 <InputHook name="title" />
@@ -145,16 +140,17 @@ export function FormResearch() {
                   options={tagsDDL}
                   optionId="id"
                   optionLabel="name"
+                  onChange={() => null}
                   value={methods.getValues("tags_id")}
                   optionOnClick={(val: { id: string, name: string }) => {
-                    methods.setValue("tags_id", Number(val.id), { shouldValidate: true });
-                    methods.setValue("tags_name", val?.name, { shouldValidate: true });
+                    methods.setValue("tags_id", val?.id ?? "", { shouldValidate: true });
+                    methods.setValue("tags_name", val?.name ?? "", { shouldValidate: true });
                   }}
                 />
               </div>
               <div className="col-span-2">
                 <label>เอกสาร</label>
-                <InputHook type="file" multiple={false} accept=".pdf" name="pdf" />
+                <InputHook type="file" accept="application/pdf" name="pdf" />
               </div>
               <div className="mt-5 col-span-2 flex items-end justify-center gap-3">
                 <Button type="submit" className="btn-primary">บันทึก</Button>

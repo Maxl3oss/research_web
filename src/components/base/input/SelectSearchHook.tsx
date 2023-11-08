@@ -1,3 +1,4 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 import { InputHook } from '@components/base';
 import React, { useState, useEffect, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
@@ -11,11 +12,11 @@ interface Props {
   value?: unknown;
   name: string;
   optionOnClick: (val: any) => void;
+  onChange?: (val: React.FormEvent<HTMLInputElement>) => void;
 }
 
-const SelectSearchHook: React.FC<Props> = ({ options, optionOnClick, optionLabel, optionId, placeholder, value, name }) => {
+const SelectSearchHook: React.FC<Props> = ({ options, onChange, optionOnClick, optionLabel, optionId, placeholder, value, name }) => {
   const ref = useRef<HTMLInputElement>(null);
-  // const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -43,22 +44,15 @@ const SelectSearchHook: React.FC<Props> = ({ options, optionOnClick, optionLabel
     }
   }, [value])
 
-  // useEffect(() => {
-  //   if (searchTerm) {
-  //     setIsOpen(true);
-  //   }
-  // }, [searchTerm])
-
   return (
     <div className="relative" ref={ref}>
-      <div className="flex w-full items-center border dark:border-zinc-600 rounded-lg">
-        <InputHook
-          name={name}
-          onClick={() => setIsOpen(prev => !prev)}
-          placeholder={placeholder ?? "--- เลือก / ค้นหา ---"}
-          className="focus:ring-0 w-full"
-        />
-      </div>
+      <InputHook
+        name={name}
+        onClick={() => setIsOpen(prev => !prev)}
+        placeholder={placeholder ?? "--- เลือก / ค้นหา ---"}
+        className="focus:ring-0 w-full"
+        onChange={onChange && onChange}
+      />
       {isOpen ? (
         <ul
           className={twMerge([

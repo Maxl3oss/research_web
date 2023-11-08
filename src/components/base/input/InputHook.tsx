@@ -8,10 +8,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement>;
 const InputHook: FC<InputProps> = (props) => {
   const { register, formState: { errors, touchedFields } } = useFormContext(); // Retrieve all hook methods
   const name = props.name ?? "";
-  // console.log(name, (errors[name] ? "1" : (touchedFields[name] ? "3" : "2")));
-  // touchedFields[name] ? (errors[name] ? "!bg-red-400/10 !border-red-500/20" : "!bg-green-400/10 !border-green-500/20") : "",
-  // errors[name] ? "!bg-red-400/10 !border-red-500/20" : (touchedFields[name] ? "!bg-green-400/10 !border-green-500/20" : "")
-
+  
   return (
     <Fragment>
       <input
@@ -26,8 +23,7 @@ const InputHook: FC<InputProps> = (props) => {
           props.className,
         ])}
       />
-      {/* {errors && <span className="alert">{errors.root?.message}</span>} */}
-      < ErrorMessage
+      <ErrorMessage
         errors={errors}
         name={name}
         render={({ message }) => <div role="alert" className="alert">{message}</div>}

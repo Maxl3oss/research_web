@@ -14,10 +14,10 @@ export interface IReqResearch {
   source: string,
   rights: string,
   year_creation: string,
-  pdf: string | File | FileList,
+  pdf: unknown | FileList,
   image: string | File,
   user_id: string,
-  tags_id: number,
+  tags_id: string,
   tags_name: string,
 }
 
