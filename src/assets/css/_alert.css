@@ -10,3 +10,97 @@
     width: 0%;
   }
 }
+
+/* swal2 start */
+.swal2-main-content {
+  position: absolute;
+}
+
+.swal2-popup {
+  display: none;
+  position: relative;
+  box-sizing: border-box;
+  grid-template-columns: minmax(0, 100%);
+  width: 25em !important;
+  max-width: 100%;
+  height: 18em !important;
+  padding: 0 !important;
+  border: none;
+  border-radius: 30px !important;
+  font-size: 1rem;
+  @apply bg-theme;
+}
+
+.bg-icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 60px;
+  height: 60px;
+  border-bottom-left-radius: 130px;
+  border-top-right-radius: 28px;
+  padding-bottom: 0;
+  padding-left: 10px;
+}
+
+.swal2-styled.swal2-confirm {
+  position: absolute;
+  left: 30px;
+  bottom: 20px;
+  border: 0;
+  border: 1px solid #3d3d3d !important;
+  background: #3d3d3d !important;
+  background-color: #3d3d3d !important;
+  border-radius: 25px !important;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+  color: #fff;
+  font-size: 1em;
+}
+
+.swal2-styled.swal2-confirm:hover {
+  position: absolute;
+  left: 30px;
+  bottom: 20px;
+  border: 1px solid #565555 !important;
+  background: #565555 !important;
+  background-color: #565555 !important;
+  color: #fff;
+  font-size: 1em;
+}
+
+.swal2-styled.swal2-cancel {
+  position: absolute;
+  right: 30px;
+  bottom: 20px;
+  border: 1px solid #ed1c24 !important;
+  background: #ed1c24 !important;
+  background-color: #ed1c24 !important;
+  border-radius: 25px !important;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+  color: #ffffff !important;
+  font-size: 1em;
+}
+
+.swal2-styled.swal2-cancel:hover {
+  position: absolute;
+  left: 130px;
+  bottom: 20px;
+  border: 1px solid #d35156 !important;
+  background: #d35156 !important;
+  background-color: #d35156 !important;
+  border-radius: 25px !important;
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+  color: #ffffff !important;
+  font-size: 1em;
+}
+
+.swal2-styled {
+  padding: 0.625em 1.1em;
+  transition: box-shadow 0.1s;
+  box-shadow: none !important;
+  font-weight: 500;
+}
+/* swal2 end */

@@ -89,7 +89,7 @@ function MainProfile() {
 
   return (
     <Fragment>
-      <CustomAlert onChange={(is) => setRsAlert((prev) => ({ ...prev, isShow: is }))} alert={rsAlert} />
+      {/* <CustomAlert onChange={(is) => setRsAlert((prev) => ({ ...prev, isShow: is }))} alert={rsAlert} /> */}
       <div className="relative w-full flex flex-col items-center">
         {/* header */}
         <section className="w-full md:w-10/12 flex pt-5 px-3">

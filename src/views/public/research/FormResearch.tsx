@@ -2,7 +2,7 @@ import { Button, InputHook, InputHookUploadImage, TextareaHook } from "@componen
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Fragment, useEffect, useState } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import validationSchema from "./ValidationResearch";
 import { CreateResearch, GetResearchDetailByUserId, UpdateResearch } from "@services/research.service";
 import { useSelector } from "react-redux";
@@ -11,12 +11,17 @@ import { Entries, IReqResearch } from "@interfaces/global.interface";
 import { IResearch, IResponse } from "@interfaces/research.interface";
 import { FetchTagsDDL } from "@services/tags.service";
 import SelectSearchHook from "@components/base/input/SelectSearchHook";
+import { ResponseAlert } from "@components/helper/CustomAlert";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 export function FormResearch() {
+  const navigate = useNavigate();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
   const [raw, setRaw] = useState<IResearch | null>(null);
   const [tagsDDL, setTagsDDL] = useState<{ id: number, name: string }[]>([]);
   const { id } = useLocation().state || "";
+  const [isLoading, setIsLoading] = useState(false);
   const methods = useForm<IReqResearch>({
     resolver: yupResolver(validationSchema),
     defaultValues: {
@@ -42,12 +47,13 @@ export function FormResearch() {
     values.user_id = userInfo?.id || "";
     values.pdf = (methods.getValues("pdf") as FileList)[0];
     values.image = methods.getValues("image");
+    values.year_creation = new Date(methods.getValues("year_creation")).toISOString();
 
-    console.log(values);
-    const res = id ? await UpdateResearch(id, values) : await CreateResearch(values);
-    if (res) {
-      console.log(res);
-    }
+    setIsLoading(true);
+    const res: Omit<IResponse, 'pagin'> = id ? await UpdateResearch(id, values) : await CreateResearch(values);
+    setIsLoading(false);
+    const result = ResponseAlert(res);
+    if(result) navigate('/user/profile');
   }
 
   useEffect(() => {
@@ -56,24 +62,26 @@ export function FormResearch() {
     }
     fetchTagsDDL();
     if (userInfo) methods.setValue('user_id', userInfo.id, { shouldValidate: true });
-  }, [id, userInfo])
+  }, [id, userInfo, methods])
 
   useEffect(() => {
-    if (raw && userInfo) {
+    if (raw) {
       for (const [key, value] of Object.entries(raw) as Entries<IReqResearch>) {
         methods.setValue(key, value);
       }
+      const date = new Date(raw.year_creation).toISOString().split('T')[0];
+      methods.setValue('year_creation', date, { shouldValidate: true });
       methods.setValue('image', raw.image_url ?? "", { shouldValidate: true });
       methods.setValue('pdf', raw.file_url ?? "", { shouldValidate: true });
     }
-  }, [raw]);
+  }, [raw, methods]);
 
   useEffect(() => {
     const { unsubscribe } = methods.watch((value) => {
       console.log(value);
     });
     return () => unsubscribe();
-  }, [methods.watch])
+  }, [methods]);
 
   return (
     <Fragment>
@@ -153,8 +161,19 @@ export function FormResearch() {
                 <InputHook type="file" accept="application/pdf" name="pdf" />
               </div>
               <div className="mt-5 col-span-2 flex items-end justify-center gap-3">
-                <Button type="submit" className="btn-primary">บันทึก</Button>
-                <Link to="/research" className="btn-link">ย้อนกลับ</Link>
+                <Button type="submit" className="btn-primary">
+                  {isLoading ?
+                    (
+                      <div className="flex items-center gap-x-2">
+                        <FontAwesomeIcon className="animate-spin text-2xl" icon={['fas', 'circle-notch']} />
+                        กำลังโหลด
+                      </div>
+                    )
+                    :
+                    <span>บันทึก</span>
+                  }
+                </Button>
+                <Link to={''} onClick={() => navigate(-1)} className="btn-link">ย้อนกลับ</Link>
               </div>
             </div>
           </form>

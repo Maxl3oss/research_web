@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes, FC, Fragment } from 'react'
 import { twMerge } from 'tailwind-merge';
 
-const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
+const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ children, ...props }) => {
     return (
         <Fragment>
             <button
@@ -12,7 +12,9 @@ const Button: FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
                     "bg-theme hover:bg-zinc-700",
                     props.className,
                 ])}
-            />
+            >
+                {children}
+            </button>
         </Fragment>
     );
 };

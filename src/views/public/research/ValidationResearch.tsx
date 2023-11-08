@@ -9,6 +9,7 @@ const SUPPORTED_FORMATS = {
 interface CustomFile extends File {
   type: string;
 }
+const isUrl = (value: unknown) => typeof value === 'string' && value.startsWith('http');
 
 const validationSchema: yup.ObjectSchema<IReqResearch> = yup.object({
   title: yup.string().required("กรุณากรอกชื่อรายงาน"),
@@ -27,9 +28,13 @@ const validationSchema: yup.ObjectSchema<IReqResearch> = yup.object({
   tags_name: yup.string().required("กรุณาเลือกประเภท"),
 
   image: yup.mixed<CustomFile>()
-    .transform((value, originalValue) => { if (originalValue === "" || typeof originalValue === "string") { return null; } return value; })
-    .test('fileSize', 'กรุณาอัปโหลดไฟล์ไม่เกิน 10 MB', (value) => !value || value.size <= FILE_SIZE)
-    .test('fileFormat', 'กรุณาอัปโหลดไฟล์ png, jpg', (value) => !value || SUPPORTED_FORMATS.image.includes(value.type))
+    .transform((value, originalValue) => { if (originalValue === "") { return null; } return value; })
+    .test('fileSize', 'กรุณาอัปโหลดไฟล์ไม่เกิน 10 MB', (value) => !value || isUrl(value) || value.size <= FILE_SIZE)
+    .test('fileFormat', 'กรุณาอัปโหลดไฟล์ png, jpg', (value) => !value || isUrl(value) || SUPPORTED_FORMATS.image.includes(value.type))
+    .test('isRequired', 'กรุณาอัปโหลดรูปภาพ', (value) => {
+      if (typeof value === 'string' && (isUrl(value))) return true;
+      return !!value;
+    })
     .required('กรุณาอัปโหลดรูปภาพ'),
 
   // pdf: yup.array().min(1, 'กรุณาอัปโหลดไฟล์'),
@@ -50,5 +55,3 @@ const validationSchema: yup.ObjectSchema<IReqResearch> = yup.object({
 });
 
 export default validationSchema;
-
-

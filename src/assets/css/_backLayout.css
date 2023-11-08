@@ -1,6 +1,5 @@
 @import "./_base.css";
 
-
 th, td {
   @apply border dark:border-zinc-800 rounded-lg p-3 max-h-fit text-left
 }
