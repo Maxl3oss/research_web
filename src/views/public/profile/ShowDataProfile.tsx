@@ -8,9 +8,11 @@ interface IProps {
   raw: IResearchByUserList[];
   onUpdate: (id: number) => void;
   onDelete: (id: number) => void;
+  onViews: (id: number) => void;
+  activeTabs: number;
 }
 
-function ShowDataProfile({ isLoading, raw, onUpdate, onDelete }: IProps) {
+function ShowDataProfile({ isLoading, raw, onUpdate, onDelete, onViews, activeTabs }: IProps) {
   return (
     <Fragment>
       {isLoading ? (
@@ -24,15 +26,25 @@ function ShowDataProfile({ isLoading, raw, onUpdate, onDelete }: IProps) {
               <img className="h-52 w-36 object-cover" src={_.image_url} alt="image_research" />
               <div className="grow">
                 <span className="text-lg font-semibold line-clamp-1">{_.title}</span>
-                <p className="indent-4 text-justify text-sm">{_.description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquam, corporis soluta quod ipsam quisquam autem tempora quo inventore commodi, necessitatibus sit dicta, excepturi rerum ad alias quidem libero modi earum.</p>
+                <p className="indent-4 text-justify text-sm">{_.description}</p>
               </div>
               <div className="absolute grid gap-2 bottom-3 right-3">
-                <div onClick={() => onUpdate(_.id)} className="p-2 w-8 h-8 bg-indigo-800/60 hover:bg-indigo-600/60 hover:cursor-pointer rounded-full flex items-center justify-center">
-                  <FontAwesomeIcon icon={faPenToSquare} />
-                </div>
-                <div onClick={() => onDelete(_.id)} className="p-2 w-8 h-8 bg-indigo-800/60 hover:bg-red-600/60 hover:cursor-pointer rounded-full flex items-center justify-center">
-                  <FontAwesomeIcon icon={faTrashCan} />
-                </div>
+                {activeTabs !== 4
+                  ? (
+                    <Fragment>
+                      <div onClick={() => onUpdate(_.id)} className="p-2 w-8 h-8 bg-indigo-800/60 hover:bg-indigo-600/60 hover:cursor-pointer rounded-full flex items-center justify-center">
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </div>
+                      <div onClick={() => onDelete(_.id)} className="p-2 w-8 h-8 bg-indigo-800/60 hover:bg-red-600/60 hover:cursor-pointer rounded-full flex items-center justify-center">
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </div>
+                    </Fragment>
+                  ) : (
+                    <div onClick={() => onViews(_.id)} className="p-2 w-8 h-8 bg-indigo-800/60 hover:bg-indigo-600/60 hover:cursor-pointer rounded-full flex items-center justify-center">
+                      <FontAwesomeIcon icon={['fas', 'eye']} />
+                    </div>
+                  )
+                }
               </div>
             </div>
           ))}

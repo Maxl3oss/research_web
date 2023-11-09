@@ -7,10 +7,10 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '@store/index';
 import ShowDataProfile from './ShowDataProfile';
 import Pagination from '@components/base/pagination';
-import { CustomAlert } from '@components/base';
-import { AlertType } from '@components/base/alert/CustomAlert';
 import NoProfile from '../../../assets/images/NoProfile.png';
 import { FindPrefix, FormatterNumber } from '@components/helper/FunctionHelper';
+import { ResponseAlert } from '@components/helper/CustomAlert';
+import ResearchAlert from '@components/customs/alert';
 
 export interface IResearchByUserList {
   id: number;
@@ -23,23 +23,19 @@ interface IRawData {
   dataResearch: IResearchByUserList[];
 }
 
+type TActive = 1 | 2 | 3 | 4;
+
 function MainProfile() {
-  const [activeTabs, setActiveTabs] = useState<1 | 2 | 3>(3);
+  const navigate = useNavigate();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
+  const [activeTabs, setActiveTabs] = useState<TActive>(3);
   const [raw, setRaw] = useState<IRawData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
   const [pagin, setPagin] = useState<IPagin>({
     page: 1,
     pageSize: 10,
     total: 1,
     totalPage: 1,
-  });
-  const [rsAlert, setRsAlert] = useState<AlertType>({
-    isShow: false,
-    icon: "success",
-    title: "",
-    text: ""
   });
 
   async function FetchData(userId = "", status = 3, page = 1, pageSize = 10) {
@@ -53,23 +49,36 @@ function MainProfile() {
   }
 
   async function handleDelete(id: number) {
-    const res: Omit<IResponse, 'pagin'> = await DeleteResearch(id);
-    if (res && (res.statusCode === 200 && res.taskStatus)) {
-      setRsAlert({
-        isShow: true,
-        icon: "success",
-        title: "เรียบร้อย",
-        text: "ลบรายการนี้แล้ว"
-      });
-      if (userInfo?.id) Promise.all([FetchData(userInfo?.id, activeTabs)]);
-    }
+    ResearchAlert({
+      timer: 0,
+      title: "คุณแน่ใจ !!!",
+      text: "คุณต้องการลบรายการนี้ใช่หรือไม่?",
+      icon: "question",
+      showConfirmButton: true,
+      showCancelButton: true,
+    }).then(async ({ isConfirmed }) => {
+      if (isConfirmed) {
+        const res: Omit<IResponse, 'pagin'> = await DeleteResearch(id);
+        if (res && (res.statusCode === 200 && res.taskStatus)) {
+          ResponseAlert(res);
+          FetchData(userInfo?.id, activeTabs);
+        }
+      }
+    });
   }
 
-  const handleChangeTabs = (tab: 1 | 2 | 3) => {
+  const handleChangeTabs = (tab: TActive) => {
     if (userInfo?.id) {
       Promise.all([FetchData(userInfo?.id, tab)]);
       setActiveTabs(tab);
     }
+  }
+
+  const handleChangePage = async (id: number) => {
+    const state = {
+      id: id
+    }
+    navigate("/research/detail-research", { state });
   }
 
   const handleUpdate = (id: number) => {
@@ -120,6 +129,9 @@ function MainProfile() {
             <span onClick={() => handleChangeTabs(2)} className={(activeTabs === 2 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
               ยังไม่เผยแพร่
             </span>
+            <span onClick={() => handleChangeTabs(4)} className={(activeTabs === 4 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
+              ถูกใจ
+            </span>
             <div className="hidden md:flex justify-end flex-1">
               <Link to="/research/create" className="btn-link !w-16">เพิ่ม</Link>
             </div>
@@ -130,9 +142,11 @@ function MainProfile() {
             {/* <TabResult /> */}
             <ShowDataProfile
               raw={raw?.dataResearch || []}
+              activeTabs={activeTabs}
               isLoading={isLoading}
               onUpdate={handleUpdate}
               onDelete={handleDelete}
+              onViews={handleChangePage}
             />
           </div>
         </section>
