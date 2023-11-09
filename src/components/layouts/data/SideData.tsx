@@ -4,7 +4,7 @@ import { faHouse, faChartPie, faFileCirclePlus } from "@fortawesome/free-solid-s
 const SideData = {
   "admin": [
     { "id": 1, "link": "/research", "name": "Home", "icon": <FontAwesomeIcon icon={faHouse} /> },
-    { "id": 2, "link": "/research/create", "name": "Add", "icon": <FontAwesomeIcon icon={faFileCirclePlus} /> },
+    // { "id": 2, "link": "/research/create", "name": "Add", "icon": <FontAwesomeIcon icon={faFileCirclePlus} /> },
     { "id": 3, "link": "/back/dashboard", "name": "Dashboard", "icon": <FontAwesomeIcon icon={faChartPie} /> }
   ],
   "user": [
