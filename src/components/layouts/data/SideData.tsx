@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faChartPie, faFileCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faChartPie } from "@fortawesome/free-solid-svg-icons";
 
 const SideData = {
   "admin": [
