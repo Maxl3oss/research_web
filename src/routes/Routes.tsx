@@ -44,6 +44,7 @@ const RoutesPrivate = {
   children: [
     { path: "/back/dashboard", name: "/แดชบอร์ด", element: <MainDashBoard /> },
     { path: "/back/research", name: "/งานวิจัย", element: <MainResearchBack /> },
+    { path: "/back/research/update", name: "/งานวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/back/users", name: "/งานวิจัย", element: <MainUsersBack /> },
     { path: "*", name: "", element: <NoPage /> },
   ],

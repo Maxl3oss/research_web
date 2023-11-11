@@ -7,6 +7,7 @@ export interface UserInfo {
 	status: number;
 	role_id: number;
 	prefix: string;
+	token: string;
 }
 
 export interface SignInUserArgs {

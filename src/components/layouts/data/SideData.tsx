@@ -1,5 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faChartPie } from "@fortawesome/free-solid-svg-icons";
+import { useSelector } from "react-redux";
+import { IRootState } from "@store/index";
 
 const SideData = {
   "admin": [
