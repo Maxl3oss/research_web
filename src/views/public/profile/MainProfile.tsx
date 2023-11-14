@@ -104,7 +104,7 @@ function MainProfile() {
         <section className="w-full md:w-10/12 flex pt-5 px-3">
           <div className="inline-block">
             <img
-              className="rounded-full h-32 w-32"
+              className="rounded-full object-cover h-32 w-32"
               src={userInfo?.profile || ""}
               onError={({ currentTarget }) => currentTarget.src = NoProfile}
               alt=""
