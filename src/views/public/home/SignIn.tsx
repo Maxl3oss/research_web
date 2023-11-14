@@ -1,15 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
-import { CustomAlert, Input } from "@components/base";
+import { Input } from "@components/base";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import Logo2 from "../../../assets/images/logo2.svg"
-import { AlertType } from "@components/base/alert/CustomAlert";
 import { useDispatch } from "react-redux";
 import { Login } from "@store/auth.store/auth.actions";
 import { SignInUserArgs } from "@store/auth.store/auth.interface";
 import { AppDispatch } from "@store/index";
+import ResearchAlert from "@components/customs/alert";
 
 const validationSchema = yup.object({
   email: yup.string().email("กรุณาตรวจสอบอีเมล").required("กรุณากรอกอีเมล"),
@@ -19,25 +19,25 @@ const validationSchema = yup.object({
 export default function SignIn() {
   const dispatch = useDispatch<AppDispatch>();
   const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(validationSchema) });
-  const [rsAlert, setRsAlert] = useState<AlertType>({
-    isShow: false,
-    icon: "" as "error" | "success",
-    title: "",
-    text: ""
-  });
   const navigate = useNavigate();
 
   async function onSubmit(data: SignInUserArgs) {
     dispatch(Login(data)).unwrap()
       .catch((err) => {
-        console.log(err)
+        ResearchAlert({
+          timer: 0,
+          title: "ไม่สำเร็จ !!!",
+          icon: "error",
+          text: err,
+          showConfirmButton: true,
+        });
       })
       .then((res) => { if (res) navigate("/") });
   }
 
   return (
     <Fragment>
-      <CustomAlert onChange={(is) => setRsAlert((prev) => ({ ...prev, isShow: is }))} alert={rsAlert} />
+      {/* <CustomAlert onChange={(is) => setRsAlert((prev) => ({ ...prev, isShow: is }))} alert={rsAlert} /> */}
       <section className="flex justify-center items-center h-screen w-full layout-theme px-5">
         <div className="md:w-6/12 lg:w-4/12 gap-3 hidden md:flex items-center justify-center">
           <img className="w-16 h-16" src={Logo2} alt="logo" />
@@ -93,7 +93,7 @@ export default function SignIn() {
             type="submit"
             className="w-full text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:border-indigo-500 focus:ring-indigo-400 focus:outline-none focus:ring-opacity-40 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800"
           >
-            เข้าสู่ระบบ
+            ข้าสู่ระบบ
           </button>
           <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
             ยังไม่มีบัญชีใช่ไหม?
