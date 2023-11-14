@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { Login, Logout } from "./auth.actions";
+import { Login, Logout, Update } from "./auth.actions";
 import { AuthState } from './auth.interface';
 
 const initialState: AuthState = {
@@ -48,6 +48,20 @@ export const authSlice = createSlice({
     builder.addCase(Logout, () => {
       localStorage.clear();
       return initialState;
+    });
+
+    // update 
+    builder.addCase(Update.fulfilled, (state, action) => {
+      if (action.payload) {
+        localStorage.setItem("user", JSON.stringify(action.payload));
+        localStorage.setItem("role", JSON.stringify(action.payload.role_id));
+        return {
+          ...state,
+          user: action.payload,
+          role: action.payload.role_id,
+          isLoading: false,
+        };
+      } else return state;
     });
   },
 });

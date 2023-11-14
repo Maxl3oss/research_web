@@ -10,6 +10,7 @@ import MainUsersBack from "@views/private/usersBack/MainUsersBack";
 import { FormResearch } from "@views/public/research/FormResearch";
 import MainResultSearch from "@views/public/result-search/MainResultSearch";
 import MainProfile from "@views/public/profile/MainProfile";
+import MainSetting from "@views/public/setting/MainSetting";
 
 const RoutesAuth = {
   role: ['none-auth'],
@@ -33,6 +34,7 @@ const RoutesPublic = {
     { path: "/research/update", name: "/รายการวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/result", name: "/รายการวิจัย/แสดงรายการ", element: <MainResultSearch /> },
     { path: "/user/profile", name: "/ผู้ใช้/ข้อมูลผู้ใช้", element: <MainProfile /> },
+    { path: "/user/setting", name: "/ผู้ใช้/ตั้งค่า", element: <MainSetting /> },
     { path: "*", name: "", element: <NoPage /> },
   ],
 }
