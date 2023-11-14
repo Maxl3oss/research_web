@@ -76,12 +76,12 @@ export function FormResearch() {
     }
   }, [raw, methods]);
 
-  useEffect(() => {
-    const { unsubscribe } = methods.watch((value) => {
-      console.log(value);
-    });
-    return () => unsubscribe();
-  }, [methods]);
+  // useEffect(() => {
+  //   const { unsubscribe } = methods.watch((value) => {
+  //     console.log(value);
+  //   });
+  //   return () => unsubscribe();
+  // }, [methods]);
 
   return (
     <Fragment>
@@ -95,7 +95,7 @@ export function FormResearch() {
                 accept="image/*"
                 name="image"
                 className="max-w-[2480px] min-h-[300px] max-h-[300px] md:max-h-[3508px] object-contain md:object-cover"
-                onChange={(e) => {
+                onChange={(e: File) => {
                   methods.setValue('image', e, { shouldValidate: true });
                 }}
               />
