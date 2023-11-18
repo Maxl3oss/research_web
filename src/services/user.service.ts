@@ -26,3 +26,30 @@ export async function GetProfileById(id: string) {
     console.error("Errors : ", err);
   }
 }
+
+export async function UpdateUser(id: string, data: unknown) {
+  try {
+    const res = await axiosService.put(`user/update/${id}`, data);
+    return res.data
+  } catch (err) {
+    console.error("Errors : ", err);
+  }
+}
+
+export async function VerifyUserById(id: string) {
+  try {
+    const res = await axiosService.put(`user/managements/verify/${id}`);
+    return res.data
+  } catch (err) {
+    console.error("Errors : ", err);
+  }
+}
+
+export async function DeleteUserById(id: string) {
+  try {
+    const res = await axiosService.delete(`user/managements/delete-user/${id}`);
+    return res.data
+  } catch (err) {
+    console.error("Errors : ", err);
+  }
+}

@@ -97,7 +97,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
                 <li className="font-medium">
                   <div className="flex gap-3 items-center transform transition-colors duration-200 p-2">
                     <img
-                      className="w-8 h-8 rounded-full"
+                      className="w-8 h-8 rounded-full object-cover"
                       src={userInfo?.profile ?? ""}
                       alt="profile"
                       onError={({ currentTarget }) => currentTarget.src = NoProfile}

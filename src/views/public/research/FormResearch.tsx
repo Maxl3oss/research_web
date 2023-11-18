@@ -3,7 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Fragment, useEffect, useState } from "react";
 import { useForm, FormProvider } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import validationSchema from "./ValidationResearch";
+import ValidationResearch from "./ValidationResearch";
 import { CreateResearch, GetResearchDetailByUserId, UpdateResearch } from "@services/research.service";
 import { useSelector } from "react-redux";
 import { IRootState } from "@store/index";
@@ -23,10 +23,11 @@ export function FormResearch() {
   const { id } = useLocation().state || "";
   const [isLoading, setIsLoading] = useState(false);
   const methods = useForm<IReqResearch>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(ValidationResearch),
     defaultValues: {
-      image: "",
-    }
+      image: raw?.image_url ?? "",
+      pdf_name: "",
+    },
   });
 
   async function fetchTagsDDL() {
@@ -53,7 +54,7 @@ export function FormResearch() {
     const res: Omit<IResponse, 'pagin'> = id ? await UpdateResearch(id, values) : await CreateResearch(values);
     setIsLoading(false);
     const result = ResponseAlert(res);
-    if(result) navigate('/user/profile');
+    if (result) navigate('/user/profile');
   }
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export function FormResearch() {
 
   useEffect(() => {
     if (raw) {
-      for (const [key, value] of Object.entries(raw) as Entries<IReqResearch>) {
+      for (const [key, value] of Object.entries(raw) as Entries<Omit<IReqResearch, "pdf_name">>) {
         methods.setValue(key, value);
       }
       const date = new Date(raw.year_creation).toISOString().split('T')[0];
@@ -76,12 +77,20 @@ export function FormResearch() {
     }
   }, [raw, methods]);
 
-  // useEffect(() => {
-  //   const { unsubscribe } = methods.watch((value) => {
-  //     console.log(value);
-  //   });
-  //   return () => unsubscribe();
-  // }, [methods]);
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    methods.setValue("pdf", event.currentTarget.files ?? "", { shouldValidate: true });
+    if (event.target.files) {
+      const file = event.target.files[0];
+      if (file) methods.setValue("pdf_name", file.name ?? "", { shouldValidate: true });
+    }
+  };
+
+  useEffect(() => {
+    const { unsubscribe } = methods.watch((value) => {
+      console.log(value);
+    });
+    return () => unsubscribe();
+  }, [methods]);
 
   return (
     <Fragment>
@@ -94,7 +103,7 @@ export function FormResearch() {
                 defaultValue={methods.getValues("image") || ""}
                 accept="image/*"
                 name="image"
-                className="max-w-[2480px] min-h-[300px] max-h-[300px] md:max-h-[3508px] object-contain md:object-cover"
+                className="h-full w-full"
                 onChange={(e: File) => {
                   methods.setValue('image', e, { shouldValidate: true });
                 }}
@@ -154,11 +163,11 @@ export function FormResearch() {
                     methods.setValue("tags_id", val?.id ?? "", { shouldValidate: true });
                     methods.setValue("tags_name", val?.name ?? "", { shouldValidate: true });
                   }}
-                />
+                /> 
               </div>
               <div className="col-span-2">
                 <label>เอกสาร</label>
-                <InputHook type="file" accept="application/pdf" name="pdf" />
+                <InputHook onChange={handleInputChange} type="file" accept="application/pdf" name="pdf" />
               </div>
               <div className="mt-5 col-span-2 flex items-end justify-center gap-3">
                 <Button type="submit" className="btn-primary">

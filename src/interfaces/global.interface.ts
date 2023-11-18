@@ -15,6 +15,7 @@ export interface IReqResearch {
   rights: string,
   year_creation: string,
   pdf: unknown | FileList,
+  pdf_name?: string,
   image: string | File,
   user_id: string,
   tags_id: string,
@@ -22,16 +23,24 @@ export interface IReqResearch {
 }
 
 export interface IReqUser {
+  id?: string,
   prefixName: string,
   prefix: string,
   first_name: string,
   last_name: string,
   email: string,
-  password: string,
-  confirmPassword: string,
-  profile: string | File,
+  password?: string,
+  confirmPassword?: string,
+  profile?: string | File,
+  isChangePassword?: boolean,
 }
 
 export type Entries<T> = {
   [K in keyof T]: [K, T[K]];
 }[keyof T][];
+
+export const FILE_SIZE = 5000000; // 5MB in bytes
+export const SUPPORTED_FORMATS = {
+  pdf: ['application/pdf'],
+  image: ['image/jpeg', 'image/png']
+};

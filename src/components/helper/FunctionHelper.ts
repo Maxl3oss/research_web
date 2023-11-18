@@ -1,3 +1,4 @@
+import { IPagin } from "@interfaces/pagin.interface";
 import { prefix } from "../../assets/json/prefix.json";
 type TypeNotation = "standard" | "scientific" | "engineering" | "compact" | undefined
 
@@ -20,4 +21,8 @@ export function FormatterNumber(num: string | number | undefined | null, notatio
   });
 
   return formatter.format(numberValue);
+}
+
+export function FindIndex(pagin: IPagin, index: number) {
+  return (FormatterNumber((pagin.page - 1) * pagin.pageSize + (index + 1)))
 }

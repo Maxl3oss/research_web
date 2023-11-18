@@ -1,23 +1,24 @@
 import { Fragment } from 'react'
-import { IRawResearchBack } from './MainResearchBack';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import NotFound from '@components/base/notFound';
+import { IUsersBack } from './MainUsersBack'
 import { IPagin } from '@interfaces/pagin.interface';
 import { FindIndex } from '@components/helper/FunctionHelper';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import NotFound from '@components/base/notFound';
 
-interface Props {
-  raw: IRawResearchBack[];
-  isLoading: boolean;
+interface IProps {
+  raw: IUsersBack[];
   pagin: IPagin;
-  onClick: (id: number) => void;
-  onDelete: (id: number) => void;
-  onVerify: (id: number) => void;
+  isLoading: boolean;
+  onVerify: (val: string) => void;
+  onDelete: (val: string) => void;
+  onUpdate: (val: string) => void;
 }
 
-function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoading }: Props) {
+function ShowDataUsersBack({ raw, pagin, isLoading, onVerify, onDelete, onUpdate }: IProps) {
   return (
     <Fragment>
       <div className="mt-5 w-full">
+        {/* <div className="row-span-2 col-span-3 gird max-h-full gap-3 bg-back-theme p-5 rounded-xl"> */}
         <h1>ล่าสุด</h1>
         <table className="w-full md:inline-table flex flex-row flex-wrap rounded-lg overflow-y-auto">
           {isLoading ? (
@@ -36,21 +37,21 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
               <thead className="">
                 {Array.from({ length: raw.length }).map((_, key) => (
                   <tr key={key} className="">
-                    <th className="p-3 text-center">#</th>
-                    <th className="p-3 text-left md:w-3/12">ชื่อรายงาน/วิจัย</th>
-                    <th className="p-3 text-left md:grow">รายละเอียด</th>
+                    <th className="p-3 text-left">#</th>
+                    <th className="p-3 text-left md:w-5/12">ชื่อ-นามสกุล</th>
+                    <th className="p-3 text-left md:w-5/12">อีเมล</th>
                     <th className="p-3 text-center">สถานะ</th>
-                    <th className="p-3 text-center">#</th>
+                    <th className="p-3 text-left">#</th>
                   </tr>
                 ))}
               </thead>
               <tbody className="flex-1 md:flex-none">
-                {raw && raw.map((curr, index) => (
+                {raw.map((curr, index) => (
                   <tr key={index} className="flex flex-col flex-nowrap md:table-row mb-2 md:mb-0">
                     <td className="border rounded-md p-3">{FindIndex(pagin, index)}</td>
-                    <td className="border rounded-md p-3">{curr.title}</td>
+                    <td className="border rounded-md p-3">{curr.first_name + " " + curr.last_name}</td>
                     <td className="border rounded-md p-3">
-                      <span className="max-h-16 line-clamp-1">{curr.description}</span>
+                      <span className="max-h-16 line-clamp-1">{curr.email}</span>
                     </td>
                     <td className="border rounded-md p-3">
                       <div className="flex w-full">
@@ -59,10 +60,11 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
                         </span>
                       </div>
                     </td>
+                    {/* <td className="border rounded-md p-3 text-red-400 hover:text-red-600 hover:font-medium cursor-pointer">Delete</td> */}
                     <td className="border rounded-md p-3 cursor-pointer">
                       <div className="flex gap-2">
                         <span className="text-yellow-400 hover:text-yellow-600 ">
-                          <FontAwesomeIcon onClick={() => onClick(curr.id)} icon={['fas', 'edit']} />
+                          <FontAwesomeIcon onClick={() => onUpdate(curr.id)} icon={['fas', 'edit']} />
                         </span>
                         <span className="text-red-400 hover:text-red-600 ">
                           <FontAwesomeIcon onClick={() => onDelete(curr.id)} icon={['fas', 'trash']} />
@@ -83,9 +85,10 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
             </tbody>
           )}
         </table>
+        {/* </div> */}
       </div>
     </Fragment>
   )
 }
 
-export default ShowDataResearchBack
+export default ShowDataUsersBack

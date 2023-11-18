@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form';
 import Pagination from '@components/base/pagination';
 import { IPagin } from '@interfaces/pagin.interface';
-import { ManagementGetResearchAll, VerifyResearchById } from '@services/private/research_managements.services';
+import { ManagementGetResearchAll, VerifyResearchById } from '@services/private/researchs.services';
 import ShowDataResearchBack from './ShowDataResearchBack';
 import { useNavigate } from 'react-router-dom';
 import ResearchAlert from '@components/customs/alert';
@@ -127,6 +127,7 @@ function MainResearchBack() {
 
         <ShowDataResearchBack
           raw={raw}
+          pagin={pagin}
           isLoading={isLoading}
           onClick={handleChangePage}
           onDelete={handleDelete}
