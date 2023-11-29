@@ -10,6 +10,7 @@ import ShowDataUsersBack from './ShowDataUsersBack';
 import ResearchAlert from '@components/customs/alert';
 import { DeleteUserById, VerifyUserById } from '@services/user.service';
 import { ResponseAlert } from '@components/helper/CustomAlert';
+import { useNavigate } from 'react-router-dom';
 export interface IUsersBack {
   id: string;
   profile: string;
@@ -21,10 +22,11 @@ export interface IUsersBack {
 }
 
 function MainUsersBack() {
+  const navigate = useNavigate();
   const { register, handleSubmit, getValues, reset } = useForm<ISearch>();
   // const onSubmit = (data: ISearch) => console.log(data);
   // const FakerDataSlice = FakerData.length > 5 ? FakerData.slice(0, 5) : FakerData;
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [raw, setRaw] = useState<IUsersBack[]>([]);
   const [pagin, setPagin] = useState<IPagin>({
     page: 1,
@@ -82,6 +84,13 @@ function MainUsersBack() {
     });
   }
 
+  const handleChangePage = async (userId: string) => {
+    const state = {
+      userId: userId
+    }
+    navigate("/back/users/update", { state });
+  }
+
   useEffect(() => {
     FetchData();
   }, []);
@@ -115,7 +124,7 @@ function MainUsersBack() {
           pagin={pagin}
           isLoading={isLoading}
           onVerify={handleVerify}
-          onUpdate={() => null}
+          onUpdate={handleChangePage}
           onDelete={handleDelete}
         />
       </div>
@@ -123,10 +132,7 @@ function MainUsersBack() {
         <Pagination
           pagin={pagin}
           onPageChange={(curr) => {
-            setPagin((prev) => ({
-              ...prev,
-              page: curr
-            }));
+            FetchData(curr, 10, getValues("search"))
           }}
         />
       </div>
