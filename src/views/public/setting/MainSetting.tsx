@@ -1,7 +1,7 @@
 import { AppDispatch, IRootState } from '@store/index';
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { IReqUser } from '@interfaces/global.interface';
+import { Entries, IReqUser } from '@interfaces/global.interface';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Button, InputHook, InputHookUploadImage } from '@components/base';
 import SelectSearchHook from '@components/base/input/SelectSearchHook';
@@ -13,15 +13,20 @@ import { useDispatch } from 'react-redux';
 import ValidationSetting from './ValidationSetting';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useLocation } from 'react-router-dom';
+import { ManagementGetUserById } from '@services/private/users.services';
 
 function MainSetting() {
   const dispatch = useDispatch<AppDispatch>();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
+  const { userId } = useLocation().state || "";
+  const [rawUser, setRawUser] = useState<IReqUser | null>(null);
   const methods = useForm<IReqUser>({
     resolver: yupResolver(ValidationSetting),
     defaultValues: {
       id: userInfo?.id ?? "",
       profile: userInfo?.profile ?? "",
+      // profile: "",
       prefix: userInfo?.prefix ?? "",
       prefixName: "",
       email: userInfo?.email ?? "",
@@ -65,13 +70,26 @@ function MainSetting() {
     }
   }
 
-  // useEffect(() => {
-  //   if (userInfo) {
-  //     for (const [key, value] of Object.entries(userInfo) as Entries<IReqUser>) {
-  //       methods.setValue(key, value);
-  //     }
-  //   }
-  // }, [methods, userInfo]);
+  async function handleGetUserById(userId: string) {
+    const res: Omit<IResponse<IReqUser>, "pagin"> = await ManagementGetUserById(userId);
+    if (res && (res.statusCode === 200 && res.taskStatus)) {
+      setRawUser(res.data);
+    }
+  }
+
+  useEffect(() => {
+    if (userId) {
+      handleGetUserById(userId);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (rawUser) {
+      for (const [key, value] of Object.entries(rawUser)) {
+        methods.setValue(key as keyof IReqUser, value, { shouldValidate: true });
+      }
+    }
+  }, [rawUser, methods]);
 
   // useEffect(() => {
   //   const { unsubscribe } = methods.watch((value) => {
@@ -135,7 +153,7 @@ function MainSetting() {
                     options={prefix}
                     optionId="id"
                     optionLabel="name"
-                    value={methods.getValues("prefix") ?? userInfo?.prefix}
+                    value={methods.getValues("prefix")}
                     optionOnClick={(val: { id: string, name: string }) => {
                       methods.setValue("prefix", val?.id ?? "", { shouldValidate: true });
                       methods.setValue("prefixName", val?.name ?? "", { shouldValidate: true });
@@ -168,9 +186,9 @@ function MainSetting() {
                     </div>
                     <div className="mt-3 md:mt-6">
                       <Button onClick={() => {
-                        methods.setValue("isChangePassword", false, { shouldValidate: true })
-                        methods.setValue("password", "", { shouldValidate: true })
-                        methods.setValue("confirmPassword", "", { shouldValidate: true })
+                        methods.setValue("isChangePassword", false, { shouldValidate: true });
+                        methods.setValue("confirmPassword", "", { shouldValidate: true });
+                        methods.setValue("password", "", { shouldValidate: true });
                       }}>
                         ยกเลิก
                       </Button>
