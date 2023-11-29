@@ -49,7 +49,7 @@ function Pagination({ pagin, onPageChange }: Props) {
             <span
               key={pageNum}
               onClick={() => onPageChange(pageNum)}
-              className={`${pagin.page === pageNum ? "text-indigo-600 bg-indigo-600/20 dark:bg-zinc-800 shadow-sm font-bold px-3" : ""} p-2 rounded-md cursor-pointer`}
+              className={`${pagin.page === pageNum ? "text-indigo-600 bg-indigo-600/10 dark:bg-zinc-800 shadow-sm font-bold px-3" : ""} p-2 rounded-md cursor-pointer`}
             >
               {pageNum}
             </span>
