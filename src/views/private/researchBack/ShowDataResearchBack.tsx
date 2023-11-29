@@ -19,7 +19,7 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
     <Fragment>
       <div className="mt-5 w-full">
         <h1>ล่าสุด</h1>
-        <table className="w-full md:inline-table flex flex-row flex-wrap rounded-lg overflow-y-auto">
+        <table className={isLoading || raw.length === 0 ? "w-full" : "w-full md:inline-table flex flex-row flex-wrap rounded-lg overflow-y-auto"}>
           {isLoading ? (
             <tbody>
               <tr>
@@ -54,7 +54,7 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
                     </td>
                     <td className="border rounded-md p-3">
                       <div className="flex w-full">
-                        <span onClick={() => onVerify(curr.id)} className={(curr.status === 1 ? "bg-green-800/20 text-green-400" : "bg-red-800/20 text-red-400") + " h-fit w-fit whitespace-nowrap px-3 p-1 text-sm rounded-xl cursor-pointer"}>
+                        <span onClick={() => onVerify(curr.id)} className={(curr.status === 1 ? "bg-green-800/20 text-green-400" : "bg-red-800/20 text-red-400") + " h-fit w-fit whitespace-nowrap px-3 py-[2px] text-sm rounded-xl cursor-pointer"}>
                           {curr.status === 1 ? "ยืนยันแล้ว" : "ยังไม่ยืนยัน"}
                         </span>
                       </div>

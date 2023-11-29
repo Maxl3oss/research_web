@@ -9,8 +9,6 @@ import ShowDataResearchBack from './ShowDataResearchBack';
 import { useNavigate } from 'react-router-dom';
 import ResearchAlert from '@components/customs/alert';
 import { ResponseAlert } from '@components/helper/CustomAlert';
-// import { useSelector } from 'react-redux';
-// import { IRootState } from '@store/index';
 import { DeleteResearch } from '@services/research.service';
 interface UserInfo {
   id: string;
@@ -124,7 +122,6 @@ function MainResearchBack() {
             }} className="btn-secondary">ล้างค่า</Button>
           </div>
         </form>
-
         <ShowDataResearchBack
           raw={raw}
           pagin={pagin}
@@ -138,10 +135,7 @@ function MainResearchBack() {
         <Pagination
           pagin={pagin}
           onPageChange={(curr) => {
-            setPagin((prev) => ({
-              ...prev,
-              page: curr
-            }));
+            FetchData(curr, 10, getValues("search"))
           }}
         />
       </div>

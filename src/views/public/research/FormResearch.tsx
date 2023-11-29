@@ -54,7 +54,7 @@ export function FormResearch() {
     const res: Omit<IResponse, 'pagin'> = id ? await UpdateResearch(id, values) : await CreateResearch(values);
     setIsLoading(false);
     const result = ResponseAlert(res);
-    if (result) navigate('/user/profile');
+    if (result) navigate(-1);
   }
 
   useEffect(() => {
@@ -85,12 +85,12 @@ export function FormResearch() {
     }
   };
 
-  useEffect(() => {
-    const { unsubscribe } = methods.watch((value) => {
-      console.log(value);
-    });
-    return () => unsubscribe();
-  }, [methods]);
+  // useEffect(() => {
+  //   const { unsubscribe } = methods.watch((value) => {
+  //     console.log(value);
+  //   });
+  //   return () => unsubscribe();
+  // }, [methods]);
 
   return (
     <Fragment>
