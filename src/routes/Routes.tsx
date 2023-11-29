@@ -45,9 +45,13 @@ const RoutesPrivate = {
   element: <BackendLayout />,
   children: [
     { path: "/back/dashboard", name: "/แดชบอร์ด", element: <MainDashBoard /> },
+
     { path: "/back/research", name: "/งานวิจัย", element: <MainResearchBack /> },
     { path: "/back/research/update", name: "/งานวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
-    { path: "/back/users", name: "/งานวิจัย", element: <MainUsersBack /> },
+
+    { path: "/back/users", name: "/ผู้ใช้งาน", element: <MainUsersBack /> },
+    { path: "/back/users/update", name: "/ผู้ใช้งาน/แก้ไขข้อผู้ใช้งาน", element: <MainSetting /> },
+
     { path: "*", name: "", element: <NoPage /> },
   ],
 }
