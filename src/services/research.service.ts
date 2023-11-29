@@ -1,9 +1,9 @@
 import { IReqResearch } from "@interfaces/global.interface";
 import axiosService from "./axios.service";
 
-export async function GetResearch(page: number, pageSize: number) {
+export async function GetResearch(page: number, pageSize: number, orderBy = "asc") {
   try {
-    const res = await axiosService.get(`research/get-all?page=${page}&pageSize=${pageSize}`);
+    const res = await axiosService.get(`research/get-all?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}`);
     return res.data
   } catch (err) {
     console.error("Errors : ", err);
