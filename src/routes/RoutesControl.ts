@@ -1,5 +1,5 @@
 import { redirect, useRoutes } from "react-router-dom";
-import { RoutesAuth, RoutesPrivate, RoutesPublic } from "./Routes";
+import { RoutesAuth, RoutesPrivate, RoutesPublic, RoutesUser } from "./Routes";
 import { useSelector } from "react-redux";
 import { IRootState } from "@store/index";
 import { useMemo } from "react";
@@ -9,12 +9,12 @@ export default function RoutesControl() {
   const dataRoutes = useMemo(() => {
     if (!userInfo?.id) {
       redirect("/");
-      return [RoutesAuth];
+      return [RoutesAuth, RoutesPublic];
     } else {
       if (userInfo.role_id === 1) {
-        return [RoutesPublic, RoutesPrivate, RoutesAuth];
-      }else{
-        return [RoutesPublic, RoutesAuth];
+        return [RoutesUser, RoutesPrivate, RoutesAuth];
+      } else {
+        return [RoutesUser, RoutesAuth];
       }
     }
   }, [userInfo]);

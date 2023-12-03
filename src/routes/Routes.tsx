@@ -30,6 +30,17 @@ const RoutesPublic = {
     { path: "/", name: "", element: <Navigate to={"research"} /> },
     { path: "/research/", name: "/รายการวิจัย", element: <MainResearch /> },
     { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
+  ],
+}
+
+const RoutesUser = {
+  role: ['user'],
+  path: "/",
+  element: <FrontendLayout />,
+  children: [
+    { path: "/", name: "", element: <Navigate to={"research"} /> },
+    { path: "/research/", name: "/รายการวิจัย", element: <MainResearch /> },
+    { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
     { path: "/research/create", name: "/รายการวิจัย/เพิ่มข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/update", name: "/รายการวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/result", name: "/รายการวิจัย/แสดงรายการ", element: <MainResultSearch /> },
@@ -56,4 +67,4 @@ const RoutesPrivate = {
   ],
 }
 
-export { RoutesPublic, RoutesPrivate, RoutesAuth };
+export { RoutesUser, RoutesPrivate, RoutesPublic, RoutesAuth };
