@@ -4,6 +4,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from "@fortawesome/free-regular-svg-icons";
+import { ResearchImage } from '@components/base';
 
 interface Props {
   raw: IResearch[];
@@ -11,14 +12,14 @@ interface Props {
   returnResearch: (id: number) => void;
 }
 
-function CardMostViewed({ raw, loading }: Props) {
+function CardMostViewed({ raw, returnResearch, loading }: Props) {
 
   return (
     <Fragment>
       {loading ? (
         Array.from({ length: 5 }).map((_, key) => (
           <div key={key} className="md:p-2 relative w-full h-[450px] sm:h-80 snap-start rounded-xl m-2">
-            <div className="aspect-[0.75/1] sm:aspect-video flex flex-col p-3 sm:p-0 h-full sm:flex-row gap-3 border dark:border-zinc-800 rounded-lg z-0">
+            <div className="aspect-[0.75/1] sm:aspect-video flex flex-col p-3 sm:p-0 h-full sm:flex-row gap-3 border-base rounded-lg z-0">
               <div className="flex w-96 h-full justify-center sm:w-52 bg-loading"></div>
               <div className="flex flex-col flex-1 gap-2 pt-0 sm:py-6 h-full">
                 <div className="grid gap-1">
@@ -45,9 +46,10 @@ function CardMostViewed({ raw, loading }: Props) {
       ) : (
         raw.map((item) => (
           <div key={nanoid(5)} className="md:p-2 relative w-full h-[450px] sm:h-80 snap-start rounded-xl shadow-md m-2 bg-theme">
-            <div className="aspect-[0.75/1] sm:aspect-video flex flex-col p-3 sm:p-0 h-full sm:flex-row gap-3 rounded-lg z-0">
+            <div onClick={() => returnResearch(item.id)} className="cursor-pointer aspect-[0.75/1] sm:aspect-video flex flex-col p-3 sm:p-0 h-full sm:flex-row gap-3 rounded-lg z-0">
               <div className="flex flex-none w-full justify-center sm:w-52 object-cover">
-                <img className="h-52 sm:h-full rounded-md object-cover" src={item.image_url as string} alt="" />
+                {/* <img className="h-52 sm:h-full rounded-md object-cover" src={item.image_url as string} alt="" /> */}
+                <ResearchImage className="h-52 sm:h-full w-auto" src={item.image_url as string} />
               </div>
               <div className="flex flex-col gap-2 pt-0 sm:py-6 h-full">
                 <div className="grid gap-1">
@@ -58,16 +60,9 @@ function CardMostViewed({ raw, loading }: Props) {
                     {item?.description}
                   </p>
                 </div>
-                <div className="flex grow flex-col mt-auto justify-end gap-2">
-                  {/* {item?.tags_info?.map((_) => ( */}
-                  <div>
-                    <span
-                      className="text-sm font-medium inline-block dark:bg-zinc-900 bg-gray-300 rounded-full px-3 py-1 dark:text-zinc-400 text-zinc-800 mr-2 mb-2"
-                    >{item?.tags_info?.name}
-                    </span>
-                  </div>
-                  {/* ))} */}
-                </div>
+                <span className="tags-theme py-1 flex items-center">
+                  {item?.tags_info?.name}
+                </span>
               </div>
             </div>
             <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">

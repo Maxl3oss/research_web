@@ -26,3 +26,10 @@ export function FormatterNumber(num: string | number | undefined | null, notatio
 export function FindIndex(pagin: IPagin, index: number) {
   return (FormatterNumber((pagin.page - 1) * pagin.pageSize + (index + 1)))
 }
+
+export const FindDataInJSON = (names: string[], dataJSON: { id: number, name: string }[]): number[] => {
+  return names.map(name => {
+    const foundItem = dataJSON.find(item => item.name === name);
+    return foundItem ? foundItem.id : 0;
+  });
+};

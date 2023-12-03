@@ -1,4 +1,5 @@
 import StarRating from '@components/base/starRating';
+import ResearchAlert from '@components/customs/alert';
 import { FormatterNumber } from '@components/helper/FunctionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IResearch, IResponse } from '@interfaces/research.interface';
@@ -6,6 +7,7 @@ import { GetResearchDetailByUserId, LikeResearch, RatingStarsResearch } from '@s
 import { IRootState } from '@store/index';
 import { setNavLoading } from '@store/nav.store/nav.slice';
 import { Fragment, useEffect, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -18,8 +20,8 @@ export default function DetailResearch() {
   const [raw, setRaw] = useState<IResearch | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  async function fetchData(userId: string, id: number) {
-    setIsLoading(true);
+  async function fetchData(userId: string, id: number, isLoading = true) {
+    setIsLoading(isLoading);
     const res: Omit<IResponse<IResearch>, 'pagin'> = await GetResearchDetailByUserId(userId, id);
     setIsLoading(false);
     if (res && (res.statusCode === 200 && res.taskStatus)) {
@@ -28,6 +30,9 @@ export default function DetailResearch() {
   }
 
   async function handleOnClickRating(rating: number) {
+    const check = handleUser();
+    if (!check) return;
+
     if (id && userInfo?.id) {
       const res: Omit<IResponse, 'pagin'> = await RatingStarsResearch(raw?.id ?? 0, {
         userId: userInfo?.id,
@@ -35,19 +40,42 @@ export default function DetailResearch() {
         rating: rating,
       });
       if (res && (res.statusCode === 200 && res.taskStatus)) {
-        fetchData(userInfo?.id, id);
+        fetchData(userInfo?.id, id, false);
       }
     }
   }
 
   async function handleLike(researchId: number) {
+    const check = handleUser();
+    if (!check) return;
+    
     if (userInfo) {
       const res = await LikeResearch(researchId, userInfo.id);
       // alert
       if (res && (res.statusCode === 200 && res.taskStatus)) {
-        fetchData(userInfo.id, id);
+        fetchData(userInfo.id, id, false);
       }
     }
+  }
+
+  function handleUser(): boolean {
+    if (!userInfo?.id) {
+      ResearchAlert({
+        timer: 0,
+        title: "ไม่สำเร็จ !!!",
+        text: "คุณต้องเข้าสู่ระบบใช่หรือไม่ ?",
+        icon: "error",
+        showConfirmButton: true,
+        showCancelButton: true,
+      }).then(async ({ isConfirmed }) => {
+        if (isConfirmed) {
+          navigate("/");
+          return false;
+        }
+      });
+      return false;
+    }
+    return true;
   }
 
   useEffect(() => {
@@ -56,28 +84,56 @@ export default function DetailResearch() {
 
   useEffect(() => {
     !id && navigate("/research");
-    userInfo?.id && Promise.all([fetchData(userInfo.id, id)]);
+    Promise.all([fetchData(userInfo?.id || "0", id)]);
   }, [id, userInfo?.id, navigate]);
 
   return (
     <Fragment>
       {isLoading ?
-        <div className="p-5 px-1 md:px-5 flex flex-grow flex-wrap w-full bg-theme shadow-md rounded-xl">
-          <div className="animate-pulse bg-zinc-900 rounded flex justify-center w-full lg:w-6/12 p-[1px] lg:h-[842px] lg:min-w-[595px]"> </div>
+        <div className="p-5 px-1 md:px-5 flex flex-grow flex-wrap w-full bg-transparent border-base shadow-md rounded-xl">
+          <div className="animate-pulse bg-loading rounded flex justify-center w-full lg:w-6/12 p-[1px] lg:h-[842px] lg:min-w-[595px]"> </div>
           <div className="h-full space-y-2 grow pl-2">
-            <div className="h-36 bg-zinc-900 rounded-md animate-pulse"></div>
-            <div className="h-14 bg-zinc-900 rounded-md animate-pulse"></div>
-            <div className="h-20 bg-zinc-900 rounded-md animate-pulse"></div>
-            <div className="h-10 bg-zinc-900 rounded-md animate-pulse"></div>
-            <div className="h-10 bg-zinc-900 rounded-md animate-pulse"></div>
-            <div className="h-14 bg-zinc-900 rounded-md animate-pulse"></div>
-            <div className="h-20 bg-zinc-900 rounded-md animate-pulse"></div>
+            <div className="relative h-36 grid p-3 border-base rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-8"></div>
+              <FontAwesomeIcon className="absolute top-5 right-5 text-loading text-2xl" icon={["fas", "heart"]} />
+              <div className="grow flex items-end">
+                <StarRating className="text-loading" rating={0} />
+              </div>
+            </div>
+            <div className="flex h-14 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
+            <div className="flex h-24 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
+            <div className="flex h-14 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
+            <div className="flex h-14 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
+            <div className="flex h-36 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
+            <div className="flex h-20 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
+            <div className="flex h-11 border-base gap-x-5 p-3 rounded-md animate-pulse">
+              <div className="w-4/12 bg-loading h-full"></div>
+              <div className="w-8/12 bg-loading h-full"></div>
+            </div>
           </div>
         </div>
         : raw ? (
           <div className="p-5 px-1 md:px-5 flex flex-grow flex-wrap w-full bg-white shadow-md dark:bg-zinc-800 rounded-xl">
             <div className="flex justify-center w-full lg:w-6/12 border p-[1px] lg:h-[842px] lg:min-w-[595px]">
-              <img src={raw?.image_url as string} className="object-cover" alt="" />
+              <LazyLoadImage effect="blur" src={raw?.image_url as string} className="object-cover h-full w-full" alt="" />
             </div>
             <fieldset className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">
               <div className="relative w-full flex flex-col border-b border-zinc-700 p-5">

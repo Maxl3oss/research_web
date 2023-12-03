@@ -4,11 +4,10 @@ import { FILE_SIZE, IReqResearch, SUPPORTED_FORMATS } from '@interfaces/global.i
 interface CustomFile extends File {
   type: string;
 }
-interface CustomFileList extends FileList {
-  type: string;
-}
+// interface CustomFileList extends FileList {
+//   type: string;
+// }
 const isUrl = (value: unknown) => typeof value === 'string' && value.startsWith('http');
-
 const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
   title: yup.string().required("กรุณากรอกชื่อรายงาน"),
   title_alternative: yup.string().required("กรุณากรอกชื่อรายงานทางเลือก"),
@@ -45,6 +44,7 @@ const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
       return value && SUPPORTED_FORMATS.pdf.includes(value[0]?.type);
     }).required('กรุณาอัปโหลดไฟล์'),
 
+  pdf_name: yup.string(),
 });
 
 export default ValidationResearch;

@@ -1,0 +1,6 @@
+.bg-hover-base {
+  @apply hover:bg-zinc-600/20 dark:hover:bg-zinc-600/40; 
+}
+.border-base {
+  @apply border border-gray-200 dark:border-[#3d3d3d]
+}
