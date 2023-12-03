@@ -6,5 +6,6 @@ import CustomAlert from "./alert/CustomAlert";
 import InputHookUploadImage from "./input/InputHookUploadImage"
 import InputHook from "./input/InputHook";
 import TextareaHook from "./input/TextareaHook";
+import { Profile, ResearchImage } from "./images";
 
-export { Input, Button, ToggleDarkMode, Tooltip, CustomAlert, InputHookUploadImage, TextareaHook, InputHook }
+export { Profile, ResearchImage, Input, Button, ToggleDarkMode, Tooltip, CustomAlert, InputHookUploadImage, TextareaHook, InputHook }

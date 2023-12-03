@@ -1,6 +1,9 @@
 import { Input } from "@components/base";
 import { useEffect, useRef, useState } from "react";
 import Tabs from "./Tabs";
+import { IRootState, store } from "@store/index";
+import { useSelector } from "react-redux";
+import { setSearch } from "@store/search.store/search.slice";
 
 interface Props {
   isOpen: boolean;
@@ -10,6 +13,7 @@ interface Props {
 function Search({ isOpen, returnIsOpen }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const search = useSelector((state: IRootState) => state.RDsearch.search);
   const [activeTab, setActiveTab] = useState<number>(1);
 
   useEffect(() => {
@@ -35,14 +39,14 @@ function Search({ isOpen, returnIsOpen }: Props) {
   };
 
   useEffect(() => {
-    if(isOpen === false) setActiveTab(1);
-  },[isOpen])
+    if (isOpen === false) setActiveTab(1);
+  }, [isOpen])
 
   return (
     <section className={`${!isOpen ? "hidden" : ""} fixed inset-0 z-10 dark:text-white`}>
-      <div ref={cardRef} className="min-h-full w-full flex justify-center p-3 pb-5 md:pt-14 bg-zinc-800/20">
+      <div ref={cardRef} className="min-h-full w-full flex justify-center p-3 pb-5 md:pt-14 bg-black/20">
 
-        <div className="h-fit w-full md:w-8/12 max-w-xl">
+        <div className="h-fit w-full md:w-8/12 max-w-4xl">
           {/* search bar */}
           <div className="flex items-center py-1 pl-4 pr-2 h-fit bg-theme rounded-full dark:border-zinc-700 border">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -50,8 +54,10 @@ function Search({ isOpen, returnIsOpen }: Props) {
             </svg>
             <Input
               type="text"
-              className="h-10 text-base rounded-l-full focus:ring-0 border-0"
-              ref={inputRef}
+              value={search}
+              onChange={(e) => store.dispatch(setSearch(e.target.value.trim()))}
+            className="h-10 text-base rounded-l-full focus:ring-0 border-0"
+            ref={inputRef}
             />
             <div onClick={() => setActiveTab((prev) => prev === 1 ? 2 : 1)} className="hover:bg-indigo-50 dark:hover:bg-zinc-900 p-2 rounded-full cursor-pointer">
               {
@@ -70,7 +76,7 @@ function Search({ isOpen, returnIsOpen }: Props) {
           </div>
           <div className="flex flex-col space-y-2 w-full bg-theme min-h-[350px] rounded-lg mt-1 p-3">
             {/* result */}
-            <Tabs activeTab={activeTab} />
+            <Tabs returnIsOpen={returnIsOpen} search={search} activeTab={activeTab} />
             {/* end result list */}
           </div>
           <div className="flex justify-center mt-2">

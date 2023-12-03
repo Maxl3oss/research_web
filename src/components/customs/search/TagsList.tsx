@@ -1,8 +1,9 @@
 import { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState, store } from '@store/index';
-import { setTagsList } from '@store/search.store/search.slice';
+import { setSearch, setTagsList } from '@store/search.store/search.slice';
 import TagsSearch from '../selectSearch/tagsSearch';
+
 
 function TagsList() {
   const tagsList = useSelector((state: IRootState) => state.RDsearch.tagsList);
@@ -32,8 +33,11 @@ function TagsList() {
           </div>
           <button
             type="reset"
-            onClick={() => store.dispatch(setTagsList([]))}
-            className="text-sm h-fit p-1 px-2 hover:bg-gray-100 dark:hover:bg-zinc-900 rounded-lg"
+            onClick={() => {
+              store.dispatch(setTagsList([]));
+              store.dispatch(setSearch(""));
+            }}
+            className="text-sm h-fit p-1 px-2 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-lg"
           >
             ล้าง
           </button>

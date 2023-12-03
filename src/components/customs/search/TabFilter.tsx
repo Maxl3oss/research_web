@@ -3,7 +3,7 @@ import SelectSearch from "../selectSearch";
 import { Fragment } from "react";
 
 function TabFilter() {
-  const optionsSearch = ['ชื่อเรื่อง', 'ผู้สร้างผลงาน', 'หัวเรื่อง', 'บทคัดย่อ', 'ผู้ร่วมสร้างสรรค์ผลงาน'];
+  const optionsSearch = ['ชื่อเรื่อง', 'ผู้สร้างผลงาน', 'รายวิชา', 'บทคัดย่อ', 'ผู้ร่วมสร้างสรรค์ผลงาน'];
   const optionsSort = ['เรียงจาก ก-ฮ', 'เรียงจาก ฮ-ก'];
   const optionsCategory = ['พัฒนาเว็ปไซต์', 'อินเทอร์เน็ตในทุกสิ่ง (IoT)'];
 

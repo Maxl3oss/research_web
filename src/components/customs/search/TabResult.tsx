@@ -1,10 +1,19 @@
+import NotFound from "@components/base/notFound";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IResearch } from "@interfaces/research.interface";
 import { Fragment } from "react"
 
-function TabResult() {
+interface Props {
+  raw: IResearch[];
+  isLoading: boolean;
+  onClick: () => void;
+}
+
+function TabResult({ raw, onClick, isLoading }: Props) {
   return (
     <Fragment>
-      <div className="grid space-y-2">
-        {Array.from({ length: 20 }).map((_, index) => (
+      <div className="grid h-full space-y-1">
+        {/* {Array.from({ length: 20 }).map((_, index) => (
           <div key={index} className="flex h-fit gap-3 hover:bg-gray-200 dark:hover:bg-zinc-900 p-2 rounded-lg cursor-pointer">
             <img
               className="w-10 max-h-10 rounded-full border dark:border-gray-700"
@@ -35,7 +44,20 @@ function TabResult() {
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
+        {isLoading
+          ? "isLoading..."
+          : raw && raw.length > 0
+            ?
+            <Fragment>
+              {raw.map((item, index) => (
+                <div key={index} onClick={onClick} className="flex gap-2 p-2 items-center bg-hover-base rounded-lg cursor-pointer">
+                  <FontAwesomeIcon className="text-base dark:text-gray-400" icon={["fas", "book-bookmark"]} />
+                  {item.title}
+                </div>
+              ))}
+            </Fragment>
+            : <NotFound />}
       </div>
     </Fragment>
   )
