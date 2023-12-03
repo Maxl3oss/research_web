@@ -1,7 +1,7 @@
 import { AppDispatch, IRootState } from '@store/index';
 import { Fragment, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { Entries, IReqUser } from '@interfaces/global.interface';
+import { IReqUser } from '@interfaces/global.interface';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Button, InputHook, InputHookUploadImage } from '@components/base';
 import SelectSearchHook from '@components/base/input/SelectSearchHook';
