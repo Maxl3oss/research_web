@@ -16,13 +16,14 @@ function CardLastsViewed({ loading, raw, returnChangePage }: Props) {
           <CardLoading />
         ) : (
           raw?.length > 0
-            ? raw.map((item: IResearch) => (
-              <CardResearch
-                // key={key}
-                item={item}
-                handleChangePage={returnChangePage}
-                className="md:!p-3"
-              />
+            ? raw.map((item: IResearch, idx) => (
+              <Fragment key={idx}>
+                <CardResearch
+                  item={item}
+                  handleChangePage={returnChangePage}
+                  className="md:!p-3"
+                />
+              </Fragment>
             )) : (
               <NotFound />
             )

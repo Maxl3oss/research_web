@@ -1,5 +1,6 @@
 import { IPagin } from "@interfaces/pagin.interface";
 import { prefix } from "../../assets/json/prefix.json";
+import moment from "moment-timezone";
 type TypeNotation = "standard" | "scientific" | "engineering" | "compact" | undefined
 
 export function FindPrefix(prefixId: string | undefined | null): string {
@@ -33,3 +34,9 @@ export const FindDataInJSON = (names: string[], dataJSON: { id: number, name: st
     return foundItem ? foundItem.id : 0;
   });
 };
+
+export function FormatterDate(date: string | undefined) {
+  if (!date || date === "") return "";
+  const thaiTime = moment.tz(date, "Asia/Bangkok"); 
+  return thaiTime.format("LL");
+}

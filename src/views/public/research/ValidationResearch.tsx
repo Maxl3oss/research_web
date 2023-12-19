@@ -36,11 +36,11 @@ const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
 
   pdf: yup.mixed()
     .test("fileSize", "กรุณาอัปโหลดไฟล์ไม่เกิน 10 mb", (value: any) => {
-      if (typeof value === "string") return true; // skip validation if value is a string
+      if (typeof value === "string") return true; 
       return value && value[0]?.size <= FILE_SIZE;
     })
-    .test("fileFormat", "กรุณาอัปโหลดไฟล์ (.png, .jpg, .jpeg)", (value: any) => {
-      if (typeof value === "string") return true; // skip validation if value is a string
+    .test("fileFormat", "กรุณาอัปโหลดไฟล์ (.pdf)", (value: any) => {
+      if (typeof value === "string") return true; 
       return value && SUPPORTED_FORMATS.pdf.includes(value[0]?.type);
     }).required('กรุณาอัปโหลดไฟล์'),
 

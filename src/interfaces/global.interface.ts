@@ -16,6 +16,7 @@ export interface IReqResearch {
   year_creation: string,
   pdf: unknown | FileList,
   pdf_name?: string,
+  file_name?: string,
   image: string | File,
   user_id: string,
   tags_id: string,

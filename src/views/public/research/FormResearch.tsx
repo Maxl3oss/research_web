@@ -13,6 +13,7 @@ import { FetchTagsDDL } from "@services/tags.service";
 import SelectSearchHook from "@components/base/input/SelectSearchHook";
 import { ResponseAlert } from "@components/helper/CustomAlert";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import InputUploadFile from "@components/base/input/InputUploadFile";
 
 
 export function FormResearch() {
@@ -26,9 +27,10 @@ export function FormResearch() {
     resolver: yupResolver(ValidationResearch),
     defaultValues: {
       image: raw?.image_url ?? "",
-      pdf_name: "",
+      file_name: "",
     },
   });
+  const { setValue, watch } = methods;
 
   async function fetchTagsDDL() {
     const res = await FetchTagsDDL();
@@ -62,28 +64,29 @@ export function FormResearch() {
       Promise.all([fetchData(userInfo.id, id)]);
     }
     fetchTagsDDL();
-    if (userInfo) methods.setValue('user_id', userInfo.id, { shouldValidate: true });
-  }, [id, userInfo, methods])
+    if (userInfo) setValue('user_id', userInfo.id, { shouldValidate: true });
+  }, [id, userInfo])
 
   useEffect(() => {
     if (raw) {
-      for (const [key, value] of Object.entries(raw) as Entries<Omit<IReqResearch, "pdf_name">>) {
-        methods.setValue(key, value);
+      for (const [key, value] of Object.entries(raw) as Entries<Omit<IReqResearch, "pdf_name" | "file_name">>) {
+        setValue(key, value);
       }
       const date = new Date(raw.year_creation).toISOString().split('T')[0];
-      methods.setValue('year_creation', date, { shouldValidate: true });
-      methods.setValue('image', raw.image_url ?? "", { shouldValidate: true });
-      methods.setValue('pdf', raw.file_url ?? "", { shouldValidate: true });
+      setValue('year_creation', date, { shouldValidate: true });
+      setValue('image', raw.image_url ?? "", { shouldValidate: true });
+      setValue('pdf', raw.file_name ?? "", { shouldValidate: true });
     }
-  }, [raw, methods]);
+  }, [raw]);
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    methods.setValue("pdf", event.currentTarget.files ?? "", { shouldValidate: true });
-    if (event.target.files) {
-      const file = event.target.files[0];
-      if (file) methods.setValue("pdf_name", file.name ?? "", { shouldValidate: true });
+  useEffect(() => {
+    const pdf = (watch("pdf") as FileList)[0];
+    if (pdf) {
+      setValue("file_name", pdf.name, { shouldValidate: true });
+    } else {
+      setValue("file_name", "", { shouldValidate: true });
     }
-  };
+  }, [watch("pdf")]);
 
   // useEffect(() => {
   //   const { unsubscribe } = methods.watch((value) => {
@@ -163,21 +166,24 @@ export function FormResearch() {
                     methods.setValue("tags_id", val?.id ?? "", { shouldValidate: true });
                     methods.setValue("tags_name", val?.name ?? "", { shouldValidate: true });
                   }}
-                /> 
+                />
               </div>
               <div className="col-span-2">
                 <label>เอกสาร</label>
-                <InputHook onChange={handleInputChange} type="file" accept="application/pdf" name="pdf" />
+                <InputUploadFile
+                  accept="application/pdf"
+                  name="pdf"
+                />
+                {/* <InputHook type="file" accept="application/pdf" name="pdf" /> */}
               </div>
               <div className="mt-5 col-span-2 flex items-end justify-center gap-3">
                 <Button type="submit" className="btn-primary">
-                  {isLoading ?
-                    (
-                      <div className="flex items-center gap-x-2">
-                        <FontAwesomeIcon className="animate-spin text-2xl" icon={['fas', 'circle-notch']} />
-                        กำลังโหลด
-                      </div>
-                    )
+                  {isLoading
+                    ?
+                    <div className="flex items-center gap-x-2">
+                      <FontAwesomeIcon className="animate-spin text-2xl" icon={['fas', 'circle-notch']} />
+                      กำลังโหลด
+                    </div>
                     :
                     <span>บันทึก</span>
                   }

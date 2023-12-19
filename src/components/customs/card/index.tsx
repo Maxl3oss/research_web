@@ -9,7 +9,7 @@ import { Fragment } from "react";
 interface Props {
   handleChangePage: (val: number) => void,
   item: IResearch,
-  className?: string
+  className?: string,
 }
 
 export function CardResearch({ className, handleChangePage, item }: Props) {
@@ -48,7 +48,7 @@ export function CardLoading() {
     <Fragment>
       {Array.from({ length: 9 }).map(() => (
         <div
-          key={nanoid(3)}
+          key={nanoid(5)}
           className="relative cursor-pointer bg-transparent border-base space-y-3 p-3 md:p-5 rounded-lg"
         >
           <div className="flex items-center gap-2">

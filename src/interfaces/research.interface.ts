@@ -7,6 +7,7 @@ export interface IResearch {
   date: string;
   description: string;
   file_url: string | File;
+  file_name: string;
   image_url: string | File;
   isVerified: number;
   publisher: string;

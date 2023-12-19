@@ -54,4 +54,6 @@ header.layout-theme {
 .detail-text {
   @apply w-full lg:w-9/12 text-sm break-all
 }
-
+.flex-ij-center {
+  @apply flex items-center justify-center;
+}

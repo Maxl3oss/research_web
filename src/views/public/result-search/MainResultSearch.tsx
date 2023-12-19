@@ -50,8 +50,10 @@ function MainResultSearch() {
             {isLoading
               ? <CardLoading />
               : raw.length > 0
-                ? raw.map((item) => (
-                  <CardResearch item={item} handleChangePage={handleChangePage} />
+                ? raw.map((item, idx) => (
+                  <Fragment key={idx}>
+                    <CardResearch item={item} handleChangePage={handleChangePage} />
+                  </Fragment>
                 ))
                 : <NotFound className="rounded-lg" />}
           </section>

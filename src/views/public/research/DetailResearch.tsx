@@ -1,6 +1,6 @@
 import StarRating from '@components/base/starRating';
 import ResearchAlert from '@components/customs/alert';
-import { FormatterNumber } from '@components/helper/FunctionHelper';
+import { FormatterDate, FormatterNumber } from '@components/helper/FunctionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IResearch, IResponse } from '@interfaces/research.interface';
 import { GetResearchDetailByUserId, LikeResearch, RatingStarsResearch } from '@services/research.service';
@@ -19,6 +19,7 @@ export default function DetailResearch() {
   const { id } = useLocation()?.state ?? "";
   const [raw, setRaw] = useState<IResearch | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDownload, setIsDownload] = useState(false);
 
   async function fetchData(userId: string, id: number, isLoading = true) {
     setIsLoading(isLoading);
@@ -48,7 +49,7 @@ export default function DetailResearch() {
   async function handleLike(researchId: number) {
     const check = handleUser();
     if (!check) return;
-    
+
     if (userInfo) {
       const res = await LikeResearch(researchId, userInfo.id);
       // alert
@@ -78,6 +79,33 @@ export default function DetailResearch() {
     return true;
   }
 
+  const handleDownload = async (fileName: string, fileUrl: string) => {
+    try {
+      setIsDownload(true);
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+
+      // Create a URL for the blob
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create a link element
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = fileName + ".pdf"; // Set the file name for download
+      document.body.appendChild(link);
+
+      // Initiate download
+      link.click();
+
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+      setIsDownload(false);
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    }
+  };
+
   useEffect(() => {
     dispatch(setNavLoading(false));
   }, [dispatch]);
@@ -90,8 +118,8 @@ export default function DetailResearch() {
   return (
     <Fragment>
       {isLoading ?
-        <div className="p-5 px-1 md:px-5 flex flex-grow flex-wrap w-full bg-transparent border-base shadow-md rounded-xl">
-          <div className="animate-pulse bg-loading rounded flex justify-center w-full lg:w-6/12 p-[1px] lg:h-[842px] lg:min-w-[595px]"> </div>
+        <div className="px-3 lg:px-5 flex flex-grow flex-wrap w-full bg-transparent border-base shadow-md rounded-xl">
+          <div className="animate-pulse bg-loading rounded flex justify-center w-full lg:w-6/12 p-[1px] h-[450px] lg:h-[842px] lg:min-w-[595px]"> </div>
           <div className="h-full space-y-2 grow pl-2">
             <div className="relative h-36 grid p-3 border-base rounded-md animate-pulse">
               <div className="w-4/12 bg-loading h-8"></div>
@@ -124,7 +152,7 @@ export default function DetailResearch() {
               <div className="w-4/12 bg-loading h-full"></div>
               <div className="w-8/12 bg-loading h-full"></div>
             </div>
-            <div className="flex h-11 border-base gap-x-5 p-3 rounded-md animate-pulse">
+            <div className="flex h-36 border-base gap-x-5 p-3 rounded-md animate-pulse">
               <div className="w-4/12 bg-loading h-full"></div>
               <div className="w-8/12 bg-loading h-full"></div>
             </div>
@@ -132,8 +160,8 @@ export default function DetailResearch() {
         </div>
         : raw ? (
           <div className="p-5 px-1 md:px-5 flex flex-grow flex-wrap w-full bg-white shadow-md dark:bg-zinc-800 rounded-xl">
-            <div className="flex justify-center w-full lg:w-6/12 border p-[1px] lg:h-[842px] lg:min-w-[595px]">
-              <LazyLoadImage effect="blur" src={raw?.image_url as string} className="object-cover h-full w-full" alt="" />
+            <div className="mx-3 lg:mx-0 flex justify-center w-full lg:w-6/12 border p-[1px] h-[450px] lg:h-[842px] lg:min-w-[595px]">
+              <LazyLoadImage effect="blur" src={raw?.image_url as string} className="object-contain lg:object-cover h-full w-full" alt="" />
             </div>
             <fieldset className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">
               <div className="relative w-full flex flex-col border-b border-zinc-700 p-5">
@@ -180,7 +208,7 @@ export default function DetailResearch() {
 
               <div className="detail-text-container">
                 <p className="w-3/12">วันที่</p>
-                <span className="detail-text">{raw?.created_date}</span>
+                <span className="detail-text">{FormatterDate(raw?.created_date)}</span>
               </div>
 
               <div className="detail-text-container">
@@ -193,12 +221,33 @@ export default function DetailResearch() {
                 <span className="detail-text">{raw?.rights}</span>
               </div>
 
-              <div className="detail-text-container">
+              <div className="detail-text-container !items-center">
                 <p className="w-3/12">แนบไฟล์</p>
-                <span className="w-full flex items-center justify-between lg:w-8/12 text-sm border-gray-300 dark:border-zinc-600 border rounded-lg p-2">
-                  {(raw?.file_url as string)?.split("/").slice(-1)[0]}
-                  <a className="text-xs text-indigo-600" href="http://">Download</a>
-                </span>
+
+                <div onClick={() => handleDownload(raw?.file_name, (raw?.file_url as string))} className={`${raw?.file_name === "" && "hidden"} relative max-w-sm w-full cursor-pointer`}>
+                  <label title="Click to upload" htmlFor="file_download" className={`cursor-pointer flex items-center gap-4 px-6 py-4 group bg-theme rounded-xl`}>
+                    <div className="w-max">
+                      <FontAwesomeIcon className="text-2xl" icon={["fas", "file-pdf"]} />
+                    </div>
+                    <div className="relative">
+                      <div className="block">
+                        <span className="block text-base font-semibold">
+                          {raw?.file_name as string}
+                        </span>
+                        <span className="mt-0.5 block text-sm text-gray-500 dark:text-gray-400">Max 10 MB and type file (PDF)</span>
+                      </div>
+
+                    </div>
+                  </label>
+
+                  <div className="absolute h-full top-0 right-2 px-4 flex-ij-center">
+                    <FontAwesomeIcon
+                      icon={isDownload ? ["fas", "circle-notch"] : ["fas", "download"]}
+                      className={`${isDownload ? "animate-spin text-xl" : "text-xl"}  cursor-pointer`}
+                    />
+                  </div>
+                </div>
+
               </div>
             </fieldset>
           </div>
