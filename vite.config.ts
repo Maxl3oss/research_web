@@ -1,9 +1,16 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite"
+import react from "@vitejs/plugin-react"
 import path from "node:path";
+import topLevelAwait from "vite-plugin-top-level-await"
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    topLevelAwait({
+      promiseExportName: '__tla',
+      promiseImportName: (i) => `__tla_${i}`
+    })
+  ],
   resolve: {
     alias: {
       process: "process/browser",
