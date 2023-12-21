@@ -45,6 +45,7 @@ const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
     }).required('กรุณาอัปโหลดไฟล์'),
 
   pdf_name: yup.string(),
+  file_name: yup.string(),
 });
 
 export default ValidationResearch;
