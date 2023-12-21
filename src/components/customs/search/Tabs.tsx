@@ -7,7 +7,7 @@ import { GetResearch } from '@services/research.service';
 import { useSelector } from 'react-redux';
 import { IRootState } from '@store/index';
 import { debounce } from 'lodash';
-import { searchJSON, sortJSON } from './OptionJSON.json';
+import { searchJSON, sortJSON } from './optionJSON.json';
 import { FindDataInJSON } from '@components/helper/FunctionHelper';
 import { useNavigate } from 'react-router-dom';
 
