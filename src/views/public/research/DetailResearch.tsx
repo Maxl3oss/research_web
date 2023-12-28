@@ -64,8 +64,8 @@ export default function DetailResearch() {
       ResearchAlert({
         timer: 0,
         title: "ไม่สำเร็จ !!!",
-        text: "คุณต้องเข้าสู่ระบบใช่หรือไม่ ?",
-        icon: "error",
+        text: "คุณต้องการเข้าสู่ระบบใช่หรือไม่ ?",
+        icon: "question",
         showConfirmButton: true,
         showCancelButton: true,
       }).then(async ({ isConfirmed }) => {
@@ -80,6 +80,8 @@ export default function DetailResearch() {
   }
 
   const handleDownload = async (fileName: string, fileUrl: string) => {
+    const check = handleUser();
+    if (!check) return;
     try {
       setIsDownload(true);
       const response = await fetch(fileUrl);
