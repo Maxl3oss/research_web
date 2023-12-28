@@ -26,13 +26,14 @@ const validationSchema = yup.object({
 export default function SignIn() {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const remember: IRemember | null = JSON.parse(localStorage.getItem("remember") || "");
+  const getData = localStorage.getItem("remember");
+  const remember: IRemember | null = getData ? JSON.parse(getData) : "";
   const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema),
   });
 
   async function onSubmit(data: SignInUserArgs) {
-    const isRemember = !getValues("isRemember");
+    const isRemember = getValues("isRemember");
     const dataRemember = {
       isRemember: isRemember,
       email: isRemember ? getValues("email") : "",
