@@ -4,25 +4,28 @@ import { twMerge } from 'tailwind-merge';
 import { IRootState, store } from '@store/index';
 import { useSelector } from 'react-redux';
 import { setTagsList } from '@store/search.store/search.slice';
+import { nanoid } from '@reduxjs/toolkit';
 
 interface Props {
-  options: string[];
+  options: any[];
   placeholder?: string;
   isMultiple?: boolean;
+  optionId?: string;
+  optionLabel?: string;
 }
 
-const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple }) => {
+const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple, optionLabel = "name" }) => {
   const ref = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [filteredOptions, setFilteredOptions] = useState<string[]>(options);
+  const [filteredOptions, setFilteredOptions] = useState<any[]>(options);
   const tagsList = useSelector((state: IRootState) => state.RDsearch.tagsList);
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
     const searchQuery = event.target.value.toLowerCase();
     setSearchTerm(searchQuery);
     const filteredOptions = options.filter((option) =>
-      option.toLowerCase().includes(searchQuery)
+      option[optionLabel].toLowerCase().includes(searchQuery)
     );
     setFilteredOptions(filteredOptions);
   };
@@ -34,7 +37,7 @@ const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple }) => 
     const isValue = tagsList.includes(words);
     if (!isMultiple) {
       // remove item in option on tagsList 
-      const prev = tagsList.filter((curr) => !options.includes(curr));
+      const prev = tagsList.filter((curr) => !options.map(item => item[optionLabel] === curr));
       return store.dispatch(setTagsList([...prev, words]));
     } else if (isValue) {
       const filteredArray = tagsList.filter((item) => item !== words);
@@ -61,7 +64,11 @@ const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple }) => 
     if (searchTerm) {
       setIsOpen(true);
     }
-  }, [searchTerm])
+  }, [searchTerm]);
+
+  useEffect(() => {
+    setFilteredOptions(options);
+  }, [options]);
 
   return (
     <div className="relative" ref={ref}>
@@ -79,22 +86,22 @@ const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple }) => 
           className={twMerge([
             "absolute w-full mt-12 z-50 max-h-[180px] text-sm overflow-auto",
             "bg-theme rounded-lg border dark:border-zinc-600",
-            isOpen ? "top-0" : "hidden", 
+            isOpen ? "top-0" : "hidden",
           ])}
         >
-          {filteredOptions?.length > 0 ? filteredOptions?.map((option, index) => (
+          {filteredOptions?.length > 0 ? filteredOptions?.map((option) => (
             <li
               className={twMerge([
                 "p-2 hover:bg-gray-100 dark:hover:bg-zinc-600 cursor-pointer",
-                `${tagsList?.some(it => it === option) ? "dark:bg-zinc-900 bg-gray-200" : ""}`,
+                `${tagsList?.some(it => it === option[optionLabel]) ? "dark:bg-zinc-900 bg-gray-200" : ""}`,
               ])}
               onClick={() => {
-                handleSearchTagsClick(option);
+                handleSearchTagsClick(option[optionLabel]);
                 if (filteredOptions?.length !== options?.length) setFilteredOptions(options);
               }}
-              key={index}
+              key={nanoid()}
             >
-              {option}
+              {option[optionLabel]}
             </li>
           )) : (
             <li className="p-2 hover:bg-gray-100 text-red-500 dark:hover:bg-zinc-600 cursor-pointer">

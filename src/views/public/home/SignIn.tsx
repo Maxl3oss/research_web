@@ -3,7 +3,7 @@ import { Input } from "@components/base";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import Logo2 from "../../../assets/images/logo2.svg"
 import { useDispatch } from "react-redux";
 import { Login } from "@store/auth.store/auth.actions";
@@ -11,17 +11,35 @@ import { SignInUserArgs } from "@store/auth.store/auth.interface";
 import { AppDispatch } from "@store/index";
 import ResearchAlert from "@components/customs/alert";
 
+type IRemember = {
+  isRemember: boolean;
+  email: string;
+  password: string;
+}
+
 const validationSchema = yup.object({
+  isRemember: yup.boolean(),
   email: yup.string().email("กรุณาตรวจสอบอีเมล").required("กรุณากรอกอีเมล"),
   password: yup.string().required("กรุณากรอกรหัสผ่าน"),
 });
 
 export default function SignIn() {
-  const dispatch = useDispatch<AppDispatch>();
-  const { register, handleSubmit, formState: { errors } } = useForm({ resolver: yupResolver(validationSchema) });
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const remember: IRemember | null = JSON.parse(localStorage.getItem("remember") || "");
+  const { register, handleSubmit, setValue, getValues, formState: { errors } } = useForm({
+    resolver: yupResolver(validationSchema),
+  });
 
   async function onSubmit(data: SignInUserArgs) {
+    const isRemember = !getValues("isRemember");
+    const dataRemember = {
+      isRemember: isRemember,
+      email: isRemember ? getValues("email") : "",
+      password: isRemember ? getValues("password") : "",
+    }
+    localStorage.setItem("remember", JSON.stringify(dataRemember));
+
     dispatch(Login(data)).unwrap()
       .catch((err) => {
         ResearchAlert({
@@ -35,6 +53,14 @@ export default function SignIn() {
       .then((res) => { if (res) navigate("/") });
   }
 
+  useEffect(() => {
+    if (remember && remember.isRemember) {
+      setValue("isRemember", remember.isRemember, { shouldValidate: true });
+      setValue("email", remember.email);
+      setValue("password", remember.password);
+    }
+  }, []);
+
   return (
     <Fragment>
       {/* <CustomAlert onChange={(is) => setRsAlert((prev) => ({ ...prev, isShow: is }))} alert={rsAlert} /> */}
@@ -43,7 +69,7 @@ export default function SignIn() {
           <img className="w-16 h-16" src={Logo2} alt="logo" />
           <h1 className="text-4xl font-bold text-slate-800 dark:text-white">Research</h1>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off" className="w-10/12 md:w-6/12 lg:w-4/12 space-y-6 h-fit md:mb-0 mb-20">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-10/12 md:w-6/12 lg:w-4/12 space-y-6 h-fit md:mb-0 mb-20">
           <h3 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
             เข้าสู่ระบบ
           </h3>
@@ -51,19 +77,20 @@ export default function SignIn() {
             <label htmlFor="email" className="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-300">
               อีเมล
             </label>
-            <Input defaultValue={"narongrid.dev@gmail.com"} register={register} error={errors.email} name="email" placeholder="example@mail.com" />
+            <Input register={register} error={errors.email} name="email" placeholder="example@mail.com" />
           </div>
           <div>
             <label htmlFor="password" className="text-sm font-medium text-gray-900 block mb-2 dark:text-gray-300">
               รหัสผ่าน
             </label>
             <Input
-              defaultValue={"asdf"}
               onClick={() => null}
               register={register}
               error={errors.password}
               type="password"
               name="password"
+              autoCorrect="off"
+              autoCapitalize="off"
               placeholder="• • • • • • • •"
             />
           </div>
@@ -73,8 +100,11 @@ export default function SignIn() {
                 id="remember"
                 type="checkbox"
                 className="bg-gray-50 border border-gray-300 focus:ring-3 focus:ring-indigo-300 h-4 w-4 rounded dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-indigo-600 dark:ring-offset-gray-800"
-              // defaultChecked={remember}
-              // onClick={onClickRemember}
+                defaultChecked={getValues("isRemember")}
+                onClick={() => {
+                  const isRemember = getValues("isRemember");
+                  setValue("isRemember", !isRemember);
+                }}
               />
             </div>
             <div className="text-sm ml-3">
@@ -85,9 +115,6 @@ export default function SignIn() {
                 จดจำรหัสผ่าน
               </label>
             </div>
-            <span className="text-sm text-indigo-700 hover:underline ml-auto dark:text-indigo-500">
-              ลืมรหัสผ่าน?
-            </span>
           </div>
           <button
             type="submit"

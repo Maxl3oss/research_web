@@ -37,10 +37,6 @@ function CardMostViewed({ raw, returnResearch, loading }: Props) {
                 </div>
               </div>
             </div>
-            <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
-              <FontAwesomeIcon className="text-sm" icon={faEye} />
-              {key}
-            </div>
           </div>
         ))
       ) : (
@@ -68,6 +64,8 @@ function CardMostViewed({ raw, returnResearch, loading }: Props) {
             <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
               <FontAwesomeIcon className="text-sm" icon={faEye} />
               {item?.views}
+              <FontAwesomeIcon className="text-sm" icon={["fas", "heart"]} />
+              {item?.likes || 0}
             </div>
           </div>
         ))

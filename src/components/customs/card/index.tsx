@@ -1,6 +1,6 @@
 import { Profile, ResearchImage } from "@components/base";
 import StarRating from "@components/base/starRating";
-import { FindPrefix, FormatterNumber } from "@components/helper/FunctionHelper";
+import { FindPrefix } from "@components/helper/FunctionHelper";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IResearch } from "@interfaces/research.interface";
 import { nanoid } from "@reduxjs/toolkit";
@@ -28,7 +28,7 @@ export function CardResearch({ className, handleChangePage, item }: Props) {
         <div className="space-y-2">
           <p className="text-base line-clamp-2">{item.title}/{item.title_alternative}</p>
           <StarRating rating={item.average_rating} />
-          <p className="line-clamp-3 text-sm text-white">{item.description || "-"}</p>
+          <p className="line-clamp-3 text-sm">{item.description || "-"}</p>
           <span className="tags-theme py-1 flex items-center">
             {item?.tags_info?.name}
           </span>
@@ -38,6 +38,8 @@ export function CardResearch({ className, handleChangePage, item }: Props) {
       <div className="absolute flex flex-row justify-center items-center gap-2 top-[2px] right-3 text-sm">
         <FontAwesomeIcon className="text-sm" icon={["fas", "eye"]} />
         {item?.views || 0}
+        <FontAwesomeIcon className="text-sm" icon={["fas", "heart"]} />
+        {item?.likes || 0}
       </div>
     </div>
   )
@@ -66,10 +68,10 @@ export function CardLoading() {
             </div>
           </div>
           {/* view */}
-          <div className="absolute flex flex-row justify-center items-center gap-2 top-[2px] right-3 text-sm">
+          {/* <div className="absolute flex flex-row justify-center items-center gap-2 top-[2px] right-3 text-sm">
             <FontAwesomeIcon className="text-sm" icon={["fas", "eye"]} />
             {FormatterNumber(Math.floor(Math.random() * 1000))}
-          </div>
+          </div> */}
         </div>
       ))}
     </Fragment>

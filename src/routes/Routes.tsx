@@ -12,6 +12,7 @@ import MainResultSearch from "@views/public/result-search/MainResultSearch";
 import MainProfile from "@views/public/profile/MainProfile";
 import MainSetting from "@views/public/setting/MainSetting";
 import MainTest from "@views/public/test/MainTest";
+import SignUp from "@views/public/home/SignUp";
 
 const RoutesAuth = {
   role: ['none-auth'],
@@ -20,6 +21,7 @@ const RoutesAuth = {
     { path: "*", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+    { path: "/signUp", name: "/สร้างบัญชีผู้ใช้", element: <SignUp /> },
   ],
 }
 

@@ -6,7 +6,7 @@ import { Fragment } from "react"
 interface Props {
   raw: IResearch[];
   isLoading: boolean;
-  onClick: () => void;
+  onClick: (id: number) => void;
 }
 
 function TabResult({ raw, onClick, isLoading }: Props) {
@@ -51,7 +51,7 @@ function TabResult({ raw, onClick, isLoading }: Props) {
             ?
             <Fragment>
               {raw.map((item, index) => (
-                <div key={index} onClick={onClick} className="flex gap-2 p-2 items-center bg-hover-base rounded-lg cursor-pointer">
+                <div key={index} onClick={() => onClick(item.id)} className="flex gap-2 p-2 items-center bg-hover-base rounded-lg cursor-pointer">
                   <FontAwesomeIcon className="text-base dark:text-gray-400" icon={["fas", "book-bookmark"]} />
                   {item.title}
                 </div>

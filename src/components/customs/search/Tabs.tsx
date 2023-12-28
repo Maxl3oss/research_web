@@ -10,30 +10,40 @@ import { debounce } from 'lodash';
 import { searchJSON, sortJSON } from './optionJSON.json';
 import { FindDataInJSON } from '@components/helper/FunctionHelper';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setResultSearch } from '@store/search.store/search.slice';
+import { FetchTagsDDL } from '@services/tags.service';
 
-interface Props {
+type Props = {
   search: string,
   activeTab: number,
   returnIsOpen: (val: boolean) => void,
 }
 
+export type ITypeDDL = {
+  id: number;
+  name: string;
+}
+
 const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
   const navigate = useNavigate();
-  const tagsList = useSelector((state: IRootState) => state.RDsearch.tagsList);
+  const dispatch = useDispatch();
+  const { tagsList, isLoad } = useSelector((state: IRootState) => state.RDsearch);
   const [raw, setRaw] = useState<IResearch[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [tagsDDL, setTagsDDL] = useState<ITypeDDL[]>([]);
 
-  const fetchData = debounce(async (search = "", fill = "", sort = "") => {
-    setIsLoading(true);
-    const res: IResponse<IResearch[]> = await GetResearch(1, 10, "asc", search, fill, sort);
-    setIsLoading(false);
+  const fetchData = debounce(async (search = "", fill = "", orderBy = "", category = "") => {
+    orderBy === "2" ? "desc" : "asc";
+    const res: IResponse<IResearch[]> = await GetResearch(1, 10, orderBy, search, fill, category);
     if (res && (res?.taskStatus && res?.statusCode === 200)) {
       setRaw(res.data);
     }
   }, 1500);
 
-  const handleChangePage = () => {
+  const handleChangePage = (id: number) => {
     returnIsOpen(false);
+    const res = sortData(raw, id);
+    dispatch(setResultSearch(res));
     navigate("/research/result", {
       state: {
         search: search,
@@ -41,11 +51,28 @@ const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
     })
   }
 
+  async function fetchTagsDDL() {
+    const res = await FetchTagsDDL();
+    if (res && (res.statusCode === 200 && res.taskStatus)) {
+      setTagsDDL(res.data);
+    }
+  }
+
+  function sortData(data: IResearch[], sortId: number): IResearch[] {
+    const sortedData = data.slice().sort((a, b) => (a.id === sortId ? -1 : b.id === sortId ? 1 : a.id - b.id));
+    return sortedData;
+  }
+
   useEffect(() => {
     const fill = FindDataInJSON(tagsList, searchJSON);
     const sort = FindDataInJSON(tagsList, sortJSON);
-    fetchData(search, fill, sort);
+    const category = FindDataInJSON(tagsList, tagsDDL);
+    fetchData(search, fill, sort, category);
   }, [tagsList, search]);
+
+  useEffect(() => {
+    fetchTagsDDL();
+  }, []);
 
   return (
     <Fragment>
@@ -55,7 +82,7 @@ const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
       <hr className="dark:border-zinc-700 w-full" />
 
       <div className={`${activeTab === 1 && "overflow-y-scroll"} w-full block relative max-h-[calc(100vh_-_15rem)] transition-all duration-300 transform`}>
-        {activeTab === 1 && <TabResult onClick={handleChangePage} isLoading={isLoading} raw={raw} />}
+        {activeTab === 1 && <TabResult onClick={handleChangePage} isLoading={isLoad} raw={raw} />}
         {activeTab === 2 && <TabFilter />}
       </div>
     </Fragment>

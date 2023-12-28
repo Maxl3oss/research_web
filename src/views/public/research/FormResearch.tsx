@@ -14,6 +14,7 @@ import SelectSearchHook from "@components/base/input/SelectSearchHook";
 import { ResponseAlert } from "@components/helper/CustomAlert";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputUploadFile from "@components/base/input/InputUploadFile";
+import { ExtractTextFromPDF as extractTextFromPDF } from "@components/helper/ExtractFromPDF";
 
 
 export function FormResearch() {
@@ -59,6 +60,28 @@ export function FormResearch() {
     if (result) navigate(-1);
   }
 
+  function extract(file: File) {
+    if ((file.size / (1024 * 1024)) > 10) {
+      // return setErr("ขนาดไฟล์เกิน 10 mb");
+      return
+    }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      if (reader.result) {
+        setIsLoading(true);
+        const res = await extractTextFromPDF(reader.result.toString());
+        setIsLoading(false);
+
+        methods.setValue("image", res.image, { shouldValidate: true });
+        methods.setValue("creator", res.creator, { shouldValidate: true });
+        methods.setValue("title", res.title, { shouldValidate: true });
+        methods.setValue("title_alternative", res.title_alternative, { shouldValidate: true });
+      }
+    };
+    reader.readAsDataURL(file);
+    // setErr("");
+  }
+
   useEffect(() => {
     if (id && userInfo) {
       Promise.all([fetchData(userInfo.id, id)]);
@@ -80,11 +103,15 @@ export function FormResearch() {
   }, [raw]);
 
   useEffect(() => {
-    const pdf = (watch("pdf") as FileList)[0];
-    if (pdf) {
-      setValue("file_name", pdf.name, { shouldValidate: true });
-    } else {
-      setValue("file_name", "", { shouldValidate: true });
+    const pdf = watch("pdf");
+    if (typeof pdf !== "string") {
+      const file = (pdf as FileList)[0];
+      if (file) {
+        extract(file);
+        setValue("file_name", file.name, { shouldValidate: true });
+      } else {
+        setValue("file_name", "", { shouldValidate: true });
+      }
     }
   }, [watch("pdf")]);
 
@@ -98,7 +125,7 @@ export function FormResearch() {
   return (
     <Fragment>
       <FormProvider {...methods}>
-        <h3 className="font-semibold text-xl sm:text-2xl mb-5">เพิ่มข้อมูลงานวิจัย</h3>
+        <h3 className="font-semibold text-xl sm:text-2xl mb-5">{id === "" ? "เพิ่มข้อมูลงานวิจัย" : "แก้ไขข้อมูลงานวิจัย"}</h3>
         <div className="bg-back-theme p-5 rounded-2xl">
           <form autoComplete="off" onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-wrap gap-3">
             <div className="w-full lg:w-1/3 max-w-[2480px] max-h-[3508px]">

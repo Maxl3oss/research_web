@@ -7,11 +7,15 @@ export const Login = createAsyncThunk<UserInfo, SignInUserArgs>(
   "auth/login",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await FetchLogin({
+      const res = await FetchLogin({
         email: values.email,
         password: values.password,
       });
-      return response.data;
+      if (res && (res.taskStatus && res.statusCode === 200)) {
+        return res?.data;
+      } else {
+        return rejectWithValue(res?.message);
+      }
     } catch (err) {
       return rejectWithValue("อีเมลหรือรหัสผ่านไม่ถูกต้อง !");
     }

@@ -3,6 +3,12 @@ export interface ILogin {
   password: string;
 }
 
+export type IRegister = ILogin & {
+  prefix: string,
+  first_name: string,
+  last_name: string,
+}
+
 export interface IReqResearch {
   title: string,
   title_alternative: string,

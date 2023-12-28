@@ -68,6 +68,7 @@ const SelectSearchHook: React.FC<Props> = ({ options, onChange, optionOnClick, o
                 `${Number(value) === Number(option[optionId]) ? "dark:bg-zinc-900 bg-gray-200" : ""}`,
               ])}
               onClick={() => {
+                setIsOpen(false);
                 optionOnClick(option);
                 if (filteredOptions?.length !== options?.length) setFilteredOptions(options);
               }}

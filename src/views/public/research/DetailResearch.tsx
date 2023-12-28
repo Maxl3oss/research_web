@@ -1,6 +1,6 @@
 import StarRating from '@components/base/starRating';
 import ResearchAlert from '@components/customs/alert';
-import { FormatterDate, FormatterNumber } from '@components/helper/FunctionHelper';
+import { FindPrefix, FormatterDate, FormatterNumber } from '@components/helper/FunctionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IResearch, IResponse } from '@interfaces/research.interface';
 import { GetResearchDetailByUserId, LikeResearch, RatingStarsResearch } from '@services/research.service';
@@ -166,8 +166,10 @@ export default function DetailResearch() {
             <fieldset className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">
               <div className="relative w-full flex flex-col border-b border-zinc-700 p-5">
                 <h2 className="text-2xl font-semibold">{raw?.title}</h2>
-                <span>{raw?.title_alternative}</span>
-                <StarRating isChange onClickStar={handleOnClickRating} rating={raw?.average_rating} />
+                <span>({raw?.title_alternative})</span>
+                <div className="flex justify-end">
+                  <StarRating isChange onClickStar={handleOnClickRating} rating={raw?.average_rating} />
+                </div>
                 {/* like */}
                 <div onClick={() => handleLike(raw.id)} className="absolute top-0 right-0 text-center">
                   <div className="cursor-pointer p-2 w-10 h-10 hover:bg-zinc-700 rounded-full">
@@ -177,13 +179,13 @@ export default function DetailResearch() {
                       <FontAwesomeIcon className="text-2xl" icon={["far", "heart"]} />
                     }
                   </div>
-                  {FormatterNumber(raw.likes_count)}
+                  {FormatterNumber(raw.likes ?? 0)}
                 </div>
               </div>
 
               <div className="detail-text-container">
                 <p className="w-3/12">จัดทำโดย</p>
-                <span className="detail-text">{`${raw?.user_info?.prefix}${raw?.user_info?.first_name} ${raw?.user_info?.last_name}`}</span>
+                <span className="detail-text">{`${FindPrefix(raw?.user_info?.prefix)}${raw?.user_info?.first_name} ${raw?.user_info?.last_name}`}</span>
               </div>
 
               <div className="detail-text-container">
@@ -193,7 +195,7 @@ export default function DetailResearch() {
 
               <div className="detail-text-container">
                 <p className="w-3/12">คำอธิบาย</p>
-                <span className="detail-text indent-5">{raw?.description}</span>
+                <span className="detail-text">{raw?.description}</span>
               </div>
 
               <div className="detail-text-container">
@@ -224,17 +226,17 @@ export default function DetailResearch() {
               <div className="detail-text-container !items-center">
                 <p className="w-3/12">แนบไฟล์</p>
 
-                <div onClick={() => handleDownload(raw?.file_name, (raw?.file_url as string))} className={`${raw?.file_name === "" && "hidden"} relative max-w-sm w-full cursor-pointer`}>
+                <div onClick={() => handleDownload(raw?.file_name, (raw?.file_url as string))} className={`${raw?.file_name === "" && "hidden"} relative grow min-w-[320px] cursor-pointer`}>
                   <label title="Click to upload" htmlFor="file_download" className={`cursor-pointer flex items-center gap-4 px-6 py-4 group bg-theme rounded-xl`}>
                     <div className="w-max">
-                      <FontAwesomeIcon className="text-2xl" icon={["fas", "file-pdf"]} />
+                      <FontAwesomeIcon className="text-xl" icon={["fas", "file-pdf"]} />
                     </div>
                     <div className="relative">
                       <div className="block">
-                        <span className="block text-base font-semibold">
+                        <span className="block text-sm font-semibold line-clamp-1">
                           {raw?.file_name as string}
                         </span>
-                        <span className="mt-0.5 block text-sm text-gray-500 dark:text-gray-400">Max 10 MB and type file (PDF)</span>
+                        <span className="mt-0.5 block text-xs text-gray-500 dark:text-gray-400">Max 10 MB and type file (PDF)</span>
                       </div>
 
                     </div>
@@ -243,7 +245,7 @@ export default function DetailResearch() {
                   <div className="absolute h-full top-0 right-2 px-4 flex-ij-center">
                     <FontAwesomeIcon
                       icon={isDownload ? ["fas", "circle-notch"] : ["fas", "download"]}
-                      className={`${isDownload ? "animate-spin text-xl" : "text-xl"}  cursor-pointer`}
+                      className={`${isDownload ? "animate-spin" : ""} text-xl cursor-pointer`}
                     />
                   </div>
                 </div>

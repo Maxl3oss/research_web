@@ -17,6 +17,10 @@ export interface IResearchByUserList {
   title: string;
   image_url: string;
   description: string;
+  average_rating: string;
+  views: number;
+  status: number;
+  likes: number;
 }
 interface IRawData {
   countResearch: number;
@@ -30,7 +34,7 @@ function MainProfile() {
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
   const [activeTabs, setActiveTabs] = useState<TActive>(3);
   const [raw, setRaw] = useState<IRawData | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [pagin, setPagin] = useState<IPagin>({
     page: 1,
     pageSize: 10,

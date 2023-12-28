@@ -1,11 +1,33 @@
 import { Input } from "@components/base"
 import SelectSearch from "../selectSearch";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { ITypeDDL } from "./Tabs";
+import { FetchTagsDDL } from "@services/tags.service";
 
 function TabFilter() {
-  const optionsSearch = ['ชื่อเรื่อง', 'ผู้สร้างผลงาน', 'รายวิชา', 'บทคัดย่อ', 'ผู้ร่วมสร้างสรรค์ผลงาน'];
-  const optionsSort = ['เรียงจาก ก-ฮ', 'เรียงจาก ฮ-ก'];
-  const optionsCategory = ['พัฒนาเว็ปไซต์', 'อินเทอร์เน็ตในทุกสิ่ง (IoT)'];
+  const [tagsDDL, setTagsDDL] = useState<ITypeDDL[]>([]);
+  const optionsSearch = [
+    { id: 1, name: 'ชื่อเรื่อง' },
+    { id: 2, name: 'ผู้สร้างผลงาน' },
+    { id: 3, name: 'รายวิชา' },
+    { id: 4, name: 'บทคัดย่อ' },
+    { id: 5, name: 'ผู้ร่วมสร้างสรรค์ผลงาน' }
+  ];
+  const optionsSort = [
+    { id: 1, name: 'เรียงจาก ก-ฮ' },
+    { id: 1, name: 'เรียงจาก ฮ-ก' }
+  ];
+
+  async function fetchTagsDDL() {
+    const res = await FetchTagsDDL();
+    if (res && (res.statusCode === 200 && res.taskStatus)) {
+      setTagsDDL(res.data);
+    }
+  }
+
+  useEffect(() => {
+    fetchTagsDDL();
+  }, []);
 
   return (
     <Fragment>
@@ -33,7 +55,7 @@ function TabFilter() {
         </div>
         <div className="space-y-2">
           <label className="text-base font-bold">หมวดหมู่</label>
-          <SelectSearch options={optionsCategory} />
+          <SelectSearch options={tagsDDL} />
         </div>
       </div>
     </Fragment>

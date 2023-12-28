@@ -26,7 +26,7 @@ export interface IResearch {
   tags_id: number;
   rating_id: number;
   like: boolean;
-  likes_count: number;
+  likes: number;
 }
 
 export interface ITagsInfo {

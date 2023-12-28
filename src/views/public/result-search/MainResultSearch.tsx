@@ -1,27 +1,15 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect } from 'react';
 import TabFilter from "@components/customs/search/TabFilter";
 import TagsList from '@components/customs/search/TagsList';
 import NotFound from '@components/base/notFound';
-import { debounce } from 'lodash';
-import { IResearch, IResponse } from '@interfaces/research.interface';
-import { GetResearch } from '@services/research.service';
 import { CardLoading, CardResearch } from '@components/customs/card';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@store/index';
 
 function MainResultSearch() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
-  const [raw, setRaw] = useState<IResearch[]>([]);
-
-  const fetchData = debounce(async (search = "", fill = "", sort = "") => {
-    setIsLoading(true);
-    const res: IResponse<IResearch[]> = await GetResearch(1, 10, "asc", search, fill, sort);
-    setIsLoading(false);
-    if (res && (res?.taskStatus && res?.statusCode === 200)) {
-      setRaw(res.data);
-    }
-  }, 1500);
-
+  const { isLoad, tagsList, data } = useSelector((state: IRootState) => state.RDsearch);
   const handleChangePage = async (id: number) => {
     const state = {
       id: id
@@ -30,8 +18,8 @@ function MainResultSearch() {
   }
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    console.log(tagsList)
+  }, [tagsList]);
 
   return (
     <Fragment>
@@ -45,22 +33,22 @@ function MainResultSearch() {
             <TagsList />
           </div>
         </div>
-        <div className="flex gap-2">
-          <section className="flex-1 space-y-2 dark:bg-zinc-900 max-w-full h-fit rounded-lg shadow-md">
-            {isLoading
+        <section className="flex gap-2">
+          <div className="flex-1 space-y-2 dark:bg-zinc-900 max-w-full h-fit rounded-lg shadow-md">
+            {isLoad
               ? <CardLoading />
-              : raw.length > 0
-                ? raw.map((item, idx) => (
+              : data.length > 0
+                ? data.map((item, idx) => (
                   <Fragment key={idx}>
                     <CardResearch item={item} handleChangePage={handleChangePage} />
                   </Fragment>
                 ))
                 : <NotFound className="rounded-lg" />}
-          </section>
+          </div>
           <div className="hidden lg:block w-96 p-5 dark:bg-zinc-800 h-fit rounded-lg shadow-md">
             <TabFilter />
           </div>
-        </div>
+        </section>
       </div>
     </Fragment>
   );

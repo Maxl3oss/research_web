@@ -44,9 +44,12 @@ export const authSlice = createSlice({
         return { ...state, isLoading: false };
       }
     });
-
+    // log out
     builder.addCase(Logout, () => {
-      localStorage.clear();
+      localStorage.removeItem("role");
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      setUser(null);
       return initialState;
     });
 
