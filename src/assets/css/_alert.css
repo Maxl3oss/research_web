@@ -6,6 +6,7 @@
   0% {
     width: 100%;
   }
+
   100% {
     width: 0%;
   }
@@ -85,7 +86,7 @@
 
 .swal2-styled.swal2-cancel:hover {
   position: absolute;
-  left: 130px;
+  right: 30px;
   bottom: 20px;
   border: 1px solid #d35156 !important;
   background: #d35156 !important;
@@ -103,4 +104,5 @@
   box-shadow: none !important;
   font-weight: 500;
 }
+
 /* swal2 end */
