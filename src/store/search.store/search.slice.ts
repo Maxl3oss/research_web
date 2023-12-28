@@ -1,10 +1,12 @@
 import { IResearch } from "@interfaces/research.interface";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { DateValueType } from "react-tailwindcss-datepicker";
 export interface CounterState {
   search: string;
   tagsList: string[];
   data: IResearch[];
   isLoad: boolean;
+  dateValue: DateValueType;
 }
 
 const initialState: CounterState = {
@@ -12,6 +14,7 @@ const initialState: CounterState = {
   tagsList: [],
   data: [],
   isLoad: false,
+  dateValue: null,
 };
 
 export const SearchSlice = createSlice({
@@ -30,9 +33,12 @@ export const SearchSlice = createSlice({
     setIsLoad: (state, action: PayloadAction<boolean>) => {
       state.isLoad = action.payload;
     },
+    setDateValue: (state, action: PayloadAction<DateValueType>) => {
+      state.dateValue = action.payload;
+    },
   },
 });
 
-export const { setSearch, setTagsList, setResultSearch, setIsLoad } = SearchSlice.actions;
+export const { setSearch, setTagsList, setResultSearch, setIsLoad, setDateValue } = SearchSlice.actions;
 
 export default SearchSlice.reducer;

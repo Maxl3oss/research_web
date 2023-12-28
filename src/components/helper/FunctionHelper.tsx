@@ -1,9 +1,8 @@
 import { IPagin } from "@interfaces/pagin.interface";
 import { prefix } from "../../assets/json/prefix.json";
 import { nanoid } from "@reduxjs/toolkit";
-import { addYears, format } from "date-fns";
-import { th } from "date-fns/locale";
-
+import dayjs from "dayjs";
+import "dayjs/locale/th";
 type TypeNotation = "standard" | "scientific" | "engineering" | "compact" | undefined
 
 export function FindPrefix(prefixId: string | undefined | null): string {
@@ -39,14 +38,11 @@ export const FindDataInJSON = (names: string[], dataJSON: { id: number, name: st
 };
 
 
-export function FormatterDate(date: string | undefined, formatDate = "dd MMMM yyyy") {
+export function FormatterDate(date: string | Date | undefined, formatDate = "DD MMMM YYYY") {
   if (!date || date === "") return "";
 
-  const convertData = new Date(date);
-  const thaiDate = addYears(convertData, 543);
-  const thaiDateFns = format(thaiDate, formatDate, { locale: th });
-
-  return thaiDateFns;
+  dayjs.locale('th');
+  return dayjs(date).format(formatDate);
 }
 
 export function GetHighlightedText(text = "", highlight = "") {
@@ -60,3 +56,9 @@ export function GetHighlightedText(text = "", highlight = "") {
   )
 }
 
+export function SubtractYear543(date: Date | string | undefined | null) {
+  if (!date || date === null) return "";
+  const getDate = new Date(date);
+  getDate.setFullYear(getDate.getFullYear() - 543);
+  return getDate.toISOString();
+} 

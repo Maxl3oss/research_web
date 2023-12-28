@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '@store/index';
 import { debounce } from 'lodash';
 import { searchJSON, sortJSON } from './optionJSON.json';
-import { FindDataInJSON } from '@components/helper/FunctionHelper';
+import { FindDataInJSON, SubtractYear543 } from '@components/helper/FunctionHelper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setResultSearch } from '@store/search.store/search.slice';
@@ -28,13 +28,13 @@ export type ITypeDDL = {
 const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { tagsList, isLoad } = useSelector((state: IRootState) => state.RDsearch);
+  const { tagsList, dateValue, isLoad } = useSelector((state: IRootState) => state.RDsearch);
   const [raw, setRaw] = useState<IResearch[]>([]);
   const [tagsDDL, setTagsDDL] = useState<ITypeDDL[]>([]);
 
-  const fetchData = debounce(async (search = "", fill = "", orderBy = "", category = "") => {
+  const fetchData = debounce(async (search = "", fill = "", orderBy = "", category = "", startDate = "", endDate = "") => {
     orderBy === "2" ? "desc" : "asc";
-    const res: IResponse<IResearch[]> = await GetResearch(1, 10, orderBy, search, fill, category);
+    const res: IResponse<IResearch[]> = await GetResearch(1, 10, orderBy, search, fill, category, startDate, endDate);
     if (res && (res?.taskStatus && res?.statusCode === 200)) {
       setRaw(res.data);
     }
@@ -67,8 +67,10 @@ const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
     const fill = FindDataInJSON(tagsList, searchJSON);
     const sort = FindDataInJSON(tagsList, sortJSON);
     const category = FindDataInJSON(tagsList, tagsDDL);
-    fetchData(search, fill, sort, category);
-  }, [tagsList, search]);
+    const startDate = SubtractYear543(dateValue?.startDate);
+    const endDate = SubtractYear543(dateValue?.endDate);
+    fetchData(search, fill, sort, category, startDate, endDate);
+  }, [tagsList, search, dateValue]);
 
   useEffect(() => {
     fetchTagsDDL();

@@ -1,10 +1,16 @@
-import { Input } from "@components/base"
 import SelectSearch from "../selectSearch";
 import { Fragment, useEffect, useState } from "react";
 import { ITypeDDL } from "./Tabs";
 import { FetchTagsDDL } from "@services/tags.service";
+import DatePicker from "@components/base/input/DatePicker";
+import { setDateValue, setTagsList } from "@store/search.store/search.slice";
+import { IRootState, store } from "@store/index";
+import { useSelector } from "react-redux";
+import { DateValueType } from "react-tailwindcss-datepicker";
+import { FormatterDate } from "@components/helper/FunctionHelper";
 
 function TabFilter() {
+  const { tagsList, dateValue } = useSelector((state: IRootState) => state.RDsearch);
   const [tagsDDL, setTagsDDL] = useState<ITypeDDL[]>([]);
   const optionsSearch = [
     { id: 1, name: 'ชื่อเรื่อง' },
@@ -25,6 +31,22 @@ function TabFilter() {
     }
   }
 
+  const handleChangeValueDate = (val: DateValueType) => {
+    // remove old value
+    const getDate = formatDateForTagsList(dateValue);
+    const filData = tagsList.filter((item) => item !== getDate);
+    
+    // new value
+    const newDate = formatDateForTagsList(val);
+    val?.startDate !== null || val?.endDate !== null ? filData.push(newDate) : null;
+    store.dispatch(setTagsList([...filData]));
+    store.dispatch(setDateValue(val));
+  }
+
+  function formatDateForTagsList(val: DateValueType) {
+    return `${FormatterDate(val?.startDate ?? "")} ~ ${FormatterDate(val?.endDate ?? "")}`;
+  }
+
   useEffect(() => {
     fetchTagsDDL();
   }, []);
@@ -38,16 +60,7 @@ function TabFilter() {
         </div>
         <div className="space-y-2">
           <label className="text-base font-bold">ช่วงเวลา</label>
-          <div className="flex flex-wrap w-full px-2 gap-y-2">
-            <div className="flex items-center w-full text-sm gap-2">
-              <label className="w-3/12">ระหว่าง</label>
-              <Input type="date" className="dark:border-zinc-600" lang="th" name="" />
-            </div>
-            <div className="flex items-center w-full text-sm gap-2">
-              <label className="w-3/12">ถึง</label>
-              <Input type="date" className="dark:border-zinc-600" lang="th" name="" />
-            </div>
-          </div>
+          <DatePicker onChange={handleChangeValueDate} />
         </div>
         <div className="space-y-2">
           <label className="text-base font-bold">เรืยงลำดับตาม</label>
