@@ -19,7 +19,8 @@ const RoutesAuth = {
   path: "/",
   children: [
     { path: "*", name: "/เข้าสู่ระบบ", element: <SignIn /> },
-    { path: "/", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+    { path: "/", name: "", element: <Navigate to={"research"} /> },
+    // { path: "/", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/signUp", name: "/สร้างบัญชีผู้ใช้", element: <SignUp /> },
   ],
