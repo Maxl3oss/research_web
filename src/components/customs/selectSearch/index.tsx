@@ -37,7 +37,8 @@ const SelectSearch: React.FC<Props> = ({ options, placeholder, isMultiple, optio
     const isValue = tagsList.includes(words);
     if (!isMultiple) {
       // remove item in option on tagsList 
-      const prev = tagsList.filter((curr) => !options.map(item => item[optionLabel] === curr));
+      const dataOptionsSet = new Set(options.map(item => item[optionLabel] as string));
+      const prev = tagsList.filter(curr => !dataOptionsSet.has(curr));
       return store.dispatch(setTagsList([...prev, words]));
     } else if (isValue) {
       const filteredArray = tagsList.filter((item) => item !== words);

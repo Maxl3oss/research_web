@@ -15,6 +15,8 @@ import { ResponseAlert } from "@components/helper/CustomAlert";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputUploadFile from "@components/base/input/InputUploadFile";
 import { ExtractTextFromPDF as extractTextFromPDF } from "@components/helper/ExtractFromPDF";
+import DatePicker from "@components/base/input/DatePicker";
+import { SubtractYear543 } from "@components/helper/FunctionHelper";
 
 
 export function FormResearch() {
@@ -92,11 +94,13 @@ export function FormResearch() {
 
   useEffect(() => {
     if (raw) {
-      for (const [key, value] of Object.entries(raw) as Entries<Omit<IReqResearch, "pdf_name" | "file_name">>) {
+      for (const [key, value] of Object.entries(raw) as Entries<Omit<IReqResearch, "pdf_name" | "file_name" | "year_creation">>) {
         setValue(key, value);
       }
-      const date = new Date(raw.year_creation).toISOString().split('T')[0];
-      setValue('year_creation', date, { shouldValidate: true });
+      const date = new Date(raw.year_creation as string);
+      date.setFullYear(date.getFullYear() + 543);
+
+      setValue('year_creation', date.toISOString(), { shouldValidate: true });
       setValue('image', raw.image_url ?? "", { shouldValidate: true });
       setValue('pdf', raw.file_name ?? "", { shouldValidate: true });
     }
@@ -115,12 +119,12 @@ export function FormResearch() {
     }
   }, [watch("pdf")]);
 
-  // useEffect(() => {
-  //   const { unsubscribe } = methods.watch((value) => {
-  //     console.log(value);
-  //   });
-  //   return () => unsubscribe();
-  // }, [methods]);
+  useEffect(() => {
+    const { unsubscribe } = methods.watch((value) => {
+      console.log(value);
+    });
+    return () => unsubscribe();
+  }, [methods]);
 
   return (
     <Fragment>
@@ -170,7 +174,15 @@ export function FormResearch() {
               </div>
               <div className="col-span-2 md:col-span-1">
                 <label>ปีที่จัดทำ</label>
-                <InputHook type="date" name="year_creation" />
+                {/* <InputHook type="date" name="year_creation" /> */}
+                <DatePicker
+                  useRange={false}
+                  value={{
+                    startDate: new Date(methods.getValues("year_creation")),
+                    endDate: new Date(methods.getValues("year_creation")),
+                  }}
+                  onChange={(date) => methods.setValue("year_creation", SubtractYear543(date?.startDate))}
+                />
               </div>
               <div className="col-span-2 md:col-span-1">
                 <label>แหล่งที่มา</label>

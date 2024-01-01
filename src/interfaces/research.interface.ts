@@ -1,3 +1,4 @@
+import { DateType } from "react-tailwindcss-datepicker";
 import { IPagin } from "./pagin.interface";
 
 export interface IResearch {
@@ -17,7 +18,7 @@ export interface IResearch {
   title: string;
   created_date: string;
   title_alternative: string;
-  year_creation: string;
+  year_creation: string | DateType;
   user_name: string;
   views: number;
   average_rating: number;
