@@ -48,8 +48,8 @@ const RoutesUser = {
     { path: "/research/create", name: "/รายการวิจัย/เพิ่มข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/update", name: "/รายการวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/result", name: "/รายการวิจัย/แสดงรายการ", element: <MainResultSearch /> },
-    { path: "/user/profile", name: "/ผู้ใช้/ข้อมูลผู้ใช้", element: <MainProfile /> },
-    { path: "/user/setting", name: "/ผู้ใช้/ตั้งค่า", element: <MainSetting /> },
+    { path: "/user", name: "/ข้อมูลผู้ใช้", element: <MainProfile /> },
+    { path: "/user/setting", name: "/ข้อมูลผู้ใช้/ตั้งค่า", element: <MainSetting /> },
 
     { path: "/test", name: "/ทดสอบ", element: <MainTest /> },
 

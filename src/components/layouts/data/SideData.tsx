@@ -3,12 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const SideData = {
   "admin": [
     { "id": 1, "link": "/research", "name": "Home", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "house"]} /> },
-    { "id": 2, "link": "/research/create", "name": "Create", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "file"]} /> },
+    { "id": 2, "link": "/user", "name": "Profile", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "user"]} /> },
     { "id": 3, "link": "/back/dashboard", "name": "Dashboard", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "dashboard"]} /> }
   ],
   "user": [
     { "id": 1, "link": "/research", "name": "Home", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "house"]} /> },
-    { "id": 2, "link": "/research/create", "name": "Create", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "file"]} /> }
+    { "id": 2, "link": "/user", "name": "Profile", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "user"]} /> }
   ]
 }
 

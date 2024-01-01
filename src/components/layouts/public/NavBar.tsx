@@ -83,7 +83,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
               onClick={() => setIsOpen(prev => !prev)}
               className="w-10 h-10 rounded-full object-cover border dark:border-gray-700 cursor-pointer"
               src={userInfo?.profile || ''}
-              alt="profile"
+              alt=""
               onError={({ currentTarget }) => currentTarget.src = NoProfile}
             />
             <ToggleDarkMode />
@@ -99,7 +99,7 @@ export default function NavBar({ isOpenSearch, sliceSide, returnIsOpen, returnSl
                     <img
                       className="w-8 h-8 rounded-full object-cover"
                       src={userInfo?.profile ?? ""}
-                      alt="profile"
+                      alt=""
                       onError={({ currentTarget }) => currentTarget.src = NoProfile}
                     />
                     <span className="font-bold">{`${userInfo?.first_name || ''} ${userInfo?.last_name || ''}`}</span>
