@@ -31,6 +31,7 @@ export function FormResearch() {
     defaultValues: {
       image: raw?.image_url ?? "",
       file_name: "",
+      pdf_name: "",
     },
   });
   const { setValue, watch } = methods;

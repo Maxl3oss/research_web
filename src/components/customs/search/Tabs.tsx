@@ -11,7 +11,7 @@ import { searchJSON, sortJSON } from './optionJSON.json';
 import { FindDataInJSON, SubtractYear543 } from '@components/helper/FunctionHelper';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setResultSearch } from '@store/search.store/search.slice';
+import { setIsLoad, setResultSearch } from '@store/search.store/search.slice';
 import { FetchTagsDDL } from '@services/tags.service';
 
 type Props = {
@@ -34,9 +34,12 @@ const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
 
   const fetchData = debounce(async (search = "", fill = "", orderBy = "", category = "", startDate = "", endDate = "") => {
     orderBy === "2" ? "desc" : "asc";
+    dispatch(setIsLoad(true));
     const res: IResponse<IResearch[]> = await GetResearch(1, 10, orderBy, search, fill, category, startDate, endDate);
+    dispatch(setIsLoad(false));
     if (res && (res?.taskStatus && res?.statusCode === 200)) {
       setRaw(res.data);
+      dispatch(setResultSearch(res.data));
     }
   }, 1500);
 
