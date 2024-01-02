@@ -27,17 +27,19 @@ export default function MainResearch() {
   const [rawPopular, setRawPopular] = useState<IResearch[]>([]);
   const [pagin, setPagin] = useState<IPagin>({
     page: 1,
-    pageSize: 10,
+    pageSize: 5,
     total: 0,
-    totalPage: 10,
+    totalPage: 0,
   });
 
-  async function loadDataLasts(page = 1, pageSize = 10, isLoading = true) {
+  async function loadDataLasts(page = 1, pageSize = 6, isLoading = true) {
     setLoading(prev => ({ ...prev, lasts: isLoading }));
     const res: IResponse<IResearch[]> = await GetResearch(page, pageSize);
     setLoading(prev => ({ ...prev, lasts: false }));
     if (res && (res?.taskStatus && res?.statusCode === 200)) {
       setRawLasts(res.data);
+      res.pagin.pageSize = pageSize;
+      console.log(pagin)
       setPagin(res?.pagin);
     }
   }
@@ -93,8 +95,8 @@ export default function MainResearch() {
         <div className="flex justify-end pt-5">
           <Pagination
             pagin={pagin}
-            onPageChange={(pg) => {
-              loadDataLasts(1, pg);
+            onPageChange={(page) => {
+              loadDataLasts(page, pagin.pageSize);
             }}
           />
         </div>

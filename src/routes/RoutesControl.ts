@@ -11,7 +11,7 @@ export default function RoutesControl() {
       redirect("/");
       return [RoutesAuth, RoutesPublic];
     } else {
-      if (userInfo.role_id === 1) {
+      if (userInfo.role_id === 2) {
         return [RoutesUser, RoutesPrivate, RoutesAuth];
       } else {
         return [RoutesUser, RoutesAuth];

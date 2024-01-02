@@ -30,7 +30,7 @@ function ShowDataProfile({ isLoading, raw, onUpdate, onDelete, onViews, activeTa
               {/* <img className="h-52 w-36 object-cover" src={item.image_url} alt="image_research" /> */}
               <div className="grow">
                 <span className="text-lg font-semibold line-clamp-1 pr-24">{item.title}</span>
-                <p className="mb-5 indent-4 text-justify text-sm">{item.description}</p>
+                <p className="mb-5 indent-4 text-justify text-sm line-clamp-5">{item.description}</p>
                 <StarRating rating={Number(item?.average_rating ?? 0)} />
               </div>
               <div className="absolute grid gap-2 bottom-3 right-3">

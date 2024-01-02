@@ -1,9 +1,17 @@
 import { ToggleDarkMode } from "@components/base"
+import { Logout } from "@store/auth.store/auth.actions";
+import { AppDispatch, IRootState } from "@store/index";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom"
+import NoProfile from "../../../assets/images/NoProfile.png";
 
 function BackNav() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useSelector((state: IRootState) => state.RDauth);
+  const dispatch = useDispatch<AppDispatch>();
+  const handleLogout = () => dispatch(Logout());
 
   return (
     <header className="sticky top-0 w-full shadow-sm z-20 flex layout-theme">
@@ -17,9 +25,10 @@ function BackNav() {
         >
           <img
             onClick={() => setIsOpen(prev => !prev)}
-            className="w-10 h-10 rounded-full border dark:border-gray-700 cursor-pointer"
-            src="https://i.pinimg.com/736x/80/17/86/80178693d1d0c7e0ec688707b02ecc0b.jpg"
+            className="w-10 h-10 rounded-full object-cover border dark:border-gray-700 cursor-pointer"
+            src={user?.profile || ''}
             alt=""
+            onError={({ currentTarget }) => currentTarget.src = NoProfile}
           />
           <ToggleDarkMode />
 
@@ -55,7 +64,7 @@ function BackNav() {
               </li>
               <hr className="dark:border-gray-700" />
               <li className="font-medium">
-                <Link to="/signIn" className="flex gap-3 items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-red-700 m-2">
+                <Link onClick={handleLogout} to="/signIn" className="flex gap-3 items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-red-700 m-2">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-red-500">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                   </svg>
