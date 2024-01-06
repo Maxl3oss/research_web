@@ -1,6 +1,7 @@
 import axios from "axios";
-// const BASE_URL = "https://research-server.vercel.app/api/";
-const BASE_URL = "http://localhost:3001/api/";
+const BASE_URL = "https://research-server.vercel.app/api/";
+// const BASE_URL = "http://localhost:3001/api/";
+// const BASE_URL = "http://192.168.88.35:3001/api/";
 
 const axiosService = axios.create({
   baseURL: BASE_URL,
