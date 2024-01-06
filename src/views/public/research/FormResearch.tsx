@@ -18,7 +18,6 @@ import { ExtractTextFromPDF as extractTextFromPDF } from "@components/helper/Ext
 import DatePicker from "@components/base/input/DatePicker";
 import { SubtractYear543 } from "@components/helper/FunctionHelper";
 
-
 export function FormResearch() {
   const navigate = useNavigate();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
@@ -26,7 +25,7 @@ export function FormResearch() {
   const [tagsDDL, setTagsDDL] = useState<{ id: number, name: string }[]>([]);
   const { id } = useLocation().state || "";
   const [isLoading, setIsLoading] = useState(false);
-  const methods = useForm<IReqResearch>({
+  const methods = useForm({
     resolver: yupResolver(ValidationResearch),
     defaultValues: {
       image: raw?.image_url ?? "",

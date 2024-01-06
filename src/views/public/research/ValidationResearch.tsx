@@ -8,6 +8,7 @@ interface CustomFile extends File {
 //   type: string;
 // }
 const isUrl = (value: unknown) => typeof value === 'string' && value.startsWith('http');
+
 const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
   title: yup.string().required("กรุณากรอกชื่อรายงาน"),
   title_alternative: yup.string().required("กรุณากรอกชื่อรายงานทางเลือก"),
