@@ -6,7 +6,7 @@ const initialState: AuthState = {
   token: localStorage.getItem("token"),
   user: JSON.parse(localStorage.getItem("user") || "{}"),
   isLoading: false,
-  role: null,
+  role: JSON.parse(localStorage.getItem("role") || ""),
 };
 
 export const authSlice = createSlice({
