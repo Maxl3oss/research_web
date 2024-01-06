@@ -20,7 +20,7 @@ export interface IReqResearch {
   source: string,
   rights: string,
   year_creation: string,
-  pdf: unknown | FileList,
+  pdf: string | FileList | File,
   pdf_name?: string,
   file_name?: string,
   image: string | File,

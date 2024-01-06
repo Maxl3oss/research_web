@@ -25,7 +25,7 @@ export function FormResearch() {
   const [tagsDDL, setTagsDDL] = useState<{ id: number, name: string }[]>([]);
   const { id } = useLocation().state || "";
   const [isLoading, setIsLoading] = useState(false);
-  const methods = useForm({
+  const methods = useForm<IReqResearch>({
     resolver: yupResolver(ValidationResearch),
     defaultValues: {
       image: raw?.image_url ?? "",
@@ -51,7 +51,7 @@ export function FormResearch() {
 
   async function onSubmit(values: IReqResearch) {
     values.user_id = userInfo?.id || "";
-    values.pdf = (methods.getValues("pdf") as FileList)[0];
+    values.pdf = (methods.getValues("pdf") as FileList)[0] as File;
     values.image = methods.getValues("image");
     values.year_creation = new Date(methods.getValues("year_creation")).toISOString();
 
@@ -119,12 +119,12 @@ export function FormResearch() {
     }
   }, [watch("pdf")]);
 
-  useEffect(() => {
-    const { unsubscribe } = methods.watch((value) => {
-      console.log(value);
-    });
-    return () => unsubscribe();
-  }, [methods]);
+  // useEffect(() => {
+  //   const { unsubscribe } = methods.watch((value) => {
+  //     console.log(value);
+  //   });
+  //   return () => unsubscribe();
+  // }, [methods]);
 
   return (
     <Fragment>

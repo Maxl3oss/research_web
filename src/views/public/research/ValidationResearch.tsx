@@ -4,9 +4,10 @@ import { FILE_SIZE, IReqResearch, SUPPORTED_FORMATS } from '@interfaces/global.i
 interface CustomFile extends File {
   type: string;
 }
-// interface CustomFileList extends FileList {
-//   type: string;
-// }
+interface CustomFileList extends FileList {
+  type: string;
+}
+
 const isUrl = (value: unknown) => typeof value === 'string' && value.startsWith('http');
 
 const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
@@ -27,21 +28,21 @@ const ValidationResearch: yup.ObjectSchema<IReqResearch> = yup.object({
 
   image: yup.mixed<CustomFile>()
     .transform((value, originalValue) => { if (originalValue === "") { return null; } return value; })
-    .test('fileSize', 'กรุณาอัปโหลดไฟล์ไม่เกิน 10 MB', (value) => !value || isUrl(value) || value.size <= FILE_SIZE)
-    .test('fileFormat', 'กรุณาอัปโหลดไฟล์ png, jpg', (value) => !value || isUrl(value) || SUPPORTED_FORMATS.image.includes(value.type))
     .test('isRequired', 'กรุณาอัปโหลดรูปภาพ', (value) => {
       if (typeof value === 'string' && (isUrl(value))) return true;
       return !!value;
     })
+    .test('fileSize', 'กรุณาอัปโหลดไฟล์ไม่เกิน 10 MB', (value) => !value || isUrl(value) || value.size <= FILE_SIZE)
+    .test('fileFormat', 'กรุณาอัปโหลดไฟล์ png, jpg', (value) => !value || isUrl(value) || SUPPORTED_FORMATS.image.includes(value.type))
     .required('กรุณาอัปโหลดรูปภาพ'),
 
-  pdf: yup.mixed()
+  pdf: yup.mixed<CustomFileList>()
     .test("fileSize", "กรุณาอัปโหลดไฟล์ไม่เกิน 10 mb", (value: any) => {
-      if (typeof value === "string") return true; 
+      if (typeof value === "string") return true;
       return value && value[0]?.size <= FILE_SIZE;
     })
     .test("fileFormat", "กรุณาอัปโหลดไฟล์ (.pdf)", (value: any) => {
-      if (typeof value === "string") return true; 
+      if (typeof value === "string") return true;
       return value && SUPPORTED_FORMATS.pdf.includes(value[0]?.type);
     }).required('กรุณาอัปโหลดไฟล์'),
 
