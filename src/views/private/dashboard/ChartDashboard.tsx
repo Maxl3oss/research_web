@@ -1,12 +1,14 @@
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js';
 import { Doughnut, Pie } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
   ArcElement,
   Tooltip,
   Legend,
   Tooltip,
-  Legend
+  Legend,
+  ChartDataLabels,
 );
 interface IPieChart {
   className?: string;
@@ -54,13 +56,16 @@ export function PieChart({ className }: IPieChart) {
 interface IDonutChart {
   className?: string;
   cutout?: number;
+  data?: number[];
+  labels?: string[];
 }
-export function DonutChart({ className }: IDonutChart) {
-  const data: ChartData<"doughnut"> = {
-    labels: ['ยืนยันแล้ว', 'ยังไม่ยืนยัน'],
+
+export function DonutChart({ className, cutout = 85, data = [64, 20], labels = ['ยืนยันแล้ว', 'ยังไม่ยืนยัน'] }: IDonutChart) {
+  const raw: ChartData<"doughnut"> = {
+    labels: labels,
     datasets: [
       {
-        data: [64, 20],
+        data: data,
         backgroundColor: [
           'rgba(54, 162, 235, 0.2)',
           'rgba(255, 99, 132, 0.2)',
@@ -76,13 +81,27 @@ export function DonutChart({ className }: IDonutChart) {
   const config: ChartOptions<"doughnut"> = {
     plugins: {
       legend: {
-        position: 'top',
+        display: true,
+        position: 'right',
         align: 'center',
+        // labels: {
+        //   generateLabels: (chart) => {
+        //     const datasets = chart.data.datasets ?? [];
+        //     const dataLabels = chart.data.labels ?? [];
+        //     return datasets[0]?.data.map((data, i) => ({
+        //       text: `${dataLabels[i]} ${data}`,
+        //       index: i
+        //     })) ?? [];
+        //   }
+        // }
       },
+      datalabels: {
+        color: '#b2b2b2'
+      }
     },
-    cutout: "85%",
+    cutout: cutout,
   };
 
-  return <Doughnut className={className + " max-h-full max-w-full"} options={config} data={data} />
+  return <Doughnut className={className + " max-h-full max-w-full"} options={config} data={raw} />
 }
 

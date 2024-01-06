@@ -32,18 +32,19 @@ function MainResearchBack() {
   const [raw, setRaw] = useState<IRawResearchBack[]>([]);
   const [pagin, setPagin] = useState<IPagin>({
     page: 1,
-    pageSize: 10,
+    pageSize: 5,
     total: 0,
-    totalPage: 10,
+    totalPage: 0,
   });
   const onSubmit = (values: ISearch) => FetchData(1, pagin.pageSize, values.search);
 
-  async function FetchData(page = 1, pageSize = 10, search = "", isLoading = true) {
+  async function FetchData(page = 1, pageSize = 5, search = "", isLoading = true) {
     setIsLoading(isLoading);
     const res: IResponse<IRawResearchBack[]> = await ManagementGetResearchAll(page, pageSize, search);
     setIsLoading(false);
     if (res) {
       setRaw(res.data);
+      res.pagin.pageSize = pageSize;
       setPagin(res.pagin);
     }
   }
@@ -135,7 +136,7 @@ function MainResearchBack() {
         <Pagination
           pagin={pagin}
           onPageChange={(curr) => {
-            FetchData(curr, 10, getValues("search"))
+            FetchData(curr, pagin.pageSize, getValues("search"))
           }}
         />
       </div>

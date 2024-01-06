@@ -39,7 +39,6 @@ export default function MainResearch() {
     if (res && (res?.taskStatus && res?.statusCode === 200)) {
       setRawLasts(res.data);
       res.pagin.pageSize = pageSize;
-      console.log(pagin)
       setPagin(res?.pagin);
     }
   }

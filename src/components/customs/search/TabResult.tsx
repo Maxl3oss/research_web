@@ -53,7 +53,7 @@ function TabResult({ raw, onClick, isLoading }: Props) {
               {raw.map((item, index) => (
                 <div key={index} onClick={() => onClick(item.id)} className="flex gap-2 p-2 items-center bg-hover-base rounded-lg cursor-pointer">
                   <FontAwesomeIcon className="text-base dark:text-gray-400" icon={["fas", "book-bookmark"]} />
-                  {item.title}
+                  <p className="line-clamp-1">{item.title}</p>
                 </div>
               ))}
             </Fragment>

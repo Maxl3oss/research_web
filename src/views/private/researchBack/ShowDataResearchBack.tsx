@@ -36,7 +36,7 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
               <thead className="">
                 {Array.from({ length: raw.length }).map((_, key) => (
                   <tr key={key} className="">
-                    <th className="p-3 text-center">#</th>
+                    <th className="p-3 text-center">No.</th>
                     <th className="p-3 text-left md:w-3/12">ชื่อรายงาน/วิจัย</th>
                     <th className="p-3 text-left md:grow">รายละเอียด</th>
                     <th className="p-3 text-center">สถานะ</th>
@@ -48,7 +48,9 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
                 {raw && raw.map((curr, index) => (
                   <tr key={index} className="flex flex-col flex-nowrap md:table-row mb-2 md:mb-0">
                     <td className="border rounded-md p-3">{FindIndex(pagin, index)}</td>
-                    <td className="border rounded-md p-3">{curr.title}</td>
+                    <td className="border rounded-md p-3">
+                      <span className="line-clamp-1 md:line-clamp-none">{curr.title}</span>
+                    </td>
                     <td className="border rounded-md p-3">
                       <span className="max-h-16 line-clamp-1">{curr.description}</span>
                     </td>
@@ -84,7 +86,7 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
           )}
         </table>
       </div>
-    </Fragment>
+    </Fragment >
   )
 }
 

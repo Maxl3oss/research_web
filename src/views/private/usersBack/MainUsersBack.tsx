@@ -132,7 +132,7 @@ function MainUsersBack() {
         <Pagination
           pagin={pagin}
           onPageChange={(curr) => {
-            FetchData(curr, 10, getValues("search"))
+            FetchData(curr, pagin.pageSize, getValues("search"))
           }}
         />
       </div>

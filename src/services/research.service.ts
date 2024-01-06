@@ -13,7 +13,7 @@ export type IReqGetResearch = {
 
 export async function GetResearch(page: number, pageSize: number, orderBy = "asc", search = "", filter = "", category = "", startDate = "", endDate = "") {
   try {
-    const res = await axiosService.get(`research/get-all?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&search=${search}&filter=${filter}&category=${category}&starDate=${startDate}&startDate=${endDate}`);
+    const res = await axiosService.get(`research/get-all?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&search=${search}&filter=${filter}&category=${category}&startDate=${startDate}&endDate=${endDate}`);
     return res.data
   } catch (err) {
     console.error("Errors : ", err);

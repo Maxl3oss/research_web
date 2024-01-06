@@ -1,41 +1,60 @@
-import { Fragment } from 'react'
-import { DonutChart, PieChart } from './ChartDashboard'
-import FakerData from '../../public/research/FakerData.json';
+import { Fragment, useEffect, useState } from 'react'
+import { DonutChart } from './ChartDashboard'
+import { GetDashboard } from '@services/private/dashboard.services';
+import { IResponse } from '@interfaces/research.interface';
+
+type User = {
+  labels: string[];
+  data: number[];
+  total: number;
+}
+
+type Research = {
+  labels: string[];
+  data: number[];
+  total: number;
+  researchLikes: number;
+  researchByCreatedDate: {
+    _count: {
+      created_date: number;
+    };
+    created_date: string;
+  }[];
+  totalViews: number;
+}
+
+type IRaw = {
+  user: User;
+  research: Research;
+}
+
 function MainDashBoard() {
-  const FakerDataSlice = FakerData.length > 5 ? FakerData.slice(0, 5) : FakerData;
+  const [raw, setRaw] = useState<IRaw | null>(null);
+
+  async function fetchData() {
+    const res: IResponse<IRaw> = await GetDashboard();
+    if (res && (res.taskStatus && res.statusCode === 200)) {
+      setRaw(res.data);
+      console.log(res.data)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
     <Fragment>
       <h3 className="font-semibold text-xl sm:text-2xl mb-5">แดชบอร์ด</h3>
-      <section className="grid grid-rows-2 grid-cols-4 gap-3 max-h-[calc(100vh_-_10rem)]">
-        <div className="row-span-2 col-span-4 md:col-span-3 lg:col-span-2 grid gap-3 w-full bg-back-theme p-5 rounded-xl">
-          <h1>Users</h1>
-          <div className="flex justify-center items-center pb-3">
-            <PieChart className="w-full h-full" />
-          </div>
-        </div>
-        <div className="row-span-1 col-span-2 md:col-span-1 grid gap-3 bg-back-theme p-5 rounded-xl">
-          <div className="flex flex-col gap-3 w-full">
-            โดรงการ/วิจัย
-            <div className="inline-block">
-              <DonutChart cutout={100} />
-            </div>
-          </div>
-        </div>
-        <div className="order-last lg:order-none row-span-1 lg:row-span-2 col-span-4 lg:col-span-1 bg-back-theme p-5 rounded-xl">
-          <div className="overflow-auto max-h-60 w-full">
-            {FakerDataSlice.map((curr, idx) => (
-              <p className="h-96" key={idx}>
-                {curr.viewed}
-              </p>
-            ))}
-          </div>
-        </div>
-        <div className="row-span-1 col-span-2 md:col-span-1 grid gap-3 bg-back-theme p-5 rounded-xl">
-          <div className="flex flex-col gap-3 w-full">
-            ผู้ใช้งาน
-            <div className="inline-block">
-              <DonutChart cutout={100} />
-            </div>
+      <section className="w-full grid grid-cols-3">
+        <div className="!rounded-3xl bg-back-theme p-5 border">
+          โดรงการ/วิจัย
+          <div className="inline-block mt-5">
+            <DonutChart
+              labels={raw?.research.labels}
+              data={raw?.research.data}
+              cutout={40}
+            />
           </div>
         </div>
       </section>

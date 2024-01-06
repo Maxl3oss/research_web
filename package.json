@@ -29,6 +29,7 @@
     "@types/react-select": "^5.0.1",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "path": "^0.12.7",

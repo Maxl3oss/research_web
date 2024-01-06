@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useCallback, useEffect, useState } from 'react';
 import TabFilter from './TabFilter';
 import TabResult from './TabResult';
 import TagsList from './TagsList';
-import { IResearch, IResponse } from '@interfaces/research.interface';
+import { IResearch } from '@interfaces/research.interface';
 import { GetResearch } from '@services/research.service';
 import { useSelector } from 'react-redux';
 import { IRootState } from '@store/index';
@@ -32,16 +32,37 @@ const Tabs = ({ activeTab, search, returnIsOpen }: Props) => {
   const [raw, setRaw] = useState<IResearch[]>([]);
   const [tagsDDL, setTagsDDL] = useState<ITypeDDL[]>([]);
 
-  const fetchData = debounce(async (search = "", fill = "", orderBy = "", category = "", startDate = "", endDate = "") => {
-    orderBy === "2" ? "desc" : "asc";
-    dispatch(setIsLoad(true));
-    const res: IResponse<IResearch[]> = await GetResearch(1, 10, orderBy, search, fill, category, startDate, endDate);
-    dispatch(setIsLoad(false));
-    if (res && (res?.taskStatus && res?.statusCode === 200)) {
-      setRaw(res.data);
-      dispatch(setResultSearch(res.data));
-    }
-  }, 1500);
+  const fetchData = useCallback(
+    debounce(
+      async (
+        search = "",
+        fill = "",
+        orderBy = "",
+        category = "",
+        startDate = "",
+        endDate = ""
+      ) => {
+        const orderDirection = orderBy === "2" ? "desc" : "asc"; // Properly set order direction
+        dispatch(setIsLoad(true));
+        const res = await GetResearch(
+          1,
+          10,
+          orderDirection, // Use orderDirection instead of orderBy
+          search,
+          fill,
+          category,
+          startDate,
+          endDate
+        );
+        dispatch(setIsLoad(false));
+        if (res && res.taskStatus && res.statusCode === 200) {
+          setRaw(res.data);
+        }
+      },
+      1500
+    ),
+    [dispatch, setRaw]
+  );
 
   const handleChangePage = (id: number) => {
     returnIsOpen(false);

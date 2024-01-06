@@ -162,7 +162,7 @@ export default function DetailResearch() {
         </div>
         : raw ? (
           <div className="p-5 px-1 md:px-5 flex flex-grow flex-wrap w-full bg-white shadow-md dark:bg-zinc-800 rounded-xl">
-            <div className="mx-3 lg:mx-0 flex justify-center w-full lg:w-6/12 border p-[1px] h-[450px] lg:h-[842px] lg:min-w-[595px]">
+            <div className="mx-3 lg:mx-0 flex justify-center w-full xl:w-6/12 border p-[1px] h-[450px] lg:h-[842px] lg:min-w-[595px]">
               <LazyLoadImage effect="blur" src={raw?.image_url as string} className="object-contain lg:object-cover h-full w-full" alt="" />
             </div>
             <fieldset className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">

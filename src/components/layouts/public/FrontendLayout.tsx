@@ -1,5 +1,5 @@
 import { IRootState } from '@store/index';
-import MenuBar from './MenuBar';
+// import MenuBar from './MenuBar';
 import NavBar from './NavBar';
 import Sidebar from './Sidebar';
 import { useState, Fragment, useEffect } from 'react';
@@ -42,7 +42,7 @@ const FrontendLayout = () => {
                </div>
             </main>
             {/* <Footer /> */}
-            <MenuBar />
+            {/* <MenuBar /> */}
          </div>
          <Search isOpen={isOpen} returnIsOpen={setIsOpen} />
       </Fragment>

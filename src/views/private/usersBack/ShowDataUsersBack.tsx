@@ -1,7 +1,7 @@
 import { Fragment } from 'react'
 import { IUsersBack } from './MainUsersBack'
 import { IPagin } from '@interfaces/pagin.interface';
-import { FindIndex } from '@components/helper/FunctionHelper';
+import { FindIndex, FindPrefix } from '@components/helper/FunctionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import NotFound from '@components/base/notFound';
 import NoProfile from '@assets/images/NoProfile.png';
@@ -38,7 +38,7 @@ function ShowDataUsersBack({ raw, pagin, isLoading, onVerify, onDelete, onUpdate
               <thead className="">
                 {Array.from({ length: raw.length }).map((_, key) => (
                   <tr key={key} className="">
-                    <th className="p-3 text-left">#</th>
+                    <th className="p-3 text-left">No.</th>
                     <th className="p-3 text-left hidden md:table-cell md:w-fit whitespace-nowrap">โปรไฟล์</th>
                     <th className="p-3 text-left md:w-5/12">ชื่อ-นามสกุล</th>
                     <th className="p-3 text-left md:w-5/12">อีเมล</th>
@@ -55,13 +55,13 @@ function ShowDataUsersBack({ raw, pagin, isLoading, onVerify, onDelete, onUpdate
                       <div className="flex items-center justify-center">
                         <img
                           alt=""
-                          src={curr.profile}
+                          src={curr.profile || NoProfile}
                           className="w-10 h-10 p-[0.5px] object-cover rounded-full border"
                           onError={({ currentTarget }) => currentTarget.src = NoProfile}
                         />
                       </div>
                     </td>
-                    <td className="border rounded-md p-3">{curr.first_name + " " + curr.last_name}</td>
+                    <td className="border rounded-md p-3">{FindPrefix(curr.prefix)+curr.first_name + " " + curr.last_name}</td>
                     <td className="border rounded-md p-3">
                       <span className="max-h-16 line-clamp-1">{curr.email}</span>
                     </td>
