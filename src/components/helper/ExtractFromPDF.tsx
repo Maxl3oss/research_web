@@ -14,6 +14,7 @@ type TypeExtractPDF = {
   creator: string;
   title: string;
   title_alternative: string;
+  description: string;
 }
 
 export function DetectLanguage(text: string): LanguageDetectionResult {
@@ -76,13 +77,18 @@ export function ExtractInformation(inputString: string) {
   const regex_title = /\s*(.*?)(?:\s*นาย|$)/s;
   const match_title = regex_title.exec(inputString) ?? "";
 
+  const regex_des = /บทคัดย่อ\s*(.*?)(?:\s*กิตติกรรมประกาศ|$)/s;
+  const match_des = regex_des.exec(inputString) ?? "";
+
   const title = DetectLanguage(match_title[1]?.trim() ?? "");
   const creator = ((match_creator[0])?.split(" ") || []).slice(0, -1)?.join(" ");
-
+  const description = match_des[1];
+  
   return {
     creator: creator,
     title: title.th,
     title_alternative: title.en,
+    description: description,
   }
 }
 

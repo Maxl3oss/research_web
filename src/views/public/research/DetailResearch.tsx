@@ -70,7 +70,7 @@ export default function DetailResearch() {
         showCancelButton: true,
       }).then(async ({ isConfirmed }) => {
         if (isConfirmed) {
-          navigate("/");
+          navigate("/signIn");
           return false;
         }
       });

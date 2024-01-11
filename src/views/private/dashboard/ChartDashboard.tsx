@@ -60,7 +60,7 @@ interface IDonutChart {
   labels?: string[];
 }
 
-export function DonutChart({ className, cutout = 85, data = [64, 20], labels = ['ยืนยันแล้ว', 'ยังไม่ยืนยัน'] }: IDonutChart) {
+export function DonutChart({ className = "", cutout = 85, data = [0, 0], labels = ['ยืนยันแล้ว', 'ยังไม่ยืนยัน'] }: IDonutChart) {
   const raw: ChartData<"doughnut"> = {
     labels: labels,
     datasets: [
@@ -102,6 +102,6 @@ export function DonutChart({ className, cutout = 85, data = [64, 20], labels = [
     cutout: cutout,
   };
 
-  return <Doughnut className={className + " max-h-full max-w-full"} options={config} data={raw} />
+  return <Doughnut className={className + " max-h-full w-full"} options={config} data={raw} />
 }
 

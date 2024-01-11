@@ -49,8 +49,12 @@ export const authSlice = createSlice({
       localStorage.removeItem("role");
       localStorage.removeItem("user");
       localStorage.removeItem("token");
-      setUser(null);
-      return initialState;
+      return {
+        token: null,
+        isLoading: false,
+        role: null,
+        user: null,
+      };
     });
 
     // update 

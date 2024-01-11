@@ -78,6 +78,7 @@ export function FormResearch() {
         methods.setValue("creator", res.creator, { shouldValidate: true });
         methods.setValue("title", res.title, { shouldValidate: true });
         methods.setValue("title_alternative", res.title_alternative, { shouldValidate: true });
+        methods.setValue("description", res.description, { shouldValidate: true });
       }
     };
     reader.readAsDataURL(file);
