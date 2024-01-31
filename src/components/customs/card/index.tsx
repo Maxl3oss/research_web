@@ -36,10 +36,12 @@ export function CardResearch({ className, handleChangePage, item }: Props) {
       </div>
       {/* view */}
       <div className="absolute flex flex-row justify-center items-center gap-2 top-[2px] right-3 text-sm">
-        <FontAwesomeIcon className="text-sm" icon={["fas", "eye"]} />
-        {item?.views || 0}
         <FontAwesomeIcon className="text-sm" icon={["fas", "heart"]} />
         {item?.likes || 0}
+        <FontAwesomeIcon className="text-sm" icon={["fas", "inbox"]} />
+        {item?.comments || 0}
+        <FontAwesomeIcon className="text-sm" icon={["fas", "eye"]} />
+        {item?.views}
       </div>
     </div>
   )

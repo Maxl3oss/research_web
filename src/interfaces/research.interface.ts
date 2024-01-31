@@ -28,6 +28,7 @@ export interface IResearch {
   rating_id: number;
   like: boolean;
   likes: number;
+  comments: number;
 }
 
 export interface ITagsInfo {

@@ -3,7 +3,6 @@ import { IResearch } from '@interfaces/research.interface';
 import { nanoid } from '@reduxjs/toolkit';
 import { Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from "@fortawesome/free-regular-svg-icons";
 import { ResearchImage } from '@components/base';
 
 interface Props {
@@ -62,10 +61,12 @@ function CardMostViewed({ raw, returnResearch, loading }: Props) {
               </div>
             </div>
             <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
-              <FontAwesomeIcon className="text-sm" icon={faEye} />
-              {item?.views}
               <FontAwesomeIcon className="text-sm" icon={["fas", "heart"]} />
               {item?.likes || 0}
+              <FontAwesomeIcon className="text-sm" icon={["fas", "inbox"]} />
+              {item?.comments || 0}
+              <FontAwesomeIcon className="text-sm" icon={["fas", "eye"]} />
+              {item?.views}
             </div>
           </div>
         ))

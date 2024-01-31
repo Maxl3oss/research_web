@@ -135,7 +135,7 @@ function MainComments({ researchId }: Props) {
                       <FontAwesomeIcon icon={["fas", "circle-notch"]} className="animate-spin text-lg mr-2" />
                       กำลังโหลด
                     </Fragment>
-                    : pagin.total === 0 || pagin.total > 3? null
+                    : pagin.total === 0 || pagin.total <= 3 ? null
                       : pagin.total > pagin.pageSize
                         ? <p onClick={() => fetchComments(researchId, pagin.total, 1)}>ดูเพิ่มเติม</p>
                         : <p onClick={() => fetchComments(researchId)}>ดูน้อยลง</p>
