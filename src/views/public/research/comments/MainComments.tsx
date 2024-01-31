@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react"
 import { LazyLoadImage } from "react-lazy-load-image-component"
 import StarRating from "@components/base/starRating";
 import { Button } from "@components/base";
-import { CreateComment, GetComments, ReqComment } from "@services/comment.service";
+import { CreateComment, DeleteComment, GetComments, ReqComment } from "@services/comment.service";
 import { nanoid } from "@reduxjs/toolkit";
 import { FindPrefix, FormatDateComments, FormatterNumber } from "@components/helper/FunctionHelper";
 import { useSelector } from "react-redux";
@@ -10,12 +10,15 @@ import { IRootState } from "@store/index";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IPagin } from "@interfaces/pagin.interface";
 import NotFound from "@components/base/notFound";
+import ResearchAlert from "@components/customs/alert";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   researchId: number;
 }
 
 interface User_info {
+  id: string;
   profile: string;
   prefix: string;
   first_name: string;
@@ -34,6 +37,7 @@ type TypeComment = {
 
 function MainComments({ researchId }: Props) {
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
+  const navigate = useNavigate();
   const [raw, setRaw] = useState<TypeComment[]>([]);
   const [contents, setContents] = useState<string>("");
   const [isLoad, setIsLoad] = useState(false);
@@ -58,6 +62,8 @@ function MainComments({ researchId }: Props) {
   }
 
   async function handleAddComment(data: ReqComment) {
+    const check = handleUser();
+    if (!check) return;
     setIsLoad(true);
     const res = await CreateComment(data);
     setIsLoad(false);
@@ -67,6 +73,44 @@ function MainComments({ researchId }: Props) {
         fetchComments(researchId);
       }
     }
+  }
+
+  function handleDelete(id: number) {
+    ResearchAlert({
+      timer: 0,
+      title: "คุณแน่ใจ !!!",
+      text: "คุณต้องการลบรายการนี้ใช่หรือไม่?",
+      icon: "question",
+      showConfirmButton: true,
+      showCancelButton: true,
+    }).then(async ({ isConfirmed }) => {
+      if (isConfirmed) {
+        const res = await DeleteComment(id);
+        if (res && (res.statusCode === 200 && res.taskStatus)) {
+          fetchComments(researchId);
+        }
+      }
+    });
+  }
+
+  function handleUser(): boolean {
+    if (!userInfo?.id) {
+      ResearchAlert({
+        timer: 0,
+        title: "ไม่สำเร็จ !!!",
+        text: "คุณต้องการเข้าสู่ระบบใช่หรือไม่ ?",
+        icon: "question",
+        showConfirmButton: true,
+        showCancelButton: true,
+      }).then(async ({ isConfirmed }) => {
+        if (isConfirmed) {
+          navigate("/signIn");
+          return false;
+        }
+      });
+      return false;
+    }
+    return true;
   }
 
   async function handleSubmit() {
@@ -120,14 +164,23 @@ function MainComments({ researchId }: Props) {
                             </span>
                           </div>
                         </div>
-                        <StarRating showText={false} isChange={false} rating={item.user_info.Rating[0].rating} />
+                        <StarRating showText={false} isChange={false} rating={item.user_info?.Rating[0]?.rating ?? 0} />
                       </div>
                       <div className="cm-body">
                         <p>{item.contents}</p>
                       </div>
+                      <div className="text-end -mt-3">
+                        {item.user_info.id === userInfo?.id ?
+                          <FontAwesomeIcon
+                            icon={["fas", "trash"]}
+                            onClick={() => handleDelete(item.id)}
+                            className="text-red-500 hover:text-red-400 text-sm cursor-pointer"
+                          />
+                          : null}
+                      </div>
                     </div>
                   ))
-                  : <NotFound />}
+                  : <NotFound text="ยังไม่มีคอมเมนท์" />}
               <div className="mt-5 flex justify-end text-sm font-semibold underline">
                 <Button type="button" className="cursor-pointer shadow-none">
                   {isLoadCm ?

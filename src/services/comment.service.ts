@@ -23,3 +23,12 @@ export async function CreateComment(data: ReqComment) {
     console.error("Errors : ", err);
   }
 }
+
+export async function DeleteComment(id: number) {
+  try {
+    const res = await axiosService.delete(`research/delete-comment/${id}`);
+    return res.data
+  } catch (err) {
+    console.error("Errors : ", err);
+  }
+}
