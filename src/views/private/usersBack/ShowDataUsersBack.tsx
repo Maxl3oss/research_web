@@ -38,7 +38,7 @@ function ShowDataUsersBack({ raw, pagin, isLoading, onVerify, onDelete, onUpdate
               <thead className="">
                 {Array.from({ length: raw.length }).map((_, key) => (
                   <tr key={key} className="">
-                    <th className="p-3 text-left">No.</th>
+                    <th className="p-3 text-left w-fit">No.</th>
                     <th className="p-3 text-left hidden md:table-cell md:w-fit whitespace-nowrap">โปรไฟล์</th>
                     <th className="p-3 text-left md:w-5/12">ชื่อ-นามสกุล</th>
                     <th className="p-3 text-left md:w-5/12">อีเมล</th>

@@ -36,26 +36,26 @@ function ShowDataResearchBack({ raw, pagin, onClick, onDelete, onVerify, isLoadi
               <thead className="">
                 {Array.from({ length: raw.length }).map((_, key) => (
                   <tr key={key} className="">
-                    <th className="p-3 text-center">No.</th>
+                    <th className="p-3 text-center md:w-[5%]">No.</th>
                     <th className="p-3 text-left md:w-3/12">ชื่อรายงาน/วิจัย</th>
                     <th className="p-3 text-left md:grow">รายละเอียด</th>
-                    <th className="p-3 text-center">สถานะ</th>
-                    <th className="p-3 text-center">#</th>
+                    <th className="p-3 text-center md:w-[5%]">สถานะ</th>
+                    <th className="p-3 text-center md:w-[5%]">#</th>
                   </tr>
                 ))}
               </thead>
               <tbody className="flex-1 md:flex-none">
                 {raw && raw.map((curr, index) => (
                   <tr key={index} className="flex flex-col flex-nowrap md:table-row mb-2 md:mb-0">
-                    <td className="border rounded-md p-3">{FindIndex(pagin, index)}</td>
+                    <td className="border rounded-md p-3 md:text-center">{FindIndex(pagin, index)}</td>
                     <td className="border rounded-md p-3">
                       <span className="line-clamp-1 md:line-clamp-none">{curr.title}</span>
                     </td>
                     <td className="border rounded-md p-3">
-                      <span className="max-h-16 line-clamp-1">{curr.description}</span>
+                      <span className="max-h-16 line-clamp-1 md:line-clamp-3">{curr.description}</span>
                     </td>
                     <td className="border rounded-md p-3">
-                      <div className="flex w-full">
+                      <div className="flex md:justify-center">
                         <span onClick={() => onVerify(curr.id)} className={(curr.status === 1 ? "bg-green-800/20 text-green-400" : "bg-red-800/20 text-red-400") + " h-fit w-fit whitespace-nowrap px-3 py-[2px] text-sm rounded-xl cursor-pointer"}>
                           {curr.status === 1 ? "ยืนยันแล้ว" : "ยังไม่ยืนยัน"}
                         </span>

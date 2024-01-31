@@ -11,6 +11,7 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
+import MainComments from './comments/MainComments';
 
 export default function DetailResearch() {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export default function DetailResearch() {
   const [raw, setRaw] = useState<IResearch | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isDownload, setIsDownload] = useState(false);
+  const [showMore, setShowMore] = useState(false);
 
   async function fetchData(userId: string, id: number, isLoading = true) {
     setIsLoading(isLoading);
@@ -165,7 +167,7 @@ export default function DetailResearch() {
             <div className="mx-3 lg:mx-0 flex justify-center w-full xl:w-6/12 border p-[1px] h-[450px] lg:h-[842px] lg:min-w-[595px]">
               <LazyLoadImage effect="blur" src={raw?.image_url as string} className="object-contain lg:object-cover h-full w-full" alt="" />
             </div>
-            <fieldset className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">
+            <section className="grid place-self-start w-full flex-none lg:flex-1 pl-0 lg:pl-3">
               <div className="relative w-full flex flex-col border-b border-zinc-700 p-5">
                 <h2 className="text-2xl font-semibold">{raw?.title}</h2>
                 <span>({raw?.title_alternative})</span>
@@ -197,7 +199,20 @@ export default function DetailResearch() {
 
               <div className="detail-text-container">
                 <p className="w-3/12">คำอธิบาย</p>
-                <span className="detail-text">{raw?.description}</span>
+                <span className="detail-text">
+                  {!showMore && raw?.description.length > 255
+                    ?
+                    <Fragment>
+                      {raw?.description.substring(0, 255)}...
+                      <b onClick={() => setShowMore(true)} className={`${raw?.description.length > 25 ? "indent-5" : ""} text-sm font-semibold underline cursor-pointer`}>ดูเพิ่มเติม</b>
+                    </Fragment>
+                    :
+                    <Fragment>
+                      {raw?.description}
+                      <b onClick={() => setShowMore(false)} className={`${raw?.description.length > 25 ? "indent-5" : ""} text-sm font-semibold underline cursor-pointer ml-2`}>ดูน้อยลง</b>
+                    </Fragment>
+                  }
+                </span>
               </div>
 
               <div className="detail-text-container">
@@ -253,9 +268,10 @@ export default function DetailResearch() {
                 </div>
 
               </div>
-            </fieldset>
+            </section>
           </div>
         ) : null}
+      <MainComments researchId={id} />
     </Fragment>
   )
 }

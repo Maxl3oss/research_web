@@ -6,9 +6,10 @@ interface Props {
   totalStars?: number;
   onClickStar?: (idx: number) => void;
   isChange?: boolean;
+  showText?: boolean;
 }
 
-function StarRating({ rating, totalStars = 5, isChange = false, onClickStar, className }: Props) {
+function StarRating({ rating, totalStars = 5, isChange = false, onClickStar, className, showText = true }: Props) {
   const [hoverRating, setHoverRating] = useState<number>(0);
   return (
     <div className="flex">
@@ -27,7 +28,10 @@ function StarRating({ rating, totalStars = 5, isChange = false, onClickStar, cla
           }
         </span>
       ))}
-      <p className={className + " ml-2 text-sm font-medium text-yellow-400"}>{rating} ใน 5</p>
+      {showText ?
+        <p className={className + " ml-2 text-sm font-medium text-yellow-400"}>{rating} ใน 5</p>
+        : null
+      }
     </div>
   )
 }

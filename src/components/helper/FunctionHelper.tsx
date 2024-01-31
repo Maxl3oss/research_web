@@ -1,9 +1,21 @@
 import { IPagin } from "@interfaces/pagin.interface";
 import { prefix } from "../../assets/json/prefix.json";
 import { nanoid } from "@reduxjs/toolkit";
-import dayjs from "dayjs";
+import dayjs, { ConfigType } from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
 import "dayjs/locale/th";
-type TypeNotation = "standard" | "scientific" | "engineering" | "compact" | undefined
+type TypeNotation = "standard" | "scientific" | "engineering" | "compact" | undefined;
+type DateType = string | number | Date | ConfigType;
+dayjs.extend(relativeTime);
+
+declare module 'dayjs' {
+  interface Dayjs {
+    fromNow(withoutSuffix?: boolean): string;
+    from(compared: DateType, withoutSuffix?: boolean): string;
+    toNow(withoutSuffix?: boolean): string;
+    to(compared: DateType, withoutSuffix?: boolean): string;
+  }
+}
 
 export function FindPrefix(prefixId: string | undefined | null): string {
   if (!prefixId) return ""
@@ -61,4 +73,9 @@ export function SubtractYear543(date: Date | string | undefined | null) {
   const getDate = new Date(date);
   getDate.setFullYear(getDate.getFullYear() - 543);
   return getDate.toISOString();
-} 
+}
+
+export function FormatDateComments(date: DateType): string {
+  if (!date) return "";
+  return dayjs(date).fromNow(true);
+}
