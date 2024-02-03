@@ -84,21 +84,20 @@ export default function SignUp() {
               </div>
               <div className="col-span-2">
                 <label htmlFor="prefix" className="label-input">ชื่อ</label>
-                <InputHook defaultValue={"ทดสอบ"} name="first_name" />
+                <InputHook name="first_name" />
               </div>
               <div className="col-span-2">
                 <label htmlFor="prefix" className="label-input">นามสกุล</label>
-                <InputHook defaultValue={"ครั้งที่ 1"} name="last_name" />
+                <InputHook name="last_name" />
               </div>
             </div>
             <div>
               <label htmlFor="email" className="label-input">อีเมล</label>
-              <InputHook defaultValue={"narongrid.game@gmail.com"} name="email" placeholder="example@email.com" />
+              <InputHook name="email" placeholder="example@email.com" />
             </div>
             <div>
               <label htmlFor="password" className="label-input">รหัสผ่าน</label>
               <InputHook
-                defaultValue={"asdf"}
                 onClick={() => null}
                 type="password"
                 name="password"
