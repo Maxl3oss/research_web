@@ -36,6 +36,8 @@ export interface IReqUser {
   first_name: string,
   last_name: string,
   email: string,
+  role_id?: string,
+  role_title?: string,
   password?: string,
   confirmPassword?: string,
   profile?: string | File,

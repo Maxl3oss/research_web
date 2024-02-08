@@ -19,6 +19,7 @@ export interface IUsersBack {
   last_name: string;
   email: string;
   status: number;
+  role_id: number;
 }
 
 function MainUsersBack() {

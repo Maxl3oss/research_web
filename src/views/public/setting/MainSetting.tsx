@@ -5,7 +5,7 @@ import { IReqUser } from '@interfaces/global.interface';
 import { useForm, FormProvider } from 'react-hook-form';
 import { Button, InputHook, InputHookUploadImage } from '@components/base';
 import SelectSearchHook from '@components/base/input/SelectSearchHook';
-import { prefix } from '@assets/json/prefix.json';
+import { prefix, role } from '@assets/json/prefix.json';
 import { ChangeProfileById, UpdateUser } from '@services/user.service';
 import { IResponse } from '@interfaces/research.interface';
 import { Update } from '@store/auth.store/auth.actions';
@@ -13,25 +13,29 @@ import { useDispatch } from 'react-redux';
 import ValidationSetting from './ValidationSetting';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ManagementGetUserById } from '@services/private/users.services';
+import { ResponseAlert } from '@components/helper/CustomAlert';
 
 function MainSetting() {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
   const { userId } = useLocation().state || "";
+  const userDefault = userId ? null : userInfo;
   const [rawUser, setRawUser] = useState<IReqUser | null>(null);
   const methods = useForm<IReqUser>({
     resolver: yupResolver(ValidationSetting),
     defaultValues: {
-      id: userInfo?.id ?? "",
-      profile: userInfo?.profile ?? "",
-      // profile: "",
-      prefix: userInfo?.prefix ?? "",
+      id: userDefault?.id ?? "",
+      profile: userDefault?.profile ?? "",
+      prefix: userDefault?.prefix ?? "",
       prefixName: "",
-      email: userInfo?.email ?? "",
-      first_name: userInfo?.first_name ?? "",
-      last_name: userInfo?.last_name ?? "",
+      email: userDefault?.email ?? "",
+      first_name: userDefault?.first_name ?? "",
+      last_name: userDefault?.last_name ?? "",
+      role_id: "",
+      role_title: "",
       password: "",
       confirmPassword: "",
       isChangePassword: false,
@@ -45,28 +49,38 @@ function MainSetting() {
   async function onSubmit(values: IReqUser) {
     if (userInfo?.id) {
       if (typeof values.profile !== "string" && values?.profile) {
-        handleChangeProfile(userInfo.id, { profile: values.profile as File })
+        handleChangeProfile(userInfo.id, { profile: values.profile as File }, Boolean(!userId))
       } else {
-        handleUpdateUser(userInfo.id, values);
+        handleUpdateUser(userId, values, Boolean(!userId));
       }
     }
   }
 
-  async function handleChangeProfile(id: string, data: { profile: File }) {
+  async function handleChangeProfile(id: string, data: { profile: File }, self = false) {
     setIsLoads(prev => ({ ...prev, profile: true }));
     const res: Omit<IResponse, "pagin"> = await ChangeProfileById(id, data);
     if (res && (res.statusCode === 200 && res.taskStatus)) {
-      dispatch(Update({ id }));
+      if (self || id === userInfo?.id) {
+        dispatch(Update({ id }));
+      } else {
+        ResponseAlert(res);
+        navigate("/back/users");
+      }
     }
     setIsLoads(prev => ({ ...prev, profile: false }));
   }
 
-  async function handleUpdateUser(id: string, data: IReqUser) {
+  async function handleUpdateUser(id: string, data: IReqUser, self = false) {
     setIsLoads(prev => ({ ...prev, data: true }));
     const res: Omit<IResponse, "pagin"> = await UpdateUser(id, data);
     setIsLoads(prev => ({ ...prev, data: false }));
     if (res && (res.statusCode === 200 && res.taskStatus)) {
-      dispatch(Update({ id }));
+      if (self || id === userInfo?.id) {
+        dispatch(Update({ id }));
+      } else {
+        ResponseAlert(res);
+        navigate("/back/users");
+      }
     }
   }
 
@@ -86,7 +100,7 @@ function MainSetting() {
   useEffect(() => {
     if (rawUser) {
       for (const [key, value] of Object.entries(rawUser)) {
-        methods.setValue(key as keyof IReqUser, value, { shouldValidate: true });
+        methods.setValue(key as keyof IReqUser, value?.toString() ?? "", { shouldValidate: true });
       }
     }
   }, [rawUser, methods]);
@@ -203,6 +217,20 @@ function MainSetting() {
                     </Button>
                   </div>
                 }
+                <div className={!userId ? "hidden" : ""}>
+                  <label>สิทธิ</label>
+                  <SelectSearchHook
+                    name="role_title"
+                    options={role}
+                    optionId="id"
+                    optionLabel="name"
+                    value={methods.getValues("role_id")}
+                    optionOnClick={(val: { id: string, name: string }) => {
+                      methods.setValue("role_id", val?.id ?? "", { shouldValidate: true });
+                      methods.setValue("role_title", val?.name ?? "", { shouldValidate: true });
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </div>
