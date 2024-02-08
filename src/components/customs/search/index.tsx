@@ -56,8 +56,8 @@ function Search({ isOpen, returnIsOpen }: Props) {
               type="text"
               value={search}
               onChange={(e) => store.dispatch(setSearch(e.target.value.trim()))}
-            className="h-10 text-base rounded-l-full focus:ring-0 border-0"
-            ref={inputRef}
+              className="h-10 text-base rounded-l-full focus:ring-0 border-0"
+              ref={inputRef}
             />
             <div onClick={() => setActiveTab((prev) => prev === 1 ? 2 : 1)} className="hover:bg-indigo-50 dark:hover:bg-zinc-900 p-2 rounded-full cursor-pointer">
               {

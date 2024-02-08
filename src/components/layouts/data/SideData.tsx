@@ -9,6 +9,9 @@ const SideData = {
   "user": [
     { "id": 1, "link": "/research", "name": "Home", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "house"]} /> },
     { "id": 2, "link": "/user", "name": "Profile", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "user"]} /> }
+  ],
+  "none": [
+    { "id": 1, "link": "/research", "name": "Home", "icon": <FontAwesomeIcon className="w-6 h-6" icon={["fas", "house"]} /> },
   ]
 }
 

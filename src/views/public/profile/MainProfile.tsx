@@ -32,7 +32,7 @@ type TActive = 1 | 2 | 3 | 4;
 function MainProfile() {
   const navigate = useNavigate();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
-  const [activeTabs, setActiveTabs] = useState<TActive>(3);
+  const [activeTabs, setActiveTabs] = useState<TActive>([2, 3].includes(userInfo?.role_id ?? 0) ? 3 : 4);
   const [raw, setRaw] = useState<IRawData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pagin, setPagin] = useState<IPagin>({
@@ -118,25 +118,31 @@ function MainProfile() {
             <fieldset className="grid space-y-1 place-self-center">
               <h3 className="text-xl font-medium">{FindPrefix(userInfo?.prefix) + userInfo?.first_name + " " + userInfo?.last_name}</h3>
               <span className="text-sm text-zinc-400">{userInfo?.email}</span>
-              <span className="text-sm text-zinc-400">วิจัย/รายงาน {FormatterNumber(raw?.countResearch)} รายการ</span>
+              {[2, 3].includes(userInfo?.role_id ?? 0) ? (
+                <span className="text-sm text-zinc-400">วิจัย/รายงาน {FormatterNumber(raw?.countResearch)} รายการ</span>
+              ) : null}
             </fieldset>
           </div>
         </section>
         <section className="flex justify-center w-full mt-5 border-b border-zinc-800">
           <div className="w-full md:w-10/12 flex items-center text-sm gap-2 text-zinc-400">
-            <span onClick={() => handleChangeTabs(3)} className={(activeTabs === 3 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
-              ทั้งหมด
-            </span>
-            <span onClick={() => handleChangeTabs(1)} className={(activeTabs === 1 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
-              เผยแพร่แล้ว
-            </span>
-            <span onClick={() => handleChangeTabs(2)} className={(activeTabs === 2 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
-              ยังไม่เผยแพร่
-            </span>
+            {[2, 3].includes(userInfo?.role_id ?? 0) ? (
+              <Fragment>
+                <span onClick={() => handleChangeTabs(3)} className={(activeTabs === 3 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
+                  ทั้งหมด
+                </span>
+                <span onClick={() => handleChangeTabs(1)} className={(activeTabs === 1 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
+                  เผยแพร่แล้ว
+                </span>
+                <span onClick={() => handleChangeTabs(2)} className={(activeTabs === 2 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
+                  ยังไม่เผยแพร่
+                </span>
+              </Fragment>
+            ) : null}
             <span onClick={() => handleChangeTabs(4)} className={(activeTabs === 4 ? "border-b text-indigo-600 border-indigo-600" : "dark:hover:text-zinc-300") + " p-3 w-28 text-center cursor-pointer rounded-t"}>
               ถูกใจ
             </span>
-            <div className="hidden md:flex justify-end flex-1">
+            <div className={![2, 3].includes(userInfo?.role_id ?? 0) ? "hidden" : "flex justify-end flex-1"}>
               <Link to="/research/create" className="btn-link !w-16">เพิ่ม</Link>
             </div>
           </div>

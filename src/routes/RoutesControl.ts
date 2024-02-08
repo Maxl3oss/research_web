@@ -1,5 +1,5 @@
 import { redirect, useRoutes } from "react-router-dom";
-import { RoutesAuth, RoutesPrivate, RoutesPublic, RoutesUser } from "./Routes";
+import { RoutesAuth, RoutesPrivate, RoutesPublic, RoutesUser, RoutesAuthor } from "./Routes";
 import { useSelector } from "react-redux";
 import { IRootState } from "@store/index";
 import { useMemo } from "react";
@@ -11,10 +11,14 @@ export default function RoutesControl() {
       redirect("/");
       return [RoutesAuth, RoutesPublic];
     } else {
-      if (userInfo.role_id === 2) {
-        return [RoutesUser, RoutesPrivate, RoutesAuth];
-      } else {
-        return [RoutesUser, RoutesAuth];
+      switch (userInfo.role_id) {
+        case 2:
+          return [RoutesUser, RoutesAuthor, RoutesPrivate, RoutesAuth];
+        case 3:
+          return [RoutesUser, RoutesAuthor, RoutesAuth];
+        default:
+          return [RoutesUser, RoutesAuth, RoutesPublic];
+
       }
     }
   }, [userInfo]);

@@ -20,7 +20,7 @@ const RoutesAuth = {
   children: [
     { path: "*", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/", name: "", element: <Navigate to={"research"} /> },
-    // { path: "/", name: "/เข้าสู่ระบบ", element: <SignIn /> },
+
     { path: "/signIn", name: "/เข้าสู่ระบบ", element: <SignIn /> },
     { path: "/signUp", name: "/สร้างบัญชีผู้ใช้", element: <SignUp /> },
   ],
@@ -34,6 +34,8 @@ const RoutesPublic = {
     { path: "/", name: "", element: <Navigate to={"research"} /> },
     { path: "/research/", name: "/รายการวิจัย", element: <MainResearch /> },
     { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
+
+    { path: "*", name: "", element: <NoPage /> },
   ],
 }
 
@@ -45,15 +47,23 @@ const RoutesUser = {
     { path: "/", name: "", element: <Navigate to={"research"} /> },
     { path: "/research/", name: "/รายการวิจัย", element: <MainResearch /> },
     { path: "/research/detail-research", name: "/รายการวิจัย/รายละเอียดวิจัย", element: <DetailResearch /> },
-    { path: "/research/create", name: "/รายการวิจัย/เพิ่มข้อมูลวิจัย", element: <FormResearch /> },
-    { path: "/research/update", name: "/รายการวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
     { path: "/research/result", name: "/รายการวิจัย/แสดงรายการ", element: <MainResultSearch /> },
+
     { path: "/user", name: "/ข้อมูลผู้ใช้", element: <MainProfile /> },
     { path: "/user/setting", name: "/ข้อมูลผู้ใช้/ตั้งค่า", element: <MainSetting /> },
 
     { path: "/test", name: "/ทดสอบ", element: <MainTest /> },
-
     { path: "*", name: "", element: <NoPage /> },
+  ],
+}
+
+const RoutesAuthor = {
+  role: ['author'],
+  path: "/",
+  element: <FrontendLayout />,
+  children: [
+    { path: "/research/create", name: "/รายการวิจัย/เพิ่มข้อมูลวิจัย", element: <FormResearch /> },
+    { path: "/research/update", name: "/รายการวิจัย/แก้ไขข้อมูลวิจัย", element: <FormResearch /> },
   ],
 }
 
@@ -69,9 +79,7 @@ const RoutesPrivate = {
 
     { path: "/back/users", name: "/ผู้ใช้งาน", element: <MainUsersBack /> },
     { path: "/back/users/update", name: "/ผู้ใช้งาน/แก้ไขข้อผู้ใช้งาน", element: <MainSetting /> },
-
-    { path: "*", name: "", element: <NoPage /> },
   ],
 }
 
-export { RoutesUser, RoutesPrivate, RoutesPublic, RoutesAuth };
+export { RoutesUser, RoutesPrivate, RoutesPublic, RoutesAuth, RoutesAuthor };

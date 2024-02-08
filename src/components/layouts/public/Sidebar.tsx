@@ -13,7 +13,7 @@ export default function Sidebar({ sliceSide }: Props) {
   const layoutSize = sliceSide === null ? "md:w-[80px] xl:w-[200px] hidden md:flex" : sliceSide ? "w-[200px]" : "md:w-[80px] -translate-x-16 md:translate-x-0";
   const pShow = sliceSide === null ? "" : sliceSide ? "!block" : "!hidden";
   const posit = (sliceSide === null ? "" : sliceSide ? "!mx-0" : "!mx-auto") + " icon";
-  const ROLES = role === 2 ? "admin" : "user"; 
+  const ROLES = role === 2 ? "admin" : [1, 3].includes(role ?? 0) ? "user" : "none";
   const jSide = SIDE_DATA[ROLES];
 
   return (
