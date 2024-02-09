@@ -12,7 +12,7 @@ const BackendLayout = () => {
             <BackNav />
             <BackSide />
             {/* <Nav /> */}
-            <main className="flex h-full layout-theme md:px-0 px-2 pb-20 pt-5 sm:pb-0 sm:pt-0">
+            <main className="flex h-full layout-theme md:px-0 px-2 pb-28 pt-5 sm:pb-0 sm:pt-0">
                <div className="layout-size md:ml-[80px] xl:ml-[200px] flex-grow max-w-full lg:w-[120px] p-2 md:p-5 min-h-[91vh] h-full">
                   <Outlet />
                </div>

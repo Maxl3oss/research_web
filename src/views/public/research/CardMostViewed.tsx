@@ -60,7 +60,7 @@ function CardMostViewed({ raw, returnResearch, loading }: Props) {
                 </span>
               </div>
             </div>
-            <div className="absolute flex flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
+            <div className="absolute flex flex-col sm:flex-row justify-center items-center gap-2 top-4 right-5 text-sm">
               <FontAwesomeIcon className="text-sm" icon={["fas", "heart"]} />
               {item?.likes || 0}
               <FontAwesomeIcon className="text-sm" icon={["fas", "inbox"]} />
