@@ -24,6 +24,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@types/chart.js": "^2.9.37",
     "@types/lodash": "^4.14.196",
+    "@types/pdfjs-dist": "^2.10.378",
     "@types/react-lazy-load-image-component": "^1.6.3",
     "@types/react-redux": "^7.1.25",
     "@types/react-select": "^5.0.1",
