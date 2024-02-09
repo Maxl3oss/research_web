@@ -32,7 +32,8 @@ type TActive = 1 | 2 | 3 | 4;
 function MainProfile() {
   const navigate = useNavigate();
   const userInfo = useSelector((state: IRootState) => state.RDauth.user);
-  const [activeTabs, setActiveTabs] = useState<TActive>([2, 3].includes(userInfo?.role_id ?? 0) ? 3 : 4);
+  const getDefaultActive = [2, 3].includes(userInfo?.role_id ?? 0) ? 3 : 4;
+  const [activeTabs, setActiveTabs] = useState<TActive>(getDefaultActive);
   const [raw, setRaw] = useState<IRawData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [pagin, setPagin] = useState<IPagin>({
@@ -42,7 +43,7 @@ function MainProfile() {
     totalPage: 1,
   });
 
-  async function FetchData(userId = "", status = 3, page = 1, pageSize = 10) {
+  async function FetchData(userId = "", status = getDefaultActive, page = 1, pageSize = 10) {
     setIsLoading(true);
     const res: IResponse<IRawData> = await GetResearchByUserId(userId, page, pageSize, status);
     setIsLoading(false);
