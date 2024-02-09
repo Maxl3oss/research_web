@@ -92,3 +92,12 @@ export async function LikeResearch(researchId: number, userId: string) {
     console.error("Errors : ", err);
   }
 }
+
+export async function DownloadPdfWaterMarK(text: string, pdfUrl: string) {
+  try {
+    const res = await axiosService.get(`watermark?text=${text}&pdf_url=${pdfUrl}`, { responseType: 'blob' });
+    return res.data
+  } catch (err) {
+    console.error("Errors : ", err);
+  }
+}

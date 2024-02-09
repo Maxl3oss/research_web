@@ -3,7 +3,7 @@ import ResearchAlert from '@components/customs/alert';
 import { FindPrefix, FormatterDate, FormatterNumber } from '@components/helper/FunctionHelper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IResearch, IResponse } from '@interfaces/research.interface';
-import { GetResearchDetailByUserId, LikeResearch, RatingStarsResearch } from '@services/research.service';
+import { DownloadPdfWaterMarK, GetResearchDetailByUserId, LikeResearch, RatingStarsResearch } from '@services/research.service';
 import { IRootState } from '@store/index';
 import { setNavLoading } from '@store/nav.store/nav.slice';
 import { Fragment, useEffect, useState } from 'react';
@@ -86,24 +86,37 @@ export default function DetailResearch() {
     if (!check) return;
     try {
       setIsDownload(true);
-      const response = await fetch(fileUrl);
-      const blob = await response.blob();
+      // const response = await fetch(fileUrl);
+      // const blob = await response.blob();
 
-      // Create a URL for the blob
-      const blobUrl = window.URL.createObjectURL(blob);
+      // // Create a URL for the blob
+      // const blobUrl = window.URL.createObjectURL(blob);
 
-      // Create a link element
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = fileName + ".pdf"; // Set the file name for download
-      document.body.appendChild(link);
+      // // Create a link element
+      // const link = document.createElement("a");
+      // link.href = blobUrl;
+      // link.download = fileName + ".pdf"; // Set the file name for download
+      // document.body.appendChild(link);
 
-      // Initiate download
-      link.click();
+      // // Initiate download
+      // link.click();
 
-      // Clean up
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
+      // // Clean up
+      // document.body.removeChild(link);
+      // window.URL.revokeObjectURL(blobUrl);
+      const res = await DownloadPdfWaterMarK("pkvc phuket", fileUrl);
+      if (res) {
+        const url = window.URL.createObjectURL(new Blob([res]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${fileName}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }
       setIsDownload(false);
     } catch (error) {
       console.error("Error downloading the file:", error);
