@@ -12,6 +12,7 @@ import { IPagin } from "@interfaces/pagin.interface";
 import NotFound from "@components/base/notFound";
 import ResearchAlert from "@components/customs/alert";
 import { useNavigate } from "react-router-dom";
+import NoProfile from '@assets/images/NoProfile.png';
 
 type Props = {
   researchId: number;
@@ -71,6 +72,7 @@ function MainComments({ researchId }: Props) {
       if (res.statusCode === 200 && res.taskStatus) {
         setRaw(res.data);
         fetchComments(researchId);
+        setContents("");
       }
     }
   }
@@ -155,7 +157,7 @@ function MainComments({ researchId }: Props) {
                     <div key={nanoid() + idx} className="cm-card">
                       <div className="cm-header">
                         <div className="flex items-center gap-2">
-                          <LazyLoadImage effect="blur" src={item.user_info.profile ?? ""} className="profile-icon" alt="" />
+                          <LazyLoadImage effect="blur" src={item.user_info.profile || NoProfile} className="profile-icon" alt="" />
                           <div className="grid">
                             <p>{FindPrefix(item.user_info.prefix) + item.user_info.first_name + " " + item.user_info.last_name}</p>
                             <span className="text-xs">
