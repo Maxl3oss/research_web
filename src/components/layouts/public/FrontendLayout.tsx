@@ -36,7 +36,7 @@ const FrontendLayout = () => {
             {/* sidebar */}
             <Sidebar sliceSide={sliceSide} />
             {/* main */}
-            <main className="overflow-hidden flex h-full md:px-0 px-2">
+            <main className="overflow-hidden flex h-full md:px-0 px-2 pb-10 pt-5 sm:pb-0 sm:pt-0">
                <div className={(sliceSide === null ? "layout-size" : sliceSide ? "md:max-w-[calc(100vw_-_200px)] md:ml-[200px]" : "md:max-w-[calc(100vw_-_80px)] md:ml-[80px]") + " max-w-full flex-grow p-0 lg:p-5 min-h-[91vh] h-full transition-all duration-200 translate-x-0"}>
                   <Outlet />
                </div>

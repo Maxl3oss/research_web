@@ -19,7 +19,7 @@ function MainResultSearch() {
 
   return (
     <Fragment>
-      <div className="pt-5 lg:pt-0 md:p-5">
+      <div className="md:p-5">
         <div className="flex flex-wrap min-h-10 mb-5 items-center gap-3">
           <span className="w-full py-1 md:w-10 whitespace-nowrap">
             ค้นหา

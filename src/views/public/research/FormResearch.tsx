@@ -133,7 +133,7 @@ export function FormResearch() {
         <h3 className="font-semibold text-xl sm:text-2xl mb-5">{id === "" ? "เพิ่มข้อมูลงานวิจัย" : "แก้ไขข้อมูลงานวิจัย"}</h3>
         <div className="bg-back-theme p-5 rounded-2xl">
           <form autoComplete="off" onSubmit={methods.handleSubmit(onSubmit)} className="flex flex-wrap gap-3">
-            <div className="w-full lg:w-1/3 max-w-[2480px] max-h-[3508px]">
+            <div className="w-full lg:w-1/3 max-w-[2480px] min-h-[250px] max-h-[3508px]">
               <InputHookUploadImage
                 defaultValue={methods.getValues("image") || ""}
                 accept="image/*"
@@ -193,7 +193,7 @@ export function FormResearch() {
                 <label>สิทธิ</label>
                 <InputHook name="rights" />
               </div>
-              <div className="">
+              <div className="col-span-2 md:col-span-1">
                 <label>ประเภท</label>
                 <SelectSearchHook
                   name="tags_name"

@@ -42,6 +42,8 @@ export function PieChart({ className }: IPieChart) {
 
   };
   const optionPie: ChartOptions<"pie"> = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'right',
@@ -79,25 +81,17 @@ export function DonutChart({ className = "", cutout = 85, data = [0, 0], labels 
   };
 
   const config: ChartOptions<"doughnut"> = {
+    responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         display: true,
         position: 'right',
         align: 'center',
-        // labels: {
-        //   generateLabels: (chart) => {
-        //     const datasets = chart.data.datasets ?? [];
-        //     const dataLabels = chart.data.labels ?? [];
-        //     return datasets[0]?.data.map((data, i) => ({
-        //       text: `${dataLabels[i]} ${data}`,
-        //       index: i
-        //     })) ?? [];
-        //   }
-        // }
       },
       datalabels: {
         color: '#b2b2b2'
-      }
+      },
     },
     cutout: cutout,
   };
